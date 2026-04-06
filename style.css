@@ -823,3 +823,95 @@ input {
     transform: translateY(0);
     transition: all 0.3s ease;
 }
+
+.dashboard {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    width: 95%;
+    max-width: 1200px;
+    margin: 20px auto;
+}
+
+.card {
+    flex: 1;
+    min-width: 200px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+.card h3 {
+    margin: 0;
+    font-size: 14px;
+}
+
+.card p {
+    margin-top: 10px;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.card {
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+}
+
+.dashboard {
+    justify-content: space-between;
+}
+
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+input {
+    width: 100%;
+    max-width: 120px;
+    font-size: 16px;
+}
+
+@media (max-width: 768px) {
+    .dashboard {
+        flex-direction: column;
+    }
+
+    .card {
+        width: 100%;
+    }
+}
+
+td {
+    padding: 8px;
+}
+
+th {
+    padding: 10px;
+}
+
+.card, table {
+    border-radius: 10px;
+}
+
+#budget-body {
+    transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.slide-out-left {
+    transform: translateX(-20px);
+    opacity: 0;
+}
+
+.slide-in-right {
+    transform: translateX(20px);
+    opacity: 0;
+}
