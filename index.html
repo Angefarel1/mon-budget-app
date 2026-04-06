@@ -1,0 +1,128 @@
+
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>Gestion Budget</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+<button id="logout" style="
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 14px;
+    background: red;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: none;
+">
+🔓 Déconnexion
+</button>
+
+<div id="auth" class="auth-container">
+
+    <div class="auth-box">
+        <h2>🔐 Connexion</h2>
+
+        <input type="text" id="username" placeholder="Nom d'utilisateur">
+        <input type="password" id="password" placeholder="Mot de passe">
+
+        <button id="btn-login">Se connecter</button>
+        <button id="btn-register" class="secondary">Créer un compte</button>
+
+        <p id="auth-msg"></p>
+    </div>
+
+</div>
+
+<button id="btn-aide" style="
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 16px;
+    background: black;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    z-index: 9999;
+">
+ℹ️ Aide
+</button>
+
+<h1>Gestion de Budget</h1>
+<button id="ajouter-depense">+ Ajouter une dépense</button>
+<div id="alerte-budget"></div>
+<table id="budget">
+
+    <thead>
+        <tr>
+            <th>Poste</th>
+            <th>Prévu</th>
+            <th>Réel</th>
+            <th>Écart</th>
+        </tr>
+    </thead>
+
+    <tbody id="budget-body">
+
+        <tr class="section">
+            <td colspan="4">REVENUS</td>
+        </tr>
+
+        <tr>
+            <td>Salaire</td>
+            <td><input type="number" class="prevu" value="0"></td>
+            <td><input type="number" class="reel" value="0"></td>
+            <td class="ecart">0</td>
+        </tr>
+
+        <tr class="section">
+            <td colspan="4">DÉPENSES</td>
+        </tr>
+
+        <tr class="subsection">
+            <td colspan="4">Achats</td>
+        </tr>
+
+        <tr class="total">
+            <td>SOLDE FINAL</td>
+            <td colspan="2"></td>
+            <td id="solde-final">0 XOF</td>
+        </tr>
+
+    </tbody>
+
+</table>
+
+    <canvas id="graphique" width="400" height="200"></canvas>
+</div>
+
+<script src="script.js" defer></script>
+
+<div id="banniere-aide" class="banniere">
+    <div class="banniere-contenu">
+        <span id="close-aide" class="close-btn">✖</span>
+
+        <h2>📊Info d'utilisation du site de gestion de budget</h2>
+
+        <p><strong>🧾 Poste :</strong> Le type de dépense ou de revenu (ex: nourriture, salaire).</p>
+
+        <p><strong>💰 Prévu :</strong> Le montant que tu penses dépenser ou recevoir.</p>
+
+        <p><strong>💸 Réel :</strong> Le montant que tu as réellement dépensé ou reçu.</p>
+
+        <p><strong>⚖️ Écart :</strong> La différence entre prévu et réel.</p>
+
+        <p><strong>👉 Objectif :</strong> T’aider à mieux gérer ton argent et éviter les surprises.</p>
+    </div>
+</div>
+
+</body>
+</html>
