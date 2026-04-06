@@ -12,4 +12,4 @@ Application de gestion de budget en Franc CFA.
 
 ---
 
-🔥 Simple, rapide et optimisé pour mobile.
+🔥 Simple, rapide et optimisé pour mobile. 
