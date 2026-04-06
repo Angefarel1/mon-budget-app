@@ -547,3 +547,52 @@ input:focus {
     }
 }
 
+body {
+    margin: 0;
+    padding: 10px;
+}
+
+/* rendre les éléments flexibles */
+.container {
+    width: 100%;
+    max-width: 100%;
+}
+
+@media (max-width: 768px) {
+
+    body {
+        font-size: 14px;
+    }
+
+    table {
+        font-size: 12px;
+    }
+
+    input {
+        width: 100%;
+        font-size: 14px;
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+    }
+}
+
+table {
+    width: 100%;
+    overflow-x: auto;
+    display: block;
+}
+
+input {
+    border-radius: 8px;
+    padding: 8px;
+}
+
+button {
+    border-radius: 10px;
+    background: #00ffcc;
+    color: black;
+    font-weight: bold;
+}
