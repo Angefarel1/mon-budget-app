@@ -8,8 +8,7 @@ Application de gestion de budget en Franc CFA.
 - 🎯 Objectifs financiers
 
 ## 🔗 Accéder au site
-👉 https://tonpseudo.github.io/nom-du-projet
-
+](https://angefarel1.github.io/mon-budget-app/)
 ---
 
 🔥 Simple, rapide et optimisé pour mobile. 
