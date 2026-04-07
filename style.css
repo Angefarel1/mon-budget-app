@@ -980,3 +980,13 @@ th {
         padding: 20px;
     }
 }
+
+.aide {
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.aide span {
+    display: block;
+    margin-top: 10px;
+}
