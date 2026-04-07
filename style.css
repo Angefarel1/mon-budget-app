@@ -925,12 +925,12 @@ th {
 /* Bannière scrollable */
 .banniere {
     width: 100%;
-    max-width: 500px;
+    max-width: 400px;
 
-    height: 50px;       /* important pour activer le scroll */
+    height: 600px;       /* important pour activer le scroll */
     overflow-y: auto;    /* scroll vertical */
     overflow-x: hidden;
 
-    padding: 450px;
+    padding: 55px;
 }
 
