@@ -323,17 +323,55 @@ input:focus {
     align-items: center;
 }
 
+/* 🌙 FOND OVERLAY */
 .banniere {
     display: none;
     position: fixed;
     top: 0;
     left: 0;
+
     width: 100%;
     height: 100%;
+
     background: rgba(0,0,0,0.6);
+
     justify-content: center;
     align-items: center;
+
     z-index: 9999;
+}
+
+/* 🧾 CONTENU */
+.banniere-contenu {
+    background: #ffffff;
+    color: #222;
+
+    padding: 25px;
+    border-radius: 15px;
+
+    width: 90%;
+    max-width: 450px;
+
+    max-height: 80vh;
+    overflow-y: auto;
+
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+
+    position: relative;
+
+    animation: popup 0.3s ease;
+}
+
+/* ✨ ANIMATION */
+@keyframes popup {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 .contenu {
@@ -352,18 +390,7 @@ input:focus {
     cursor: pointer;
 }
 
-.banniere {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.6);
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-}
+
 
 .banniere-contenu {
     background: white;
@@ -379,31 +406,9 @@ input:focus {
     float: right;
 }
 
-.banniere {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.6);
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-}
 
-.banniere {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.6);
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-}
+
+
 
 .banniere.active {
     display: flex;
@@ -633,22 +638,7 @@ button {
   font-weight: bold;
 }
 
-.banniere {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
 
-    background: rgba(0,0,0,0.6);
-    backdrop-filter: blur(8px);
-
-    justify-content: center;
-    align-items: center;
-
-    z-index: 9999;
-}
 
 .banniere.active {
     display: flex;
@@ -923,14 +913,70 @@ th {
 }
 
 /* Bannière scrollable */
-.banniere {
-    width: 100%;
-    max-width: 400px;
 
-    height: 600px;       /* important pour activer le scroll */
-    overflow-y: auto;    /* scroll vertical */
-    overflow-x: hidden;
 
-    padding: 55px;
+.aide {
+    font-size: 15px;
+    color: #333;
 }
 
+.aide b {
+    color: #007bff;
+}
+
+.aide span {
+    display: block;
+    margin-top: 10px;
+}
+
+@media (max-width: 600px) {
+    .banniere {
+        width: 95%;
+        height: 450px;
+        padding: 15px;
+    }
+
+    .aide {
+        font-size: 14px;
+    }
+}
+
+
+/* ✅ FIX POSITIONNEMENT BANNIÈRE */
+.banniere {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ✅ CONTENU BIEN CENTRÉ + RESPONSIVE */
+.banniere-contenu {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+@media (max-width: 600px) {
+    .banniere {
+        align-items: flex-start;
+        padding-top: 20px;
+    }
+
+    .banniere-contenu {
+        width: 95%;
+        max-height: 85vh;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .banniere {
+        align-items: flex-start;
+        padding-top: 20px;
+    }
+
+    .banniere-contenu {
+        width: 95%;
+        max-height: 85vh;
+        padding: 20px;
+    }
+}
