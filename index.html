@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+
+<meta name="monetag" content="dba96c99a29eb5c30c0807150d7a2c99">
+
     <title>Gestion Budget</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -193,6 +200,16 @@
         Utilise le tableau et le tableau de bord régulièrement pour mieux gérer ton argent et éviter les dépenses inutiles.
     </span>
 </div>
+
 <script src="script.js" defer></script>
+
+<script>
+    if ('serviceWorker' in navigator)
+{
+    navigator.serviceWorker.register('/sw.js');
+}
+
+</script>
+
 </body>
 </html>
