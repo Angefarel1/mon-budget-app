@@ -368,3 +368,10 @@ if (selectMois) {
     });
 }
 
+document.getElementById("ajouter-depense").addEventListener("click", function() {
+  // action ajouter dépense
+});
+
+document.getElementById("btn-aide").addEventListener("click", function() {
+  // ouvrir aide
+});
