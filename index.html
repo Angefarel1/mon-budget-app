@@ -1,227 +1,626 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
+    <meta name="monetag" content="dba96c99a29eb5c30c0807150d7a2c99">
 
-<meta name="monetag" content="dba96c99a29eb5c30c0807150d7a2c99">
-
-    <title>TAF</title>
+    <title>TAF (Take All Finances)</title>
     <link rel="stylesheet" href="style.css">
+
+
+    <div class="logo-box">
+  <img src="logo.png" alt="TAF Logo" class="logo">
+  <span>TAF</span>
+</div>
+    
 </head>
 
 <body>
 
-<h1>Gestion de Budget</h1>
+<button class="menu-btn" onclick="toggleMenu()">☰</button>
 
-<!-- ✅ DASHBOARD -->
-<h2>📊 Tableau de bord</h2>
+<nav id="sidebar" class="sidebar">
+  <h2>TAF</h2>
 
-
-<div class="dashboard">
-
-  <div class="card">
-    <h3>Total Dépensé</h3>
-    <p id="totalDepense">0 FCFA</p>
-  </div>
-
-
-  <div class="card">
-    <h3>Total Prévu</h3>
-    <p id="totalPrevu">0 FCFA</p>
-  </div>
 
   
-  <div class="card">
-    <h3>Écart</h3>
-    <p id="ecart">0 FCFA</p>
+
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <a href="#" onclick="showSection('taf')"data-i18n=taf>✨ TAF - Budget</a>
+<a href="#" onclick="showSection('stats')" data-i18n="stats">📈 Rapports & Stats</a>
+<a href="#" onclick="showSection('savings')" data-i18n="savings">💰 Épargne & Objectifs</a>
+<a href="#" onclick="showSection('privacy')" data-i18n="privacy">🔒 Confidentialité</a>
+<a href="#" onclick="showSection('settings')" data-i18n="settings">⚙️ Paramètres</a>
+</nav>
+
+<div class="content">
+
+<section id="landing" class="bg-white">
+
+  <!-- HERO -->
+  <div class="hero-bg py-24">
+    <div class="max-w-6xl mx-auto px-6 text-center">
+
+      <h1 class="text-5xl md:text-7xl font-extrabold text-gray-900 leading-tight">
+        Comprends et contrôle <span class="accent-yellow">tout ton argent</span> avec TAF
+      </h1>
+
+      <p class="mt-6 text-xl text-gray-600 max-w-2xl mx-auto">
+        TAF est une application simple qui te permet de suivre ton argent,
+        gérer ton budget, analyser tes dépenses et atteindre tes objectifs financiers.
+      </p>
+
+      <p class="mt-6 text-sm text-gray-500">
+        ✔ Sans inscription • ✔ Données privées • ✔ Gratuit
+      </p>
+
+    </div>
   </div>
 
-  <div class="card">
-    <h3>Objectif</h3>
-    <p id="objectif">0 FCFA</p>
-  
-  
+  <!-- INTRO -->
+  <div class="py-20">
+    <div class="max-w-5xl mx-auto px-6 text-center">
+      <h2 class="text-3xl font-bold">
+        Tout est réuni dans un seul outil
+      </h2>
+      <p class="mt-6 text-gray-600">
+        TAF regroupe plusieurs fonctionnalités essentielles pour t’aider à gérer ton argent au quotidien.
+        Voici exactement ce que tu peux faire avec chaque section du menu.
+      </p>
+    </div>
   </div>
 
-</div>
+  <!-- DASHBOARD -->
+  <div class="py-16 border-t">
+    <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
 
+      <div>
+        <h2 data-i18n="text-3xl font-bold">📊 Tableau de bord</h2>
+        <p class="mt-4 text-gray-600">
+          Le tableau de bord est la première chose que tu vois. Il te donne une vue rapide
+          de ta situation financière.
+        </p>
 
+        <p class="mt-4 text-gray-600">
+          Tu peux voir :
+          ton total de dépenses, ton épargne et l’argent qu’il te reste.
+          Les graphiques te permettent de comprendre rapidement comment ton argent est réparti.
+        </p>
 
-<!-- OBJECTIF -->
-<input type="number" id="objectifInput" placeholder="Ton objectif en FCFA">
-<button onclick="definirObjectif()">Définir objectif</button>
+        <p class="mt-4 text-gray-600">
+          Grâce à ça, tu sais immédiatement si tu dépenses trop ou si tu es sur la bonne voie.
+        </p>
+      </div>
 
-<!-- MOIS -->
-<label for="mois">Choisir le mois :</label>
-<select id="mois">
-  <option value="janvier">Janvier</option>
-  <option value="fevrier">Février</option>
-  <option value="mars">Mars</option>
-  <option value="avril">Avril</option>
-  <option value="mai">Mai</option>
-  <option value="juin">Juin</option>
-  <option value="juillet">Juillet</option>
-  <option value="aout">Août</option>
-  <option value="septembre">Septembre</option>
-  <option value="octobre">Octobre</option>
-  <option value="novembre">Novembre</option>
-  <option value="decembre">Décembre</option>
-</select>
+      <div class="yellow-soft p-6 rounded-2xl">
+        💡 Tu ouvres TAF → en 2 secondes tu sais où tu en es financièrement
+      </div>
 
-<button id="ajouter-depense">+ Ajouter une dépense</button>
+    </div>
+  </div>
 
-<div id="alerte-budget"></div>
+  <!-- STATS -->
+  <div class="py-16 border-t bg-yellow-50">
+    <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
 
-<div class="table-container">
-    <table>
-        ...
+      <div class="yellow-soft p-6 rounded-2xl">
+        💡 Idéal pour comprendre tes habitudes et améliorer ton budget
+      </div>
+
+      <div>
+        <h2 data-i18n="text-3xl font-bold">📈 Rapports & Statistiques</h2>
+        <p class="mt-4 text-gray-600">
+          Cette section te montre des données plus détaillées sur ton budget.
+        </p>
+
+        <p class="mt-4 text-gray-600">
+          Tu peux voir :
+          le total de ton budget, tes dépenses, ton épargne,
+          ton taux d’utilisation et ton écart.
+        </p>
+
+        <p class="mt-4 text-gray-600">
+          Cela te permet d’analyser ton comportement financier
+          et de prendre de meilleures décisions.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SAVINGS -->
+  <div class="py-16 border-t">
+    <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+
+      <div>
+        <h2 data-i18n="text-3xl font-bold">💰 Épargne & Objectifs</h2>
+
+        <p class="mt-4 text-gray-600">
+          Dans cette section, tu peux créer des objectifs financiers.
+        </p>
+
+        <p class="mt-4 text-gray-600">
+          Par exemple :
+          acheter un téléphone, voyager, ou économiser une somme précise.
+        </p>
+
+        <p class="mt-4 text-gray-600">
+          TAF suit automatiquement ton épargne et te montre ta progression.
+        </p>
+
+        <p class="mt-4 text-gray-600">
+          Cela te motive à économiser et à atteindre tes objectifs plus rapidement.
+        </p>
+      </div>
+
+      <div class="yellow-soft p-6 rounded-2xl">
+        💡 Tu vois clairement combien tu as déjà économisé et combien il reste
+      </div>
+
+    </div>
+  </div>
+
+  <!-- BUDGET -->
+  <div class="py-16 border-t bg-yellow-50">
+    <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+
+      <div class="yellow-soft p-6 rounded-2xl">
+        💡 Compare facilement ce que tu avais prévu et ce que tu dépenses réellement
+      </div>
+
+      <div>
+        <h2 data-i18n="text-3xl font-bold">💼 Gestion de Budget (TAF)</h2>
+
+        <p class="mt-4 text-gray-600">
+          C’est le cœur de l’application.
+        </p>
+
+        <p class="mt-4 text-gray-600">
+          Tu peux créer ton budget mensuel en ajoutant des catégories :
+          nourriture, transport, loyer, loisirs, épargne…
+        </p>
+
+        <p class="mt-4 text-gray-600">
+          Pour chaque catégorie, tu définis un montant prévu
+          puis tu ajoutes tes dépenses réelles.
+        </p>
+
+        <p class="mt-4 text-gray-600">
+          TAF calcule automatiquement la différence
+          pour te montrer si tu respectes ton budget.
+        </p>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="py-16 border-t">
+    <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+
+      <div>
+        <h2 data-i18n="text-3xl font-bold">⚙️ Paramètres</h2>
+
+        <p class="mt-4 text-gray-600">
+          Tu peux personnaliser ton expérience selon tes préférences.
+        </p>
+
+        <p class="mt-4 text-gray-600">
+          Tu peux choisir la devise, activer ou désactiver les graphiques,
+          modifier le mode de calcul ou activer les alertes.
+        </p>
+
+        <p class="mt-4 text-gray-600">
+          Tout est conçu pour s’adapter à ton utilisation.
+        </p>
+      </div>
+
+      <div class="yellow-soft p-6 rounded-2xl">
+        💡 Adapte TAF à ta façon de gérer ton argent
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PRIVACY -->
+  <div class="py-16 border-t bg-yellow-50">
+    <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+
+      <div class="yellow-soft p-6 rounded-2xl">
+        🔒 Tes données restent sur ton appareil
+      </div>
+
+      <div>
+        <h2 data-i18n="text-3xl font-bold">🔒 Confidentialité</h2>
+
+        <p class="mt-4 text-gray-600">
+          TAF respecte totalement ta vie privée.
+        </p>
+
+        <p class="mt-4 text-gray-600">
+          Aucune inscription n’est nécessaire.
+          Tes données ne sont pas envoyées sur internet.
+        </p>
+
+        <p class="mt-4 text-gray-600">
+          Tout est stocké directement dans ton navigateur.
+        </p>
+
+        <p class="mt-4 text-gray-600">
+          Tu gardes un contrôle total sur tes informations.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CONCLUSION -->
+  <div class="py-24 text-center">
+    <div class="max-w-4xl mx-auto px-6">
+
+      <h2 class="text-4xl font-bold">
+        Tout ce dont tu as besoin pour gérer ton argent est ici
+      </h2>
+
+      <p class="mt-6 text-gray-600">
+        Avec TAF, tu peux suivre, analyser, contrôler et améliorer ta gestion financière
+        sans complexité.
+      </p>
+
+    </div>
+  </div>
+
+</section>
+
+ 
+
+  <section id="stats">
+
+    <h2>📊 Rapports & Statistiques</h2>
+
+    <div class="stats-container">
+
+      <div class="stat-card">
+        <h3>💰 Budget total</h3>
+        <p id="statBudget">0 FCFA</p>
+      </div>
+
+      <div class="stat-card">
+        <h3>Dépenses totales</h3>
+        <p id="statDepenses">0 FCFA</p>
+      </div>
+
+      <div class="stat-card">
+        <h3>Épargne</h3>
+        <p id="statEpargne">0 FCFA</p>
+      </div>
+
+      <div class="stat-card">
+        <h3>Taux d'utilisation</h3>
+        <p id="statTaux">0%</p>
+      </div>
+
+      <div class="stat-card">
+        <h3>Écart total</h3>
+        <p id="statEcart">0 FCFA</p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <section id="savings">
+
+    <h2>💰 Épargne & Objectifs</h2>
+
+    <div class="savings-box">
+
+      <input type="text" id="goalName" placeholder="Nom de l'objectif (ex: Voyage)">
+      <input type="number" id="goalAmount" placeholder="Montant cible (FCFA)">
+      
+      <button onclick="createGoal()">Créer objectif</button>
+
+    </div>
+
+    <div id="goalsContainer"></div>
+
+  </section>
+
+  <section id="settings">
+
+    <h2>⚙️ Paramètres</h2>
+
+    <div class="privacy-box">
+
+      <h3>💵 Devise</h3>
+      <select id="currencySelect" onchange="setCurrency()">
+        <option value="FCFA">FCFA</option>
+        <option value="USD">USD</option>
+        <option value="EUR">EUR</option>
+      </select>
+
+      <h3>📊 Graphiques</h3>
+      <label>
+        <input type="checkbox" id="chartsToggle" onchange="setCharts()">
+        Afficher les graphiques
+      </label>
+
+      <h3>📊 Mode calcul</h3>
+      <select id="calcMode" onchange="setCalcMode()">
+        <option value="simple">Simple</option>
+        <option value="detailed">Détaillé</option>
+      </select>
+
+      <h3>🔔 Alerte budget</h3>
+      <label>
+        <input type="checkbox" id="budgetAlert" onchange="setAlert()">
+        Activer les alertes
+      </label>
+
+    </div>
+
+  </section>
+
+  <section id="privacy">
+
+  <h2>🔒 Politique de confidentialité de TAF</h2>
+  <p style="text-align:center;"><strong>Dernière mise à jour : 26 avril 2026</strong></p>
+
+  <div class="privacy-box">
+
+    <h3>1. Introduction</h3>
+    <p>
+      Bienvenue sur TAF (Take All Finances). Nous accordons une grande importance à la protection de votre vie privée.
+      Cette politique de confidentialité explique en détail comment les informations sont traitées lorsque vous utilisez notre site web.
+    </p>
+
+    <p>
+      En utilisant TAF, vous acceptez les pratiques décrites dans cette politique.
+    </p>
+
+    <h3>2. Définition des termes</h3>
+    <ul>
+      <li><strong>Utilisateur :</strong> toute personne utilisant le site TAF</li>
+      <li><strong>Site :</strong> l’application web TAF</li>
+      <li><strong>Données :</strong> informations saisies dans le budget ou les outils</li>
+      <li><strong>Service :</strong> fonctionnalités offertes par TAF</li>
+    </ul>
+
+    <h3>3. Données collectées</h3>
+    <p>
+      TAF ne collecte aucune donnée personnelle sensible permettant de vous identifier directement.
+      Nous ne demandons pas de nom, email, numéro de téléphone ou mot de passe.
+    </p>
+
+    <p>Les seules données utilisées sont :</p>
+    <ul>
+      <li>Budgets financiers saisis par l’utilisateur</li>
+      <li>Dépenses enregistrées</li>
+      <li>Objectifs d’épargne</li>
+      <li>Préférences locales du navigateur</li>
+      <li>Données de fonctionnement du site (localStorage)</li>
+    </ul>
+
+    <h3>4. Méthode de stockage des données</h3>
+    <p>
+      Toutes les données sont stockées localement sur votre appareil via la technologie <strong>localStorage</strong>.
+      Cela signifie que :
+    </p>
+
+    <ul>
+      <li>Aucune donnée n’est envoyée vers un serveur TAF</li>
+      <li>Aucune base de données centrale n’est utilisée</li>
+      <li>Vous gardez le contrôle total sur vos informations</li>
+    </ul>
+
+    <h3>5. Finalité de l’utilisation des données</h3>
+    <p>Les données sont utilisées uniquement pour :</p>
+    <ul>
+      <li>Afficher votre tableau de budget</li>
+      <li>Calculer vos statistiques financières</li>
+      <li>Suivre vos objectifs d’épargne</li>
+      <li>Améliorer les fonctionnalités du site</li>
+      <li>Optimiser l’expérience utilisateur</li>
+    </ul>
+
+    <h3>6. Partage des données</h3>
+    <p>
+      TAF ne vend, ne loue et ne partage aucune donnée personnelle avec des tiers.
+    </p>
+
+    <p>
+      Cependant, certains services tiers (comme les régies publicitaires) peuvent traiter des données anonymes
+      à des fins de publicité ou d’analyse.
+    </p>
+
+    <h3>7. Publicité et services tiers</h3>
+    <p>
+      TAF peut afficher des publicités via des réseaux publicitaires tiers (ex : PropellerAds ou autres partenaires similaires).
+    </p>
+
+    <p>
+      Ces partenaires peuvent utiliser des technologies telles que les cookies, pixels ou identifiants anonymes
+      pour afficher des annonces adaptées.
+    </p>
+
+    <p>
+      TAF n’a aucun contrôle sur les données collectées par ces services externes.
+      Nous vous recommandons de consulter leurs politiques de confidentialité.
+    </p>
+
+    <h3>8. Cookies</h3>
+    <p>
+      Le site peut utiliser des cookies pour :
+    </p>
+    <ul>
+      <li>Améliorer les performances du site</li>
+      <li>Analyser le trafic de manière anonyme</li>
+      <li>Afficher des publicités personnalisées</li>
+      <li>Mémoriser certaines préférences utilisateur</li>
+    </ul>
+
+    <p>
+      Vous pouvez désactiver les cookies à tout moment via les paramètres de votre navigateur.
+    </p>
+
+    <h3>9. Technologies utilisées</h3>
+    <p>
+      TAF utilise plusieurs technologies web modernes :
+    </p>
+    <ul>
+      <li>localStorage pour sauvegarder les données</li>
+      <li>JavaScript pour les calculs et interactions</li>
+      <li>Chart.js pour les graphiques</li>
+      <li>Scripts publicitaires tiers</li>
+    </ul>
+
+    <h3>10. Sécurité des données</h3>
+    <p>
+      Nous mettons en place des mesures techniques pour assurer le bon fonctionnement de l’application.
+      Cependant, aucune technologie web n’est totalement sécurisée à 100%.
+    </p>
+
+    <p>
+      L’utilisateur est responsable de la gestion de ses données sur son appareil.
+    </p>
+
+    <h3>11. Conservation des données</h3>
+    <p>
+      Les données sont conservées uniquement sur votre navigateur jusqu’à suppression manuelle.
+      Vous pouvez les supprimer en vidant le cache ou en réinitialisant l’application.
+    </p>
+
+    <h3>12. Droits de l’utilisateur</h3>
+    <p>Vous avez un contrôle total sur vos données :</p>
+    <ul>
+      <li>Modifier vos informations à tout moment</li>
+      <li>Supprimer les données stockées localement</li>
+      <li>Réinitialiser complètement l’application</li>
+      <li>Bloquer les cookies via votre navigateur</li>
+    </ul>
+
+    <h3>13. Protection des mineurs</h3>
+    <p>
+      TAF n’est pas destiné aux enfants de moins de 13 ans.
+      Nous ne collectons pas volontairement de données concernant des mineurs.
+    </p>
+
+    <h3>14. Transfert international</h3>
+    <p>
+      Certaines données anonymes peuvent être traitées par des services tiers situés dans différents pays.
+      Ces services respectent leurs propres politiques de confidentialité.
+    </p>
+
+    <h3>15. Limitation de responsabilité</h3>
+    <p>
+      TAF est un outil d’assistance financière.
+      Nous ne garantissons pas l’exactitude parfaite des calculs ou des informations.
+    </p>
+
+    <p>
+      L’utilisateur reste entièrement responsable de l’utilisation des données saisies.
+    </p>
+
+    <h3>16. Liens externes</h3>
+    <p>
+      Le site peut contenir des liens vers d’autres sites web.
+      TAF n’est pas responsable de leur contenu ni de leurs politiques de confidentialité.
+    </p>
+
+    <h3>17. Modifications de cette politique</h3>
+    <p>
+      Cette politique peut être mise à jour à tout moment.
+      Les modifications seront publiées directement sur cette page.
+    </p>
+
+    <p>
+      L’utilisation continue du site après modification signifie que vous acceptez la nouvelle version.
+    </p>
+
+    <h3>18. Contact</h3>
+    <p>
+      Pour toute question concernant cette politique de confidentialité, veuillez utiliser la section paramètres ou contact du site.
+    </p>
+
+    <br>
+
+    <p style="text-align:center;">
+      <strong>TAF – Take All Finances</strong><br>
+      Votre sécurité et votre confidentialité sont notre priorité.
+    </p>
+
+  </div>
+
+</section>
+
+  <section id="taf">
+
+    <h2>💰 Gestion de Budget Mensuel</h2>
+
+    <p style="text-align:center; color:#7f8c8d;">
+      Devise : <span id="currentCurrency">FCFA</span>
+    </p>
+
+    <table class="budget-table" id="budgetTable">
+      <thead>
+        <tr>
+          <th>Catégorie</th>
+          <th>Budget prévu (FCFA)</th>
+          <th>Dépenses réelles (FCFA)</th>
+          <th>Écart (Prévu - Réel)</th>
+          <th>Commentaires</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
     </table>
+
+    <div class="summary-box">
+      <strong>Total Revenus :</strong> <span id="totalRevenus">0</span> FCFA &nbsp;&nbsp;&nbsp;
+      <strong>Total Dépenses :</strong> <span id="totalDepenses">0</span> FCFA &nbsp;&nbsp;&nbsp;
+      <strong>Solde Final :</strong> <span id="soldeFinal">0</span> FCFA
+    </div>
+
+    <div style="text-align:center; margin: 20px 0;">
+      <button onclick="resetToPlanned()">Réinitialiser aux valeurs prévues</button>
+      <button onclick="importData()">Importer (JSON)</button>
+      <button onclick="addEmptyRow()">➕ Ajouter une ligne</button>
+    </div>
+
+  </section>
+
 </div>
 
-<table id="budget">
+<script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
-  
-<thead>
-<tr>
-    <th>Poste</th>
-    <th>Prévu</th>
-    <th>Réel</th>
-    <th>Écart</th>
-</tr>
-</thead>
+<footer class="taf-footer">
 
-<tbody id="budget-body">
+  <div class="footer-content">
 
+    <div class="footer-brand">
+      <h2>TAF</h2>
+      <p>Prends le contrôle de ton argent simplement.</p>
+    </div>
 
+    <div class="footer-links">
+      <a href="#" onclick="showSection('dashboard')">📊 Dashboard</a>
+      <a href="#" onclick="showSection('stats')">📈 Stats</a>
+      <a href="#" onclick="showSection('savings')">💰 Épargne</a>
+      <a href="#" onclick="showSection('privacy')">🔒 Confidentialité</a>
+    </div>
 
-<!-- ✅ CORRECTION : ajout de "data" -->
-<tr class="data revenu">
-    <td>Salaire</td>
-    <td><input type="number" class="prevu" value="0"></td>
-    <td><input type="number" class="reel" value="0"></td>
-    <td class="ecart">0</td>
-</tr>
+    <div class="footer-info">
+      <p>© 2026 TAF</p>
+      <p>Abidjan • Côte d’Ivoire</p>
+    </div>
 
-<tr class="section">
-    <td colspan="4">DÉPENSES</td>
-</tr>
+  </div>
 
-<tr class="subsection">
-    <td colspan="4">Achats</td>
-</tr>
-
-<tr class="total">
-    <td>SOLDE FINAL</td>
-    <td colspan="2"></td>
-    <td id="solde-final">0 XOF</td>
-</tr>
-
-</tbody>
-</table>
-
-
-<canvas id="graphique" width="400" height="200"></canvas>
-
-<button id="btn-aide">ℹ️ Aide</button>
-
-<div id="banniere-aide" class="banniere">
-    <div class="banniere-contenu">
-        <span id="close-aide">✖</span>
-         <div class="aide">
-    <div class="aide">
-    <div class="aide">
-        <b>Comment utiliser TAF ?</b>
-
-
-    <b>💡 À quoi sert ce tableau ?</b>
-
-    <span>
-        Ce tableau te permet de suivre ton budget en comparant ce que tu prévois avec ce que tu dépenses réellement.
-    </span>
-
-    <br>
-
-    <b>🧾 Comment l’utiliser :</b>
-
-    <span>
-        1. Dans la colonne <b>"prévu"</b>, entre les montants que tu penses dépenser ou gagner
-    </span>
-
-    <span>
-        2. Dans la colonne <b>"réel"</b>, entre les montants que tu as réellement dépensés ou reçus
-    </span>
-
-    <span>
-        3. L’écart se calcule automatiquement entre les deux
-    </span>
-
-    <br>
-
-    <b>📊 Comprendre les résultats :</b>
-
-    <span>
-        👉 Si l’écart est <b>négatif</b>, tu as dépensé plus que prévu
-    </span>
-
-    <span>
-        👉 Si l’écart est <b>positif</b>, tu es en dessous de ton budget ou tu as économisé
-    </span>
-
-    <br>
-
-    <b>📈 Tableau de bord :</b>
-
-    <span>
-        Le tableau de bord te donne une vue rapide de ta situation financière.
-    </span>
-
-    <span>
-        • Il affiche le total de tes dépenses  
-    </span>
-
-    <span>
-        • Il affiche le total prévu  
-    </span>
-
-    <span>
-        • Il calcule automatiquement l’écart global  
-    </span>
-
-    <span>
-        • Il t’aide à voir rapidement si tu respectes ton budget  
-    </span>
-
-<b>Comment sauvegarder:</b>
-
- <span>
-        Pour sauvegarder tout ce que vous avez fait il vous suffit juste d'actualiser la page 
-    </span>
-
-    <br>
-
-     <span>
-        • Merci de bien vouloir partager au maximum le lien du site web a vos amies ou vos proches pour nous soutenir
-    </span>
-</div>
-
-<script src="script.js" defer></script>
-
-<script>
-function addClickZone() {
-  // zone contrôlée
-}
-</script>
-
-<script>
-(function(s){
-  s.dataset.zone='10899406';
-  s.src='https://al5sm.com/tag.min.js';
-})(document.body.appendChild(document.createElement('script')));
-</script>
+</footer>
 
 </body>
 </html>

@@ -1,377 +1,496 @@
-function formatXOF(valeur) {
-    return valeur.toLocaleString("fr-FR") + " XOF";
+function toggleMenu() {
+  document.getElementById("sidebar").classList.toggle("active");
+
+  // ✅ FIX UNIQUEMENT ICI (évite le crash si overlay n'existe pas)
+  const overlay = document.getElementById("overlay");
+  if (overlay) {
+    overlay.classList.toggle("active");
+  }
 }
 
-// 🎯 CANVAS
-const canvas = document.getElementById("graphique");
-const ctx = canvas.getContext("2d");
+function showSection(id) {
+  const sections = document.querySelectorAll("section");
 
-// 🎯 DESSIN GRAPHIQUE
+  sections.forEach(section => {
+    section.style.display = "none";
+  });
 
-function drawRoundedRect(ctx, x, y, width, height, radius) {
-    ctx.beginPath();
-    ctx.moveTo(x + radius, y);
-    ctx.lineTo(x + width - radius, y);
-    ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-    ctx.lineTo(x + width, y + height);
-    ctx.lineTo(x, y + height);
-    ctx.lineTo(x, y + radius);
-    ctx.quadraticCurveTo(x, y, x + radius, y);
-    ctx.closePath();
-    ctx.fill();
+  const active = document.getElementById(id);
+  if (active) {
+    active.style.display = "block";
+  }
 }
 
-function dessinerGraphique() {
+let balance = 0;
+let totalIncome = 0;
+let totalExpense = 0;
 
-    if (!canvas || !ctx) return;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    let lignes = document.querySelectorAll("#budget-body tr");
-
-    let depenses = [];
-
-    lignes.forEach(ligne => {
-
-        let nom = ligne.querySelector("input[type='text']");
-        let reel = ligne.querySelector(".reel");
-
-        if (nom && reel) {
-            let valeur = parseFloat(reel.value) || 0;
-
-            if (valeur > 0) {
-                depenses.push({
-                    nom: nom.value || "Dépense",
-                    valeur: valeur
-                });
-            }
-        }
-    });
-
-    if (depenses.length === 0) return;
-
-    let max = Math.max(...depenses.map(d => d.valeur));
-
-    let largeurBarre = 40;
-    let espace = 20;
-    let baseY = 180;
-
-    let progress = 0;
-
-    function animate() {
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        progress += 0.02;
-
-        if (progress > 1) progress = 1;
-
-        ctx.font = "12px Arial";
-
-        depenses.forEach((depense, index) => {
-
-            let hauteurFinale = (depense.valeur / max) * 120;
-
-            let hauteur = hauteurFinale * progress;
-
-            let x = 30 + index * (largeurBarre + espace);
-
-            ctx.fillStyle = `hsl(${index * 60}, 70%, 50%)`;
-
-            drawRoundedRect(ctx, x, baseY - hauteur, largeurBarre, hauteur, 8);
-
-            ctx.fillStyle = "black";
-            ctx.fillText(depense.nom, x, baseY + 15);
-            ctx.fillText(Math.floor(depense.valeur * progress) + " XOF", x, baseY - hauteur - 5);
-        });
-
-        ctx.beginPath();
-        ctx.moveTo(20, baseY);
-        ctx.lineTo(canvas.width - 20, baseY);
-        ctx.stroke();
-
-        if (progress < 1) {
-            requestAnimationFrame(animate);
-        }
-    }
-
-    animate();
+function updateDashboard() {
+  document.getElementById("balance").innerText = balance + " FCFA";
+  document.getElementById("incomeTotal").innerText = totalIncome + " FCFA";
+  document.getElementById("expenseTotal").innerText = totalExpense + " FCFA";
 }
 
-// 🎯 CALCUL
-function calculer() {
+function addIncome() {
+  let income = Number(document.getElementById("income").value);
 
-    let totalPrevu = 0;
-    let totalReel = 0;
+  if (income > 0) {
+    totalIncome += income;
+    balance += income;
+    updateDashboard();
+  }
 
-    document.querySelectorAll("#budget-body tr").forEach(ligne => {
-
-        let prevuInput = ligne.querySelector(".prevu");
-        let reelInput = ligne.querySelector(".reel");
-        let ecartCell = ligne.querySelector(".ecart");
-
-        if (!prevuInput || !reelInput || !ecartCell) return;
-
-        let prevu = parseFloat(prevuInput.value) || 0;
-        let reel = parseFloat(reelInput.value) || 0;
-
-        let ecart = reel - prevu;
-
-        ecartCell.textContent = formatXOF(ecart);
-
-        totalPrevu += prevu;
-        totalReel += reel;
-    });
-
-    document.getElementById("solde-final").textContent = formatXOF(totalReel - totalPrevu);
-
-    mettreAJourDashboard();
-    dessinerGraphique();
-    sauvegarder();
+  document.getElementById("income").value = "";
 }
 
-// 🔥 DASHBOARD
-function mettreAJourDashboard() {
+function addExpense() {
+  let expense = Number(document.getElementById("expense").value);
 
-    let totalPrevu = 0;
-    let totalReel = 0;
+  if (expense > 0) {
+    totalExpense += expense;
+    balance -= expense;
+    updateDashboard();
+  }
 
-    document.querySelectorAll("#budget-body tr").forEach(ligne => {
-
-    let prevuInput = ligne.querySelector(".prevu");
-    let reelInput = ligne.querySelector(".reel");
-
-    if (!prevuInput || !reelInput) return;
-
-    let prevu = parseFloat(prevuInput.value) || 0;
-    let reel = parseFloat(reelInput.value) || 0;
-
-    totalPrevu += prevu;
-    totalReel += reel;
-});
-
-    let ecart = totalPrevu - totalReel;
-
-    let elPrevu = document.getElementById("totalPrevu");
-    let elReel = document.getElementById("totalDepense");
-    let elEcart = document.getElementById("ecart");
-
-   if (elPrevu) animerChiffre(elPrevu, totalPrevu);
-if (elReel) animerChiffre(elReel, totalReel);
-if (elEcart) animerChiffre(elEcart, ecart);
+  document.getElementById("expense").value = "";
 }
 
-// 🎯 OBJECTIF
-let objectif = 0;
+let transactions = [];
 
-function definirObjectif() {
-    objectif = parseFloat(document.getElementById("objectifInput").value) || 0;
+function addTransaction() {
+  let desc = document.getElementById("desc").value;
+  let amount = Number(document.getElementById("amount").value);
+  let type = document.getElementById("type").value;
 
-    let el = document.getElementById("objectif");
-    if (el) {
-        el.innerText = objectif + " FCFA";
-    }
+  if (desc === "" || amount <= 0) return;
+
+  let transaction = { desc, amount, type };
+  transactions.push(transaction);
+
+  renderTable();
+
+  document.getElementById("desc").value = "";
+  document.getElementById("amount").value = "";
 }
 
-// 🎯 SAUVEGARDE
-function sauvegarder() {
+function renderTable() {
+  let table = document.getElementById("tableBody");
+  table.innerHTML = "";
 
-    let mois = document.getElementById("mois").value;
-
-    let donnees = [];
-
-    document.querySelectorAll("#budget-body tr").forEach(ligne => {
-
-        let nom = ligne.querySelector("input[type='text']");
-        let prevu = ligne.querySelector(".prevu");
-        let reel = ligne.querySelector(".reel");
-
-        if (nom && prevu && reel) {
-            donnees.push({
-                nom: nom.value,
-                prevu: prevu.value,
-                reel: reel.value
-            });
-        }
-    });
-
-    // 💡 clé différente par mois
-    localStorage.setItem("budget_" + mois, JSON.stringify(donnees));
-}
-
-// 🎯 CHARGEMENT
-function charger() {
-
-    let mois = document.getElementById("mois").value;
-
-    let donnees = JSON.parse(localStorage.getItem("budget_" + mois)) || [];
-
-    let tbody = document.getElementById("budget-body");
-
-    // ❗ vider le tableau (sauf structure)
-    let lignes = tbody.querySelectorAll("tr:not(.section):not(.subsection):not(.total)");
-    lignes.forEach(l => l.remove());
-
-    donnees.forEach(item => {
-
-        let ligne = document.createElement("tr");
-
-        ligne.innerHTML = `
-            <td>
-                <input type="text" value="${item.nom}">
-                <button class="supprimer">❌</button>
-            </td>
-            <td><input type="number" class="prevu" value="${item.prevu}"></td>
-            <td><input type="number" class="reel" value="${item.reel}"></td>
-            <td class="ecart">0</td>
-        `;
-
-        tbody.appendChild(ligne);
-
-        ligne.querySelectorAll("input").forEach(input => {
-            input.addEventListener("input", calculer);
-        });
-
-        ligne.querySelector(".supprimer").addEventListener("click", function () {
-            ligne.remove();
-            calculer();
-        });
-    });
-
-    calculer();
-} 
-// ➕ AJOUT
-document.getElementById("ajouter-depense").addEventListener("click", function () {
-
-    let tbody = document.getElementById("budget-body");
-
-    let ligne = document.createElement("tr");
-
-    ligne.classList.add("ligne-animation"); // 👈 animation
-
-    ligne.innerHTML = `
-        <td>
-            <input type="text" placeholder="Dépense">
-            <button class="supprimer">❌</button>
-        </td>
-        <td><input type="number" class="prevu" value="0"></td>
-        <td><input type="number" class="reel" value="0"></td>
-        <td class="ecart">0 XOF</td>
+  transactions.forEach(t => {
+    let row = `
+      <tr>
+        <td>${t.desc}</td>
+        <td>${t.amount} FCFA</td>
+        <td>${t.type}</td>
+      </tr>
     `;
+    table.innerHTML += row;
+  });
+}
 
-    let solde = document.getElementById("solde-final").closest("tr");
-    tbody.insertBefore(ligne, solde);
 
-    // 👇 activation de l’animation (petit délai)
-    setTimeout(() => {
-        ligne.classList.add("visible");
-    }, 10);
+// ==================== TABLEAU DE BUDGET ====================
 
-    ligne.querySelectorAll("input").forEach(input => {
-        input.addEventListener("input", calculer);
+let budgetData = [];
+
+function renderBudgetTable() {
+  const tbody = document.getElementById("tableBody");
+  tbody.innerHTML = "";
+
+  budgetData.forEach((row, index) => {
+    let tr = document.createElement("tr");
+
+    if (row.cat === "REVENUS" || row.cat === "TOTAL REVENUS") tr.classList.add("revenu-row");
+    else if (row.cat.includes("DÉPENSES FIXES") || row.cat === "Sous-total Dépenses fixes") tr.classList.add("section-row");
+    else if (row.cat.includes("DÉPENSES VARIABLES") || row.cat === "Sous-total Dépenses variables") tr.classList.add("section-row");
+    else if (row.cat.includes("ÉPARGNE") || row.cat.includes("TOTAL DÉPENSES + ÉPARGNE") || row.cat.includes("SOLDE FINAL")) tr.classList.add("total-row");
+
+    let ecartHTML = "";
+    if (row.prevu !== "" && row.reel !== "") {
+      let ecart = row.prevu - row.reel;
+      ecartHTML = `<span class="${ecart >= 0 ? 'ecart-pos' : 'ecart-neg'}">${ecart.toLocaleString('fr-FR')}</span>`;
+    }
+
+    tr.innerHTML = `
+  <td><input type="text" value="${row.cat || ''}" oninput="budgetData[${index}].cat = this.value"></td>
+  <td><input type="number" value="${row.prevu || ''}" oninput="budgetData[${index}].prevu = this.value"></td>
+  <td><input type="number" value="${row.reel || ''}" oninput="updateReel(${index}, this.value)"></td>
+  <td></td>
+  <td><input type="text" value="${row.comment || ''}" oninput="updateComment(${index}, this.value)"></td>
+
+  <td>
+    <button onclick="deleteRow(${index})" style="background:red;color:white;border:none;padding:5px;border-radius:5px;">
+      🗑️
+    </button>
+  </td>
+`;
+   tr.classList.add("add-row");
+tbody.appendChild(tr);
+  });
+
+  updateBudgetSummary();
+  
+}
+
+function updateReel(index, value) {
+  budgetData[index].reel = value === "" ? 0 : parseFloat(value);
+
+  updateBudgetSummary();
+  updateChart();
+}
+
+function updateComment(index, value) {
+  budgetData[index].comment = value;
+}
+
+function updateBudgetSummary() {
+  let totalRevenus = 0;
+  let totalDepenses = 0;
+  let totalEpargne = 0;
+
+  budgetData.forEach(row => {
+    let cat = (row.cat || "").toLowerCase();
+    let prevu = Number(row.reel || 0);
+
+    if (cat.includes("revenu") || cat.includes("salaire")) {
+      totalRevenus += prevu;
+    }
+    else if (cat.includes("épargne") || cat.includes("epargne")) {
+      totalEpargne += prevu;
+    }
+    else if (cat !== "" && !cat.includes("total") && !cat.includes("revenu")) {
+      totalDepenses += prevu;
+    }
+
+    updateCharts();
+    updateStats();
+    renderGoals();
+  });
+
+  let solde = totalRevenus - totalDepenses - totalEpargne;
+
+  document.getElementById("totalRevenus").textContent = totalRevenus.toLocaleString('fr-FR');
+  document.getElementById("totalDepenses").textContent = (totalDepenses + totalEpargne).toLocaleString('fr-FR');
+  document.getElementById("soldeFinal").textContent = solde.toLocaleString('fr-FR');
+}
+
+function resetToPlanned() {
+  if (confirm("Réinitialiser toutes les dépenses réelles aux valeurs prévues ?")) {
+    budgetData.forEach(row => {
+      if (row.prevu !== "" && !row.cat.includes("TOTAL")) {
+        row.reel = row.prevu;
+      }
     });
+    renderBudgetTable();
+  }
+}
 
-    ligne.querySelector(".supprimer").addEventListener("click", function () {
-        ligne.remove();
-        calculer();
-    });
+function exportData() {
+  const jsonStr = JSON.stringify(budgetData, null, 2);
+  const blob = new Blob([jsonStr], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "budget_avril_2026.json";
+  a.click();
+  URL.revokeObjectURL(url);
+  alert("✅ Budget exporté avec succès !");
+}
 
-    calculer();
-});
+function importData() {
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = ".json";
+  input.onchange = e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        budgetData = JSON.parse(ev.target.result);
+        renderBudgetTable();
+        alert("✅ Budget importé avec succès !");
+      } catch (err) {
+        alert("❌ Erreur : Le fichier JSON n'est pas valide.");
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
 
-
-// ⭐ AJOUT BOUTON AIDE (INTÉGRÉ)
 document.addEventListener("DOMContentLoaded", () => {
-
-    const btn = document.getElementById("btn-aide");
-    const banniere = document.getElementById("banniere-aide");
-    const close = document.getElementById("close-aide");
-
-    if (!btn || !banniere || !close) {
-        console.log("Erreur : élément aide introuvable");
-        return;
-    }
-
-    btn.onclick = () => {
-        banniere.style.display = "flex";
-    };
-
-    close.onclick = (e) => {
-        e.stopPropagation();
-        banniere.style.display = "none";
-    };
-
-    banniere.onclick = (e) => {
-        if (e.target === banniere) {
-            banniere.style.display = "none";
-        }
-    };
-
+  renderBudgetTable();
 });
 
+function addEmptyRow() {
+  budgetData.push({
+    cat: "",
+    prevu: "",
+    reel: "",
+    comment: ""
+  });
 
-// 👇 INIT
-charger();
-dessinerGraphique();
-
-
-function animerChiffre(element, valeurFinale) {
-
-    let debut = 0;
-    let duree = 600; // durée en ms
-    let start = null;
-
-    function step(timestamp) {
-        if (!start) start = timestamp;
-        let progress = timestamp - start;
-
-        let valeurActuelle = Math.min(
-            Math.floor((progress / duree) * valeurFinale),
-            valeurFinale
-        );
-
-        element.innerText = valeurActuelle + " FCFA";
-
-        if (progress < duree) {
-            requestAnimationFrame(step);
-        } else {
-            element.innerText = valeurFinale + " FCFA";
-        }
-    }
-
-    requestAnimationFrame(step);
-}
-document.getElementById("mois").addEventListener("change", function () {
-
-    let tableau = document.getElementById("budget");
-
-    // animation sortie
-    tableau.classList.add("fade-out");
-
-    setTimeout(() => {
-        charger(); // recharge les données
-
-        tableau.classList.remove("fade-out");
-        tableau.classList.add("fade-in");
-
-        setTimeout(() => {
-            tableau.classList.remove("fade-in");
-        }, 300);
-
-    }, 300);
-});
-const selectMois = document.getElementById("mois");
-
-if (selectMois) {
-    selectMois.addEventListener("change", function () {
-        charger();
-    });
+  renderBudgetTable();
 }
 
-document.getElementById("ajouter-depense").addEventListener("click", function() {
-  // action ajouter dépense
+function deleteRow(index) {
+  const table = document.getElementById("tableBody");
+  const row = table.children[index];
+
+  if (!row) return;
+
+  // 🔥 animation avant suppression
+  row.classList.add("fade-out");
+
+  setTimeout(() => {
+    budgetData.splice(index, 1);
+    renderBudgetTable();
+
+    // 🔥 mise à jour globale
+    updateBudgetSummary();
+    updateCharts();
+    updateStats();
+    renderGoals();
+
+  }, 300); // durée = animation CSS
+}
+
+let chart;
+
+let depenseChart, epargneChart, resteChart;
+
+function updateCharts() {
+
+  let totalRevenus = 0;
+  let totalDepenses = 0;
+  let totalEpargne = 0;
+
+  budgetData.forEach(row => {
+    let cat = (row.cat || "").toLowerCase();
+    let value = Number(row.reel || 0);
+
+    if (cat.includes("revenu")) {
+      totalRevenus += value;
+    }
+    else if (cat.includes("epargne") || cat.includes("épargne")) {
+      totalEpargne += value;
+    }
+    else if (cat !== "") {
+      totalDepenses += value;
+    }
+  });
+
+  let reste = totalRevenus - totalDepenses - totalEpargne;
+  if (reste < 0) reste = 0;
+
+  let totalGlobal = totalRevenus || (totalDepenses + totalEpargne + reste);
+  if (totalGlobal === 0) totalGlobal = 1;
+
+  if (depenseChart) depenseChart.destroy();
+  if (epargneChart) epargneChart.destroy();
+  if (resteChart) resteChart.destroy();
+
+  depenseChart = new Chart(document.getElementById("depenseChart"), {
+    type: "doughnut",
+    data: {
+      datasets: [{
+        data: [totalDepenses, totalGlobal - totalDepenses],
+        backgroundColor: ["#ff4d4d", "#eee"]
+      }]
+    },
+    options: { maintainAspectRatio: false }
+  });
+
+  epargneChart = new Chart(document.getElementById("epargneChart"), {
+    type: "doughnut",
+    data: {
+      datasets: [{
+        data: [totalEpargne, totalGlobal - totalEpargne],
+        backgroundColor: ["#ffe97a", "#eee"]
+      }]
+    },
+    options: { maintainAspectRatio: false }
+  });
+
+  resteChart = new Chart(document.getElementById("resteChart"), {
+    type: "doughnut",
+    data: {
+      datasets: [{
+        data: [reste, totalGlobal - reste],
+        backgroundColor: ["#4dabf7", "#eee"]
+      }]
+    },
+    options: { maintainAspectRatio: false }
+  });
+}
+
+function updateStats() {
+
+  let totalPrevus = 0;
+  let totalDepenses = 0;
+  let totalEpargne = 0;
+
+  budgetData.forEach(row => {
+    let cat = (row.cat || "").toLowerCase();
+    let prevu = Number(row.prevu || 0);
+    let reel = Number(row.reel || 0);
+
+    totalPrevus += prevu;
+    totalDepenses += reel;
+
+    if (cat.includes("épargne") || cat.includes("epargne")) {
+      totalEpargne += reel;
+    }
+  });
+
+  let taux = totalPrevus > 0 ? (totalDepenses / totalPrevus) * 100 : 0;
+  let ecart = totalPrevus - totalDepenses;
+
+  document.getElementById("statBudget").textContent = totalPrevus.toLocaleString('fr-FR') + " FCFA";
+  document.getElementById("statDepenses").textContent = totalDepenses.toLocaleString('fr-FR') + " FCFA";
+  document.getElementById("statEpargne").textContent = totalEpargne.toLocaleString('fr-FR') + " FCFA";
+  document.getElementById("statTaux").textContent = taux.toFixed(1) + "%";
+  document.getElementById("statEcart").textContent = ecart.toLocaleString('fr-FR') + " FCFA";
+}
+
+let goals = [];
+
+function createGoal() {
+  let name = document.getElementById("goalName").value;
+  let amount = Number(document.getElementById("goalAmount").value);
+
+  if (!name || amount <= 0) return;
+
+  goals.push({
+    name,
+    target: amount,
+    saved: 0
+  });
+
+  renderGoals();
+
+  document.getElementById("goalName").value = "";
+  document.getElementById("goalAmount").value = "";
+}
+
+function addSavings(index) {
+  let value = Number(prompt("Montant à ajouter :"));
+
+  if (value > 0) {
+    goals[index].saved += value;
+    renderGoals();
+  }
+}
+
+function renderGoals() {
+  let container = document.getElementById("goalsContainer");
+  container.innerHTML = "";
+
+  let autoSaved = getTotalEpargne();
+
+  goals.forEach((goal) => {
+
+    let percent = (autoSaved / goal.target) * 100;
+    if (percent > 100) percent = 100;
+
+    container.innerHTML += `
+      <div class="goal-card">
+        <h3>${goal.name}</h3>
+        <p>${autoSaved} / ${goal.target} FCFA</p>
+
+        <div class="progress-bar">
+          <div class="progress" style="width:${percent}%"></div>
+        </div>
+      </div>
+    `;
+  });
+}
+
+function getTotalEpargne() {
+  let total = 0;
+
+  budgetData.forEach(row => {
+    let cat = (row.cat || "").toLowerCase();
+    let value = Number(row.reel || 0);
+
+    if (cat.includes("épargne") || cat.includes("epargne")) {
+      total += value;
+    }
+  });
+
+  return total;
+}
+
+
+
+// ==================== PARAMÈTRES ====================
+
+function setCurrency() {
+  let val = document.getElementById("currencySelect").value;
+  localStorage.setItem("currency", val);
+  applySettings();
+}
+
+function setCharts() {
+  let val = document.getElementById("chartsToggle").checked;
+  localStorage.setItem("charts", val);
+  applySettings();
+}
+
+function setCalcMode() {
+  let val = document.getElementById("calcMode").value;
+  localStorage.setItem("calcMode", val);
+}
+
+function setAlert() {
+  let val = document.getElementById("budgetAlert").checked;
+  localStorage.setItem("alert", val);
+}
+
+// ==================== APPLIQUER LES PARAMÈTRES ====================
+
+function applySettings() {
+
+  const currency = localStorage.getItem("currency") || "FCFA";
+
+  document.querySelectorAll("#statBudget, #statDepenses, #statEpargne, #statEcart, #totalRevenus, #totalDepenses, #soldeFinal").forEach(el => {
+    if (el) {
+      el.textContent = el.textContent.replace(/FCFA|USD|EUR/g, currency);
+    }
+  });
+
+  document.querySelectorAll(".budget-table th, .summary-box").forEach(el => {
+    el.innerHTML = el.innerHTML.replace(/FCFA|USD|EUR/g, currency);
+  });
+
+  const charts = localStorage.getItem("charts");
+
+  document.querySelectorAll(".charts").forEach(el => {
+    el.style.display = (charts === "false") ? "none" : "block";
+  });
+
+  const currencyNow = localStorage.getItem("currency") || "FCFA";
+  document.getElementById("currentCurrency").textContent = currencyNow;
+}
+
+document.getElementById("currencySelect").value =
+  localStorage.getItem("currency") || "FCFA";
+
+document.getElementById("chartsToggle").checked =
+  localStorage.getItem("charts") === "true";
+
+document.getElementById("calcMode").value =
+  localStorage.getItem("calcMode") || "simple";
+
+document.getElementById("budgetAlert").checked =
+  localStorage.getItem("alert") === "true";
+
+window.addEventListener("DOMContentLoaded", applySettings);
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderBudgetTable();
+  showSection("landing"); // 👈 ajoute juste ça
 });
 
-document.getElementById("btn-aide").addEventListener("click", function() {
-  // ouvrir aide
-});
