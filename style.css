@@ -2062,3 +2062,274 @@ body.dark #settings h3 {
     transform: translateY(0);
   }
 }
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    padding: 15px;
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    border-radius: 10px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 22px;
+    }
+
+    .container {
+        padding: 10px;
+    }
+}
+
+.card {
+    background: white;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    margin-bottom: 15px;
+}
+
+button {
+    background: #FFD54F;
+    border: none;
+    color: black;
+    font-weight: bold;
+}
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f6f6f6;
+    color: #222;
+}
+
+h1 {
+    text-align: center;
+    font-size: 24px;
+    margin: 15px 0;
+    color: #333;
+}
+
+/* rend les blocs plus lisibles sans changer ton HTML */
+div {
+    box-sizing: border-box;
+}
+
+/* améliore les sections existantes */
+section, .card, .container > div {
+    background: white;
+    margin: 10px;
+    padding: 12px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+/* inputs plus lisibles */
+input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 15px;
+}
+
+/* boutons propres */
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: none;
+    background: #f0c040;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+/* effet léger au clic */
+button:active {
+    transform: scale(0.99);
+}
+
+@media (max-width: 768px) {
+    body {
+        font-size: 15px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f6f6f6;
+    color: #222;
+}
+
+/* centre tout proprement */
+.container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 15px;
+}
+
+/* titre bien centré */
+h1 {
+    text-align: center;
+    font-size: 22px;
+    margin: 15px 0;
+}
+
+/* blocs bien cadrés */
+.card, section, .container > div {
+    background: white;
+    width: 100%;
+    margin: 12px 0;
+    padding: 14px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* inputs alignés */
+input {
+    width: 100%;
+    display: block;
+    margin-top: 8px;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    font-size: 15px;
+}
+
+/* boutons bien visibles */
+button {
+    width: 100%;
+    display: block;
+    margin-top: 10px;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: #f0c040;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    max-width: 500px;
+margin: 0 auto;
+}
+
+/* améliore le toucher mobile */
+button:active {
+    transform: scale(0.98);
+}
+
+/* optimisation mobile */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    color: #222;
+    line-height: 1.4;
+}
+
+/* conteneur mieux centré */
+.container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 12px;
+}
+
+/* titre plus propre */
+h1 {
+    text-align: center;
+    font-size: 22px;
+    margin: 12px 0 18px;
+}
+
+/* cartes améliorées */
+.card, section, .container > div {
+    background: white;
+    margin-bottom: 12px;
+    padding: 14px;
+    border-radius: 14px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+}
+
+/* inputs plus confortables */
+input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    font-size: 15px;
+    outline: none;
+}
+
+/* focus propre (important UX) */
+input:focus {
+    border-color: #f0c040;
+}
+
+/* boutons plus modernes */
+button {
+    width: 100%;
+    padding: 13px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: none;
+    background: #f0c040;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+/* effet tactile mobile */
+button:active {
+    transform: scale(0.97);
+}
+
+/* petit ajustement mobile */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+}
