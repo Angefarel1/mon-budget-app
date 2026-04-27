@@ -1,60 +1,32 @@
+let config = {
+  currency: localStorage.getItem("currency") || "FCFA",
+  calcMode: localStorage.getItem("calcMode") || "simple",
+  alert: localStorage.getItem("alert") === "true"
+};
+
 function toggleMenu() {
   document.getElementById("sidebar").classList.toggle("active");
-
-  // ✅ FIX UNIQUEMENT ICI (évite le crash si overlay n'existe pas)
-  const overlay = document.getElementById("overlay");
-  if (overlay) {
-    overlay.classList.toggle("active");
-  }
 }
 
 function showSection(id) {
-  const sections = document.querySelectorAll("section");
+  let sections = document.querySelectorAll("section");
 
-  sections.forEach(section => {
-    section.style.display = "none";
+  sections.forEach(sec => {
+    sec.classList.remove("active");
   });
 
-  const active = document.getElementById(id);
-  if (active) {
-    active.style.display = "block";
-  }
+  document.getElementById(id).classList.add("active");
+
+  document.getElementById("sidebar").classList.remove("active");
 }
 
+// page par défaut
+document.addEventListener("DOMContentLoaded", () => {
+  showSection("home");
+});
 let balance = 0;
-let totalIncome = 0;
-let totalExpense = 0;
-
-function updateDashboard() {
-  document.getElementById("balance").innerText = balance + " FCFA";
-  document.getElementById("incomeTotal").innerText = totalIncome + " FCFA";
-  document.getElementById("expenseTotal").innerText = totalExpense + " FCFA";
-}
-
-function addIncome() {
-  let income = Number(document.getElementById("income").value);
-
-  if (income > 0) {
-    totalIncome += income;
-    balance += income;
-    updateDashboard();
-  }
-
-  document.getElementById("income").value = "";
-}
-
-function addExpense() {
-  let expense = Number(document.getElementById("expense").value);
-
-  if (expense > 0) {
-    totalExpense += expense;
-    balance -= expense;
-    updateDashboard();
-  }
-
-  document.getElementById("expense").value = "";
-}
-
+let incomeTotal = 0;
+let expenseTotal = 0;
 let transactions = [];
 
 function addTransaction() {
@@ -62,15 +34,30 @@ function addTransaction() {
   let amount = Number(document.getElementById("amount").value);
   let type = document.getElementById("type").value;
 
-  if (desc === "" || amount <= 0) return;
+  if (!desc || amount <= 0) return;
 
-  let transaction = { desc, amount, type };
-  transactions.push(transaction);
+  transactions.push({ desc, amount, type });
 
+  if (type === "income") {
+    incomeTotal += amount;
+    balance += amount;
+  } else {
+    expenseTotal += amount;
+    balance -= amount;
+  }
+
+  updateUI();
   renderTable();
 
   document.getElementById("desc").value = "";
   document.getElementById("amount").value = "";
+}
+
+function updateUI() {
+  document.getElementById("incomeTotal").innerText = incomeTotal;
+  document.getElementById("expenseTotal").innerText = expenseTotal;
+  document.getElementById("balance").innerText = balance;
+  updateStats();
 }
 
 function renderTable() {
@@ -78,281 +65,24 @@ function renderTable() {
   table.innerHTML = "";
 
   transactions.forEach(t => {
-    let row = `
+    table.innerHTML += `
       <tr>
         <td>${t.desc}</td>
-        <td>${t.amount} FCFA</td>
+        <td>${t.amount}</td>
         <td>${t.type}</td>
       </tr>
     `;
-    table.innerHTML += row;
-  });
-}
-
-
-// ==================== TABLEAU DE BUDGET ====================
-
-let budgetData = [];
-
-function renderBudgetTable() {
-  const tbody = document.getElementById("tableBody");
-  tbody.innerHTML = "";
-
-  budgetData.forEach((row, index) => {
-    let tr = document.createElement("tr");
-
-    if (row.cat === "REVENUS" || row.cat === "TOTAL REVENUS") tr.classList.add("revenu-row");
-    else if (row.cat.includes("DÉPENSES FIXES") || row.cat === "Sous-total Dépenses fixes") tr.classList.add("section-row");
-    else if (row.cat.includes("DÉPENSES VARIABLES") || row.cat === "Sous-total Dépenses variables") tr.classList.add("section-row");
-    else if (row.cat.includes("ÉPARGNE") || row.cat.includes("TOTAL DÉPENSES + ÉPARGNE") || row.cat.includes("SOLDE FINAL")) tr.classList.add("total-row");
-
-    let ecartHTML = "";
-    if (row.prevu !== "" && row.reel !== "") {
-      let ecart = row.prevu - row.reel;
-      ecartHTML = `<span class="${ecart >= 0 ? 'ecart-pos' : 'ecart-neg'}">${ecart.toLocaleString('fr-FR')}</span>`;
-    }
-
-    tr.innerHTML = `
-  <td><input type="text" value="${row.cat || ''}" oninput="budgetData[${index}].cat = this.value"></td>
-  <td><input type="number" value="${row.prevu || ''}" oninput="budgetData[${index}].prevu = this.value"></td>
-  <td><input type="number" value="${row.reel || ''}" oninput="updateReel(${index}, this.value)"></td>
-  <td></td>
-  <td><input type="text" value="${row.comment || ''}" oninput="updateComment(${index}, this.value)"></td>
-
-  <td>
-    <button onclick="deleteRow(${index})" style="background:red;color:white;border:none;padding:5px;border-radius:5px;">
-      🗑️
-    </button>
-  </td>
-`;
-   tr.classList.add("add-row");
-tbody.appendChild(tr);
-  });
-
-  updateBudgetSummary();
-  
-}
-
-function updateReel(index, value) {
-  budgetData[index].reel = value === "" ? 0 : parseFloat(value);
-
-  updateBudgetSummary();
-  updateChart();
-}
-
-function updateComment(index, value) {
-  budgetData[index].comment = value;
-}
-
-function updateBudgetSummary() {
-  let totalRevenus = 0;
-  let totalDepenses = 0;
-  let totalEpargne = 0;
-
-  budgetData.forEach(row => {
-    let cat = (row.cat || "").toLowerCase();
-    let prevu = Number(row.reel || 0);
-
-    if (cat.includes("revenu") || cat.includes("salaire")) {
-      totalRevenus += prevu;
-    }
-    else if (cat.includes("épargne") || cat.includes("epargne")) {
-      totalEpargne += prevu;
-    }
-    else if (cat !== "" && !cat.includes("total") && !cat.includes("revenu")) {
-      totalDepenses += prevu;
-    }
-
-    updateCharts();
-    updateStats();
-    renderGoals();
-  });
-
-  let solde = totalRevenus - totalDepenses - totalEpargne;
-
-  document.getElementById("totalRevenus").textContent = totalRevenus.toLocaleString('fr-FR');
-  document.getElementById("totalDepenses").textContent = (totalDepenses + totalEpargne).toLocaleString('fr-FR');
-  document.getElementById("soldeFinal").textContent = solde.toLocaleString('fr-FR');
-}
-
-function resetToPlanned() {
-  if (confirm("Réinitialiser toutes les dépenses réelles aux valeurs prévues ?")) {
-    budgetData.forEach(row => {
-      if (row.prevu !== "" && !row.cat.includes("TOTAL")) {
-        row.reel = row.prevu;
-      }
-    });
-    renderBudgetTable();
-  }
-}
-
-function exportData() {
-  const jsonStr = JSON.stringify(budgetData, null, 2);
-  const blob = new Blob([jsonStr], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "budget_avril_2026.json";
-  a.click();
-  URL.revokeObjectURL(url);
-  alert("✅ Budget exporté avec succès !");
-}
-
-function importData() {
-  const input = document.createElement("input");
-  input.type = "file";
-  input.accept = ".json";
-  input.onchange = e => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = ev => {
-      try {
-        budgetData = JSON.parse(ev.target.result);
-        renderBudgetTable();
-        alert("✅ Budget importé avec succès !");
-      } catch (err) {
-        alert("❌ Erreur : Le fichier JSON n'est pas valide.");
-      }
-    };
-    reader.readAsText(file);
-  };
-  input.click();
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  renderBudgetTable();
-});
-
-function addEmptyRow() {
-  budgetData.push({
-    cat: "",
-    prevu: "",
-    reel: "",
-    comment: ""
-  });
-
-  renderBudgetTable();
-}
-
-function deleteRow(index) {
-  const table = document.getElementById("tableBody");
-  const row = table.children[index];
-
-  if (!row) return;
-
-  // 🔥 animation avant suppression
-  row.classList.add("fade-out");
-
-  setTimeout(() => {
-    budgetData.splice(index, 1);
-    renderBudgetTable();
-
-    // 🔥 mise à jour globale
-    updateBudgetSummary();
-    updateCharts();
-    updateStats();
-    renderGoals();
-
-  }, 300); // durée = animation CSS
-}
-
-let chart;
-
-let depenseChart, epargneChart, resteChart;
-
-function updateCharts() {
-
-  let totalRevenus = 0;
-  let totalDepenses = 0;
-  let totalEpargne = 0;
-
-  budgetData.forEach(row => {
-    let cat = (row.cat || "").toLowerCase();
-    let value = Number(row.reel || 0);
-
-    if (cat.includes("revenu")) {
-      totalRevenus += value;
-    }
-    else if (cat.includes("epargne") || cat.includes("épargne")) {
-      totalEpargne += value;
-    }
-    else if (cat !== "") {
-      totalDepenses += value;
-    }
-  });
-
-  let reste = totalRevenus - totalDepenses - totalEpargne;
-  if (reste < 0) reste = 0;
-
-  let totalGlobal = totalRevenus || (totalDepenses + totalEpargne + reste);
-  if (totalGlobal === 0) totalGlobal = 1;
-
-  if (depenseChart) depenseChart.destroy();
-  if (epargneChart) epargneChart.destroy();
-  if (resteChart) resteChart.destroy();
-
-  depenseChart = new Chart(document.getElementById("depenseChart"), {
-    type: "doughnut",
-    data: {
-      datasets: [{
-        data: [totalDepenses, totalGlobal - totalDepenses],
-        backgroundColor: ["#ff4d4d", "#eee"]
-      }]
-    },
-    options: { maintainAspectRatio: false }
-  });
-
-  epargneChart = new Chart(document.getElementById("epargneChart"), {
-    type: "doughnut",
-    data: {
-      datasets: [{
-        data: [totalEpargne, totalGlobal - totalEpargne],
-        backgroundColor: ["#ffe97a", "#eee"]
-      }]
-    },
-    options: { maintainAspectRatio: false }
-  });
-
-  resteChart = new Chart(document.getElementById("resteChart"), {
-    type: "doughnut",
-    data: {
-      datasets: [{
-        data: [reste, totalGlobal - reste],
-        backgroundColor: ["#4dabf7", "#eee"]
-      }]
-    },
-    options: { maintainAspectRatio: false }
   });
 }
 
 function updateStats() {
 
-  let totalPrevus = 0;
-  let totalDepenses = 0;
-  let totalEpargne = 0;
+  let t = calculateTotals();
 
-  budgetData.forEach(row => {
-    let cat = (row.cat || "").toLowerCase();
-    let prevu = Number(row.prevu || 0);
-    let reel = Number(row.reel || 0);
-
-    totalPrevus += prevu;
-    totalDepenses += reel;
-
-    if (cat.includes("épargne") || cat.includes("epargne")) {
-      totalEpargne += reel;
-    }
-  });
-
-  let taux = totalPrevus > 0 ? (totalDepenses / totalPrevus) * 100 : 0;
-  let ecart = totalPrevus - totalDepenses;
-
-  document.getElementById("statBudget").textContent = totalPrevus.toLocaleString('fr-FR') + " FCFA";
-  document.getElementById("statDepenses").textContent = totalDepenses.toLocaleString('fr-FR') + " FCFA";
-  document.getElementById("statEpargne").textContent = totalEpargne.toLocaleString('fr-FR') + " FCFA";
-  document.getElementById("statTaux").textContent = taux.toFixed(1) + "%";
-  document.getElementById("statEcart").textContent = ecart.toLocaleString('fr-FR') + " FCFA";
+  document.getElementById("statBudget").innerText = applyCurrency(t.budget);
+  document.getElementById("statDepenses").innerText = applyCurrency(t.depenses);
+  document.getElementById("statEpargne").innerText = applyCurrency(t.epargne || 0);
+  document.getElementById("statEcart").innerText = applyCurrency(t.solde);
 }
 
 let goals = [];
@@ -375,122 +105,238 @@ function createGoal() {
   document.getElementById("goalAmount").value = "";
 }
 
-function addSavings(index) {
-  let value = Number(prompt("Montant à ajouter :"));
-
-  if (value > 0) {
-    goals[index].saved += value;
-    renderGoals();
-  }
-}
-
 function renderGoals() {
   let container = document.getElementById("goalsContainer");
   container.innerHTML = "";
 
-  let autoSaved = getTotalEpargne();
+  goals.forEach(goal => {
 
-  goals.forEach((goal) => {
-
-    let percent = (autoSaved / goal.target) * 100;
+    let percent = (incomeTotal / goal.target) * 100;
     if (percent > 100) percent = 100;
 
     container.innerHTML += `
-      <div class="goal-card">
+      <div class="card">
         <h3>${goal.name}</h3>
-        <p>${autoSaved} / ${goal.target} FCFA</p>
+        <p>${incomeTotal} / ${goal.target} FCFA</p>
 
-        <div class="progress-bar">
-          <div class="progress" style="width:${percent}%"></div>
+        <div class="progress">
+          <div class="progress-bar" style="width:${percent}%"></div>
         </div>
       </div>
     `;
   });
 }
 
-function getTotalEpargne() {
-  let total = 0;
+let budgetData = [];
+function renderBudgetTable() {
+
+  let table = document.getElementById("budgetTableBody");
+  table.innerHTML = "";
+
+  budgetData.forEach((row, index) => {
+
+    let prevu = Number(row.prevu || 0);
+    let reel = Number(row.reel || 0);
+    let ecart = prevu - reel;
+
+   table.innerHTML += `
+  <tr>
+    <td><input value="${row.cat}" oninput="budgetData[${index}].cat=this.value"></td>
+
+    <td><input type="number" value="${row.prevu}"
+      oninput="budgetData[${index}].prevu=this.value; syncAll()"></td>
+
+    <td><input type="number" value="${row.reel}"
+      oninput="budgetData[${index}].reel=this.value; syncAll()"></td>
+
+    <td>${(Number(row.prevu || 0) - Number(row.reel || 0))}</td>
+
+    <td><input value="${row.comment || ''}"
+      oninput="budgetData[${index}].comment=this.value"></td>
+
+    <td>
+      <button onclick="deleteRow(${index})" class="delete-btn">🗑️</button>
+    </td>
+  </tr>
+
+`;`
+      <tr>
+        
+        <td>
+          <input value="${row.cat}" 
+            oninput="budgetData[${index}].cat = this.value; syncAll()"
+        </td>
+
+        <td>
+          <input type="number" value="${applyCurrency(row.prevu)}"
+            oninput="budgetData[${index}].prevu = this.value; syncAll()"
+        </td>
+
+        <td>
+          <input type="number" value="${row.reel}"
+            oninput="budgetData[${index}].reel=this.value; syncAll()"
+        </td>
+
+        <td class="ecart">${ecart}</td>
+
+        <td>
+          <input value="${row.comment || ''}"
+            oninput="budgetData[${index}].comment = this.value; syncAll()"
+        </td>
+
+      </tr>
+    `;
+  });
+}
+
+updateBudgetSummary();
+
+function addRow() {
+  budgetData.push({
+    cat: "",
+    prevu: "",
+    reel: "",
+    comment: ""
+  });
+
+  renderBudgetTable(); // IMPORTANT
+  syncAll();           // ensuite seulement
+}
+
+function resetAll() {
+  if (confirm("⚠️ Tu es sûr de vouloir tout supprimer ?")) {
+
+    localStorage.clear();
+
+    budgetData = [];
+    goals = [];
+    transactions = [];
+
+    renderBudgetTable();
+    renderGoals();
+    renderTable();
+
+    alert("✅ Application réinitialisée !");
+  }
+}
+
+function deleteRow(index) {
+  if (confirm("Supprimer cette ligne ?")) {
+    budgetData.splice(index, 1);
+    renderBudgetTable();
+  }
+}
+
+
+function calculateTotals() {
+
+  let revenus = 0;
+  let depenses = 0;
+  let epargne = 0;
 
   budgetData.forEach(row => {
+
     let cat = (row.cat || "").toLowerCase();
-    let value = Number(row.reel || 0);
+    let val = Number(row.reel || 0);
 
-    if (cat.includes("épargne") || cat.includes("epargne")) {
-      total += value;
+    if (cat.includes("revenu")) {
+      revenus += val;
+    }
+    else if (cat.includes("épargne") || cat.includes("epargne")) {
+      epargne += val;
+    }
+    else {
+      depenses += val;
     }
   });
 
-  return total;
+  if (config.calcMode === "simple") {
+    return {
+      budget: revenus,
+      depenses: depenses + epargne,
+      solde: revenus - depenses - epargne
+    };
+  }
+
+  // MODE DÉTAILLÉ
+  return {
+    budget: revenus,
+    depenses,
+    epargne,
+    solde: revenus - depenses - epargne
+  };
 }
 
 
+function updateBudgetSummary() {
+  let totalPrevus = 0;
+  let totalReels = 0;
 
-// ==================== PARAMÈTRES ====================
+  budgetData.forEach(row => {
+    totalPrevus += Number(row.prevu || 0);
+    totalReels += Number(row.reel || 0);
+  });
 
+  let ecart = totalPrevus - totalReels;
+  let taux = totalPrevus > 0 ? (totalReels / totalPrevus) * 100 : 0;
+
+  document.getElementById("statBudget").innerText = totalPrevus;
+  document.getElementById("statDepenses").innerText = totalReels;
+  document.getElementById("statEcart").innerText = ecart;
+  document.getElementById("statTaux").innerText = taux.toFixed(1) + "%";
+}
+
+function syncAll() {
+  updateBudgetSummary();
+  updateStats();
+  renderGoals();
+  saveData(); // si tu as déjà l’auto-save
+}
+
+function deleteRow(index) {
+  budgetData.splice(index, 1);
+  syncAll();
+}
+
+function applyCurrency(value) {
+  return value + " " + config.currency;
+}
+
+function checkBudgetAlert() {
+
+  if (!config.alert) return;
+
+  let t = calculateTotals();
+
+  if (t.depenses > t.budget) {
+    alert("⚠️ Attention : tu as dépassé ton budget !");
+  }
+}
 function setCurrency() {
-  let val = document.getElementById("currencySelect").value;
-  localStorage.setItem("currency", val);
-  applySettings();
-}
-
-function setCharts() {
-  let val = document.getElementById("chartsToggle").checked;
-  localStorage.setItem("charts", val);
-  applySettings();
-}
-
+  config.currency = document.getElementById("currencySelect").value;
+  localStorage.setItem("currency", config.currency);
+  syncAll();
+} 
 function setCalcMode() {
-  let val = document.getElementById("calcMode").value;
-  localStorage.setItem("calcMode", val);
+  config.calcMode = document.getElementById("calcMode").value;
+  localStorage.setItem("calcMode", config.calcMode);
+  syncAll();
 }
-
 function setAlert() {
-  let val = document.getElementById("budgetAlert").checked;
-  localStorage.setItem("alert", val);
+  config.alert = document.getElementById("budgetAlert").checked;
+  localStorage.setItem("alert", config.alert);
 }
 
-// ==================== APPLIQUER LES PARAMÈTRES ====================
-
-function applySettings() {
-
-  const currency = localStorage.getItem("currency") || "FCFA";
-
-  document.querySelectorAll("#statBudget, #statDepenses, #statEpargne, #statEcart, #totalRevenus, #totalDepenses, #soldeFinal").forEach(el => {
-    if (el) {
-      el.textContent = el.textContent.replace(/FCFA|USD|EUR/g, currency);
-    }
-  });
-
-  document.querySelectorAll(".budget-table th, .summary-box").forEach(el => {
-    el.innerHTML = el.innerHTML.replace(/FCFA|USD|EUR/g, currency);
-  });
-
-  const charts = localStorage.getItem("charts");
-
-  document.querySelectorAll(".charts").forEach(el => {
-    el.style.display = (charts === "false") ? "none" : "block";
-  });
-
-  const currencyNow = localStorage.getItem("currency") || "FCFA";
-  document.getElementById("currentCurrency").textContent = currencyNow;
+function syncAll() {
+  updateStats();
+  updateBudgetSummary();
+  renderGoals();
+  checkBudgetAlert();
 }
 
-document.getElementById("currencySelect").value =
-  localStorage.getItem("currency") || "FCFA";
+function deleteRow(index) {
+  budgetData.splice(index, 1);
 
-document.getElementById("chartsToggle").checked =
-  localStorage.getItem("charts") === "true";
-
-document.getElementById("calcMode").value =
-  localStorage.getItem("calcMode") || "simple";
-
-document.getElementById("budgetAlert").checked =
-  localStorage.getItem("alert") === "true";
-
-window.addEventListener("DOMContentLoaded", applySettings);
-
-document.addEventListener("DOMContentLoaded", () => {
-  renderBudgetTable();
-  showSection("landing"); // 👈 ajoute juste ça
-});
-
+  renderBudgetTable(); // 🔥 obligatoire
+  syncAll();           // 🔥 met à jour stats
+}
