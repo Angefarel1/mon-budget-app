@@ -2333,3 +2333,81 @@ button:active {
         font-size: 20px;
     }
 }
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
+  width: 100%;
+max-width: 400px;
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+
+  .container {
+    padding: 10px;
+  }
+
+  button {
+    width: 100%;
+    font-size: 16px;
+  }
+}
+
+button {
+  padding: 15px;
+  border-radius: 10px;
+  font-size: 16px;
+  width: 100%;
+}
+
+img {
+  width: 100%;
+  height: auto;
+}
+
+.menu {
+  display: none;
+}
+
+.menu.active {
+  display: block;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  background: #f5f5f5;
+}
+
+.container {
+  width: 100%;
+  max-width: 420px; /* taille parfaite mobile */
+  padding: 10px;
+}
+html, body {
+  overflow-x: hidden;
+}
+
+.card {
+  width: 100%;
+  border-radius: 15px;
+}
+
+@media (max-width: 768px) {
+  body {
+    display: flex;
+    justify-content: center;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 100%;
+  }
+}
