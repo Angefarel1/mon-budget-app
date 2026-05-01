@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <title>TAF — Confidentialité</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="top-nav">
+  <div class="top-nav-inner">
+    <div class="nav-logo">T<span>AF</span></div>
+    <nav class="desktop-nav">
+      <a href="app.html"       data-page="app">🏠 Accueil</a>
+      <a href="dashboard.html" data-page="dashboard">📊 Stats</a>
+      <a href="history.html"   data-page="history">📜 Historique</a>
+      <a href="settings.html"  data-page="settings">⚙️ Réglages</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="nav-btn" id="btn-theme">🌙</button>
+    </div>
+  </div>
+</nav>
+
+<main class="page-content">
+  <div class="container" style="padding-top:20px;padding-bottom:80px">
+
+    <!-- Back -->
+    <div class="back-btn-row">
+      <a href="settings.html" class="back-link">← Retour aux paramètres</a>
+    </div>
+
+    <!-- Hero -->
+    <div class="legal-hero">
+      <div class="legal-icon">🔐</div>
+      <h1>Politique de Confidentialité</h1>
+      <p>Dernière mise à jour : Janvier 2025 · TAF Finance v2.0</p>
+    </div>
+
+    <!-- Badge -->
+    <div style="margin-bottom:20px">
+      <div class="legal-badge">🛡️ Vos données vous appartiennent à 100%</div>
+    </div>
+
+    <!-- Section 1 -->
+    <div class="legal-card">
+      <h2>📌 1. Résumé rapide</h2>
+      <p>
+        TAF est une application de gestion financière personnelle qui fonctionne
+        <strong>entièrement dans votre navigateur</strong>, sans serveur, sans compte, sans connexion internet requise.
+      </p>
+      <ul>
+        <li>Toutes vos données sont stockées <strong>localement</strong> sur votre appareil.</li>
+        <li>Aucune donnée n'est envoyée vers un serveur externe.</li>
+        <li>Aucune inscription ni mot de passe n'est requis.</li>
+        <li>Vous pouvez supprimer toutes vos données à tout moment.</li>
+      </ul>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="legal-card">
+      <h2>💾 2. Stockage des données (localStorage)</h2>
+      <p>
+        TAF utilise exclusivement le mécanisme <strong>localStorage</strong> de votre navigateur
+        pour conserver vos informations entre les sessions.
+      </p>
+      <p>Les données stockées comprennent :</p>
+      <ul>
+        <li>Vos <strong>dépenses</strong> (montant, catégorie, date, description)</li>
+        <li>Vos <strong>objectifs d'épargne</strong> (nom, montant cible, progression)</li>
+        <li>Vos <strong>paramètres</strong> (devise, langue, thème, nom d'utilisateur)</li>
+        <li>Votre <strong>photo de profil</strong> (si fournie, encodée localement)</li>
+        <li>Votre <strong>budget mensuel</strong> et vos revenus saisis</li>
+      </ul>
+      <div style="background:var(--primary-l);border-radius:var(--radius);padding:12px;margin-top:12px">
+        <p style="color:var(--primary-d);font-size:0.82rem;margin:0">
+          💡 <strong>localStorage</strong> est une zone de stockage propre à votre navigateur,
+          sur votre appareil. Elle ne peut être lue que par TAF, uniquement sur ce navigateur.
+        </p>
+      </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="legal-card">
+      <h2>🚫 3. Ce que nous ne faisons pas</h2>
+      <ul>
+        <li>Nous ne collectons <strong>aucune donnée</strong> personnelle ou financière.</li>
+        <li>Nous n'utilisons <strong>aucun tracker</strong>, aucun cookie de suivi.</li>
+        <li>Nous ne vendons <strong>aucune information</strong> à des tiers.</li>
+        <li>Nous n'envoyons <strong>aucune donnée</strong> vers un serveur distant.</li>
+        <li>Nous n'utilisons <strong>aucune API externe</strong> liée à vos finances.</li>
+        <li>Il n'y a <strong>aucune publicité</strong> dans l'application.</li>
+      </ul>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="legal-card">
+      <h2>🔒 4. Sécurité de vos données</h2>
+      <p>
+        Vos données sont protégées par les mécanismes natifs de votre navigateur :
+      </p>
+      <ul>
+        <li>Le <strong>Same-Origin Policy</strong> empêche tout autre site d'accéder à vos données TAF.</li>
+        <li>Les données sont <strong>isolées</strong> par domaine dans le localStorage.</li>
+        <li>Personne, pas même nous, ne peut accéder à vos données à distance.</li>
+      </ul>
+      <p style="margin-top:12px">
+        ⚠️ <strong>Attention :</strong> si vous effacez le cache / les données de votre navigateur,
+        ou utilisez un mode de navigation privée, vos données TAF seront supprimées.
+        Pensez à exporter régulièrement en CSV depuis les paramètres.
+      </p>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="legal-card">
+      <h2>✋ 5. Vos droits & contrôle</h2>
+      <p>Vous avez le contrôle total sur vos données :</p>
+      <ul>
+        <li><strong>Accès :</strong> toutes vos données sont visibles dans l'application.</li>
+        <li><strong>Export :</strong> exportez l'intégralité en fichier CSV (Paramètres → Exporter).</li>
+        <li><strong>Suppression :</strong> réinitialisez tout depuis Paramètres → Zone de danger.</li>
+        <li><strong>Portabilité :</strong> le format CSV exporté est universel.</li>
+      </ul>
+    </div>
+
+    <!-- Section 6 -->
+    <div class="legal-card">
+      <h2>🌐 6. Connexion internet</h2>
+      <p>
+        TAF peut fonctionner <strong>hors ligne</strong> une fois chargé. La connexion internet
+        est uniquement nécessaire au premier chargement des polices de caractères
+        (Google Fonts). Aucune de vos données n'est transmise lors de ce chargement.
+      </p>
+      <p>
+        Pour une utilisation 100% hors ligne, vous pouvez télécharger et héberger
+        TAF localement sur votre appareil.
+      </p>
+    </div>
+
+    <!-- Section 7 -->
+    <div class="legal-card">
+      <h2>📧 7. Contact</h2>
+      <p>
+        TAF est un projet indépendant à but non lucratif. Pour toute question relative
+        à la confidentialité ou au fonctionnement de l'application, vous pouvez
+        consulter la documentation du projet.
+      </p>
+      <p>
+        Cette politique de confidentialité peut être mise à jour pour refléter
+        des améliorations de l'application, sans jamais modifier notre engagement :
+        <strong>vos données vous appartiennent, elles restent sur votre appareil.</strong>
+      </p>
+      <div class="legal-updated">Mise à jour : Janvier 2025</div>
+    </div>
+
+    <!-- CTA -->
+    <div style="text-align:center;padding:24px 0 8px">
+      <a href="settings.html" class="btn btn-primary">← Retour aux paramètres</a>
+    </div>
+    <div style="text-align:center;margin-top:12px">
+      <a href="terms.html" class="back-link" style="font-size:0.82rem">Lire les conditions d'utilisation →</a>
+    </div>
+
+  </div>
+</main>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <div class="bnav-item" data-page="app" data-href="app.html">
+    <span class="bnav-icon">🏠</span><span>Accueil</span><div class="bnav-dot"></div>
+  </div>
+  <div class="bnav-item" data-page="dashboard" data-href="dashboard.html">
+    <span class="bnav-icon">📊</span><span>Stats</span><div class="bnav-dot"></div>
+  </div>
+  <div class="bnav-item" data-page="history" data-href="history.html">
+    <span class="bnav-icon">📜</span><span>Historique</span><div class="bnav-dot"></div>
+  </div>
+  <div class="bnav-item" data-page="settings" data-href="settings.html">
+    <span class="bnav-icon">⚙️</span><span>Réglages</span><div class="bnav-dot"></div>
+  </div>
+</nav>
+
+<div id="toast-container"></div>
+<script src="script.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    setActiveNav('settings');
+    const btn = document.getElementById('btn-theme');
+    btn.textContent = Store.getSettings().theme === 'dark' ? '☀️' : '🌙';
+    btn.addEventListener('click', () => {
+      Theme.toggle();
+      btn.textContent = Store.getSettings().theme === 'dark' ? '☀️' : '🌙';
+    });
+  });
+</script>
+</body>
+</html>

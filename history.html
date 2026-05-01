@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <title>TAF — Historique</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .filter-bar { display: flex; gap: 8px; margin-bottom: 16px; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .filter-chip {
+      padding: 7px 14px; border-radius: 20px;
+      background: var(--bg-2); border: 1.5px solid var(--border);
+      font-size: 0.8rem; font-weight: 600; color: var(--text-3);
+      white-space: nowrap; cursor: pointer; flex-shrink: 0;
+      transition: all var(--transition); -webkit-tap-highlight-color: transparent;
+    }
+    .filter-chip.active { background: var(--primary-l); border-color: var(--primary); color: var(--primary-d); }
+
+    .search-wrap { position: relative; margin-bottom: 16px; }
+    .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 16px; pointer-events: none; }
+    .search-input { padding-left: 38px; }
+
+    .hist-day-group { margin-bottom: 20px; }
+    .hist-day-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 10px; padding-bottom: 6px;
+      border-bottom: 2px solid var(--border);
+    }
+    .hd-date { font-size: 0.82rem; font-weight: 700; color: var(--text-2); }
+    .hd-total { font-size: 0.82rem; font-weight: 700; color: var(--primary); }
+
+    .hist-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px; margin-bottom: 6px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      animation: fadeUp 0.25s ease both;
+      transition: box-shadow var(--transition);
+    }
+    .hist-item:hover { box-shadow: var(--shadow); }
+    .hi-info { flex: 1; min-width: 0; }
+    .hi-desc { font-size: 0.88rem; font-weight: 600; color: var(--text-1); }
+    .hi-meta { display: flex; align-items: center; gap: 6px; margin-top: 2px; }
+    .hi-amount { font-family: var(--font-head); font-size: 0.95rem; font-weight: 700; }
+    .hi-del { width: 32px; height: 32px; border-radius: var(--radius-sm); background: var(--red-l); color: var(--red); display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; transition: all var(--transition); -webkit-tap-highlight-color: transparent; }
+    .hi-del:active { transform: scale(0.88); background: var(--red); color: #fff; }
+
+    .summary-bar {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-xl); padding: 16px;
+      display: flex; gap: 0; margin-bottom: 20px;
+    }
+    .sb-stat { flex: 1; text-align: center; }
+    .sb-stat + .sb-stat { border-left: 1px solid var(--border); }
+    .sb-val   { font-family: var(--font-head); font-size: 1rem; font-weight: 700; }
+    .sb-label { font-size: 0.68rem; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.4px; margin-top: 2px; }
+    .cat-filter { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    .cat-filter-item { padding: 5px 12px; border-radius: 20px; background: var(--bg-2); border: 1.5px solid var(--border); font-size: 0.75rem; font-weight: 600; color: var(--text-3); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: all var(--transition); }
+    .cat-filter-item.active { background: var(--primary-l); border-color: var(--primary); color: var(--primary-d); }
+  </style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="top-nav-inner">
+    <div class="nav-logo">T<span>AF</span></div>
+    <nav class="desktop-nav">
+      <a href="app.html"       data-page="app">🏠 Accueil</a>
+      <a href="dashboard.html" data-page="dashboard">📊 Stats</a>
+      <a href="history.html"   data-page="history" class="active">📜 Historique</a>
+      <a href="settings.html"  data-page="settings">⚙️ Réglages</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="nav-btn" id="btn-export" title="Exporter">📤</button>
+      <button class="nav-btn" id="btn-theme">🌙</button>
+    </div>
+  </div>
+</nav>
+
+<main class="page-content">
+  <div class="container" style="padding-top:20px">
+
+    <!-- Summary -->
+    <div class="summary-bar" id="summary-bar"></div>
+
+    <!-- Search -->
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="search" id="search-input" class="input search-input" placeholder="Rechercher..."/>
+    </div>
+
+    <!-- Period filter -->
+    <div class="filter-bar" id="period-filter">
+      <div class="filter-chip active" data-filter="all">Tout</div>
+      <div class="filter-chip" data-filter="month">Ce mois</div>
+      <div class="filter-chip" data-filter="week">Cette semaine</div>
+      <div class="filter-chip" data-filter="today">Aujourd'hui</div>
+    </div>
+
+    <!-- Category filter -->
+    <div class="cat-filter" id="cat-filter"></div>
+
+    <!-- History list -->
+    <div id="history-list"></div>
+
+  </div>
+</main>
+
+<nav class="bottom-nav">
+  <div class="bnav-item" data-page="app" data-href="app.html">
+    <span class="bnav-icon">🏠</span><span>Accueil</span><div class="bnav-dot"></div>
+  </div>
+  <div class="bnav-item" data-page="dashboard" data-href="dashboard.html">
+    <span class="bnav-icon">📊</span><span>Stats</span><div class="bnav-dot"></div>
+  </div>
+  <div class="bnav-item active" data-page="history" data-href="history.html">
+    <span class="bnav-icon">📜</span><span>Historique</span><div class="bnav-dot"></div>
+  </div>
+  <div class="bnav-item" data-page="settings" data-href="settings.html">
+    <span class="bnav-icon">⚙️</span><span>Réglages</span><div class="bnav-dot"></div>
+  </div>
+</nav>
+
+<div id="toast-container"></div>
+<script src="script.js"></script>
+<script>
+(function(){
+  let periodFilter = 'all';
+  let catFilter    = 'all';
+  let searchQuery  = '';
+
+  function init() {
+    setActiveNav('history');
+    buildCatFilter();
+    renderSummary();
+    renderHistory();
+    attachEvents();
+    document.getElementById('btn-theme').textContent = Store.getSettings().theme === 'dark' ? '☀️' : '🌙';
+  }
+
+  function buildCatFilter() {
+    const el = document.getElementById('cat-filter');
+    el.innerHTML = `<div class="cat-filter-item active" data-cat="all">Tout</div>`;
+    CATEGORIES.forEach(c => {
+      const d = document.createElement('div');
+      d.className = 'cat-filter-item';
+      d.dataset.cat = c.id;
+      d.textContent = c.icon + ' ' + t(c.key);
+      el.appendChild(d);
+    });
+    el.querySelectorAll('.cat-filter-item').forEach(item => {
+      item.addEventListener('click', () => {
+        catFilter = item.dataset.cat;
+        el.querySelectorAll('.cat-filter-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        renderHistory();
+      });
+    });
+  }
+
+  function getFiltered() {
+    let list = Expenses.getAll();
+    if (periodFilter === 'month') list = list.filter(e => isThisMonth(e.date));
+    if (periodFilter === 'week')  list = list.filter(e => isThisWeek(e.date));
+    if (periodFilter === 'today') list = list.filter(e => e.date === today());
+    if (catFilter !== 'all')      list = list.filter(e => e.category === catFilter);
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      list = list.filter(e =>
+        (e.description||'').toLowerCase().includes(q) ||
+        (e.note||'').toLowerCase().includes(q) ||
+        e.category.toLowerCase().includes(q)
+      );
+    }
+    return list;
+  }
+
+  function renderSummary() {
+    const all   = Expenses.getAll();
+    const month = Expenses.getMonth();
+    const week  = Expenses.getWeek();
+    document.getElementById('summary-bar').innerHTML = `
+      <div class="sb-stat">
+        <div class="sb-val text-red">${formatCurrency(Expenses.totalMonth())}</div>
+        <div class="sb-label">Ce mois</div>
+      </div>
+      <div class="sb-stat">
+        <div class="sb-val">${formatCurrency(Expenses.totalWeek())}</div>
+        <div class="sb-label">Cette sem.</div>
+      </div>
+      <div class="sb-stat">
+        <div class="sb-val">${all.length}</div>
+        <div class="sb-label">Total</div>
+      </div>
+    `;
+  }
+
+  function renderHistory() {
+    const list     = getFiltered();
+    const container= document.getElementById('history-list');
+
+    if (!list.length) {
+      container.innerHTML = `<div class="empty-state">
+        <div class="es-icon">🔍</div>
+        <h3>Aucun résultat</h3>
+        <p>Modifiez vos filtres ou votre recherche.</p>
+      </div>`;
+      return;
+    }
+
+    // Group by date
+    const groups = {};
+    list.forEach(e => {
+      const d = e.date || today();
+      if (!groups[d]) groups[d] = [];
+      groups[d].push(e);
+    });
+
+    const sortedDates = Object.keys(groups).sort((a,b) => b.localeCompare(a));
+
+    container.innerHTML = '';
+    sortedDates.forEach(dateKey => {
+      const items = groups[dateKey];
+      const dayTotal = items.reduce((s,e)=>s+e.amount,0);
+      const group = document.createElement('div');
+      group.className = 'hist-day-group';
+      group.innerHTML = `
+        <div class="hist-day-header">
+          <span class="hd-date">${formatDate(dateKey)}</span>
+          <span class="hd-total">${formatCurrency(dayTotal)}</span>
+        </div>
+      `;
+      items.forEach((e, i) => {
+        const cat = getCatConfig(e.category);
+        const item = document.createElement('div');
+        item.className = 'hist-item';
+        item.style.animationDelay = (i * 0.03) + 's';
+        item.innerHTML = `
+          <div class="icon-circle ${cat.class}">${cat.icon}</div>
+          <div class="hi-info">
+            <div class="hi-desc truncate">${e.description || t(cat.key)}</div>
+            <div class="hi-meta">
+              <span class="badge ${cat.class}" style="padding:2px 8px;font-size:0.65rem">${t(cat.key)}</span>
+              ${e.recurring ? '<span class="badge badge-blue" style="padding:2px 8px;font-size:0.65rem">🔄</span>' : ''}
+              ${e.note ? `<span class="text-xs text-muted truncate" style="max-width:80px">${e.note}</span>` : ''}
+            </div>
+          </div>
+          <span class="hi-amount">${formatCurrency(e.amount)}</span>
+          <div class="hi-del" data-id="${e.id}" title="${t('delete')}">🗑</div>
+        `;
+        item.querySelector('.hi-del').addEventListener('click', (ev) => {
+          ev.stopPropagation();
+          if (!confirm(t('confirm_delete'))) return;
+          Expenses.delete(e.id);
+          Toast.success(t('deleted'));
+          renderSummary(); renderHistory();
+        });
+        group.appendChild(item);
+      });
+      container.appendChild(group);
+    });
+  }
+
+  function attachEvents() {
+    // Period filter
+    document.querySelectorAll('#period-filter .filter-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        periodFilter = chip.dataset.filter;
+        document.querySelectorAll('#period-filter .filter-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        renderHistory();
+      });
+    });
+
+    // Search
+    document.getElementById('search-input').addEventListener('input', (e) => {
+      searchQuery = e.target.value.trim();
+      renderHistory();
+    });
+
+    // Theme
+    document.getElementById('btn-theme').addEventListener('click', () => {
+      Theme.toggle();
+      document.getElementById('btn-theme').textContent = Store.getSettings().theme === 'dark' ? '☀️' : '🌙';
+    });
+
+    // Export
+    document.getElementById('btn-export').addEventListener('click', exportCSV);
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>

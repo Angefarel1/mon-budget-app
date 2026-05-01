@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <title>TAF — Paramètres</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="top-nav">
+  <div class="top-nav-inner">
+    <div class="nav-logo">T<span>AF</span></div>
+    <nav class="desktop-nav">
+      <a href="app.html"       data-page="app">🏠 Accueil</a>
+      <a href="dashboard.html" data-page="dashboard">📊 Stats</a>
+      <a href="history.html"   data-page="history">📜 Historique</a>
+      <a href="settings.html"  data-page="settings" class="active">⚙️ Réglages</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="nav-btn" id="btn-theme-toggle" title="Changer thème">🌙</button>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="page-content">
+  <div class="container" style="padding-top:20px; padding-bottom:100px">
+
+    <!-- ── PROFILE CARD ─────────────────── -->
+    <div class="settings-section">
+      <div class="settings-section-title" id="lbl-profile">Profil</div>
+      <div class="settings-card">
+
+        <!-- Avatar + name display -->
+        <div style="padding:24px 18px; text-align:center; border-bottom:1px solid var(--border)">
+          <div class="profile-avatar-wrap" style="margin-bottom:14px">
+            <div class="profile-avatar" id="avatar-display" onclick="document.getElementById('avatar-input').click()">
+              <span id="avatar-emoji">👤</span>
+              <img id="avatar-img" src="" alt="" style="display:none; position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%"/>
+            </div>
+            <div class="avatar-edit-badge" onclick="document.getElementById('avatar-input').click()">✏️</div>
+          </div>
+          <input type="file" id="avatar-input" accept="image/*" style="display:none"/>
+          <div id="avatar-name-display" style="font-family:var(--font-head);font-size:1.1rem;font-weight:700;color:var(--text-1)">—</div>
+          <div style="font-size:0.78rem;color:var(--text-3);margin-top:2px" id="avatar-sub">Appuyez sur la photo pour changer</div>
+        </div>
+
+        <!-- Username field -->
+        <div class="settings-row" style="flex-direction:column;align-items:flex-start;gap:10px">
+          <div style="display:flex;align-items:center;gap:14px;width:100%">
+            <div class="sr-icon" style="background:var(--primary-l)">👤</div>
+            <div class="sr-content">
+              <div class="sr-label" id="lbl-username">Prénom / Nom</div>
+              <div class="sr-desc" id="lbl-username-desc">Affiché sur la page d'accueil</div>
+            </div>
+          </div>
+          <input type="text" id="input-username" class="input" placeholder="Ex : Marie, Jean..." style="width:100%"/>
+        </div>
+
+        <!-- Save profile btn -->
+        <div style="padding:14px 18px">
+          <button class="btn btn-primary btn-full" id="btn-save-profile">💾 Enregistrer le profil</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── FINANCES ─────────────────────── -->
+    <div class="settings-section">
+      <div class="settings-section-title" id="lbl-finances-section">Finances</div>
+      <div class="settings-card">
+
+        <!-- Monthly income -->
+        <div class="settings-row" style="flex-direction:column;align-items:flex-start;gap:10px">
+          <div style="display:flex;align-items:center;gap:14px;width:100%">
+            <div class="sr-icon" style="background:#dcfce7">💵</div>
+            <div class="sr-content">
+              <div class="sr-label" id="lbl-income-setting">Revenus mensuels</div>
+              <div class="sr-desc" id="lbl-income-desc">Montant net reçu par mois</div>
+            </div>
+            <div class="sr-value" id="display-income">—</div>
+          </div>
+          <input type="number" inputmode="decimal" id="input-income" class="input" placeholder="0" min="0" style="width:100%"/>
+        </div>
+
+        <!-- Monthly budget -->
+        <div class="settings-row" style="flex-direction:column;align-items:flex-start;gap:10px">
+          <div style="display:flex;align-items:center;gap:14px;width:100%">
+            <div class="sr-icon" style="background:#fef3c7">🎯</div>
+            <div class="sr-content">
+              <div class="sr-label" id="lbl-budget-setting">Budget mensuel</div>
+              <div class="sr-desc" id="lbl-budget-desc">Limite de dépenses mensuelle</div>
+            </div>
+            <div class="sr-value" id="display-budget">—</div>
+          </div>
+          <input type="number" inputmode="decimal" id="input-budget" class="input" placeholder="0" min="0" style="width:100%"/>
+        </div>
+
+        <!-- Save finances -->
+        <div style="padding:14px 18px">
+          <button class="btn btn-primary btn-full" id="btn-save-finances">💾 Enregistrer les finances</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── DEVISE & LANGUE ──────────────── -->
+    <div class="settings-section">
+      <div class="settings-section-title" id="lbl-region-section">Région & Devise</div>
+      <div class="settings-card">
+
+        <!-- Currency -->
+        <div class="settings-row">
+          <div class="sr-icon" style="background:#dbeafe">💱</div>
+          <div class="sr-content">
+            <div class="sr-label" id="lbl-currency">Devise</div>
+            <div class="sr-desc" id="lbl-currency-desc">Conversion automatique appliquée</div>
+          </div>
+          <div class="sr-control">
+            <select class="settings-select" id="select-currency">
+              <option value="XOF">🌍 FCFA</option>
+              <option value="EUR">🇪🇺 EUR €</option>
+              <option value="USD">🇺🇸 USD $</option>
+              <option value="GBP">🇬🇧 GBP £</option>
+              <option value="NGN">🇳🇬 NGN ₦</option>
+              <option value="GHS">🇬🇭 GHS ₵</option>
+              <option value="MAD">🇲🇦 MAD</option>
+              <option value="CAD">🇨🇦 CAD</option>
+              <option value="CHF">🇨🇭 CHF</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Language -->
+        <div class="settings-row">
+          <div class="sr-icon" style="background:#ede9fe">🌍</div>
+          <div class="sr-content">
+            <div class="sr-label" id="lbl-language">Langue</div>
+            <div class="sr-desc" id="lbl-language-desc">Langue de l'interface</div>
+          </div>
+          <div class="sr-control">
+            <select class="settings-select" id="select-language">
+              <option value="fr">🇫🇷 Français</option>
+              <option value="en">🇬🇧 English</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Conversion info -->
+        <div id="conversion-info" style="padding:12px 18px; background:var(--bg-2); border-top:1px solid var(--border)">
+          <div style="font-size:0.78rem; color:var(--text-3); display:flex; gap:8px; align-items:flex-start">
+            <span>ℹ️</span>
+            <span id="conversion-text">Les montants sont convertis automatiquement depuis EUR.</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── APPARENCE ─────────────────────── -->
+    <div class="settings-section">
+      <div class="settings-section-title" id="lbl-appearance">Apparence</div>
+      <div class="settings-card">
+
+        <!-- Dark mode -->
+        <div class="settings-row">
+          <div class="sr-icon" style="background:#1e293b">🌙</div>
+          <div class="sr-content">
+            <div class="sr-label" id="lbl-dark-mode">Mode sombre</div>
+            <div class="sr-desc" id="lbl-dark-mode-desc">Interface en thème sombre</div>
+          </div>
+          <div class="sr-control">
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-dark"/>
+              <div class="toggle-track"></div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Notifications (cosmetic, local) -->
+        <div class="settings-row">
+          <div class="sr-icon" style="background:#fef3c7">🔔</div>
+          <div class="sr-content">
+            <div class="sr-label" id="lbl-notif">Alertes budget</div>
+            <div class="sr-desc" id="lbl-notif-desc">Prévenir quand le budget est dépassé</div>
+          </div>
+          <div class="sr-control">
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-notif" checked/>
+              <div class="toggle-track"></div>
+            </label>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── DONNÉES ───────────────────────── -->
+    <div class="settings-section">
+      <div class="settings-section-title" id="lbl-data-section">Données</div>
+      <div class="settings-card">
+
+        <!-- Data size -->
+        <div class="settings-row">
+          <div class="sr-icon" style="background:var(--primary-l)">📦</div>
+          <div class="sr-content">
+            <div class="sr-label" id="lbl-storage">Stockage local</div>
+            <div class="sr-desc" id="data-summary">Calcul en cours…</div>
+          </div>
+          <div class="sr-value" id="data-size">—</div>
+        </div>
+
+        <!-- Export -->
+        <div class="settings-row" id="row-export" style="cursor:pointer">
+          <div class="sr-icon" style="background:#dbeafe">📤</div>
+          <div class="sr-content">
+            <div class="sr-label" id="lbl-export">Exporter en CSV</div>
+            <div class="sr-desc" id="lbl-export-desc">Télécharger toutes vos dépenses</div>
+          </div>
+          <div class="sr-control">
+            <span class="sr-arrow">›</span>
+          </div>
+        </div>
+
+        <!-- Privacy -->
+        <div class="settings-row" id="row-privacy" style="cursor:pointer">
+          <div class="sr-icon" style="background:#ede9fe">🔐</div>
+          <div class="sr-content">
+            <div class="sr-label" id="lbl-privacy-link">Confidentialité</div>
+            <div class="sr-desc" id="lbl-privacy-desc">Voir notre politique de données</div>
+          </div>
+          <div class="sr-control">
+            <span class="sr-arrow">›</span>
+          </div>
+        </div>
+
+        <!-- Terms -->
+        <div class="settings-row" id="row-terms" style="cursor:pointer">
+          <div class="sr-icon" style="background:#fce7f3">📜</div>
+          <div class="sr-content">
+            <div class="sr-label" id="lbl-terms-link">Conditions d'utilisation</div>
+            <div class="sr-desc" id="lbl-terms-desc">Lire les conditions générales</div>
+          </div>
+          <div class="sr-control">
+            <span class="sr-arrow">›</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── ZONE DANGEREUSE ──────────────── -->
+    <div class="settings-section">
+      <div class="settings-section-title" id="lbl-danger">Zone de danger</div>
+      <div class="settings-card" style="border-color:rgba(239,68,68,0.3)">
+
+        <div class="settings-row" style="cursor:pointer" id="row-reset">
+          <div class="sr-icon" style="background:var(--red-l)">⚠️</div>
+          <div class="sr-content">
+            <div class="sr-label" style="color:var(--red)" id="lbl-reset">Réinitialiser les données</div>
+            <div class="sr-desc" id="lbl-reset-desc">Supprimer toutes les dépenses et objectifs</div>
+          </div>
+          <div class="sr-control">
+            <span style="color:var(--red);font-size:12px">›</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── ABOUT ─────────────────────────── -->
+    <div class="settings-section">
+      <div class="settings-section-title" id="lbl-about">À propos</div>
+      <div class="settings-card">
+        <div class="settings-row">
+          <div class="sr-icon" style="background:var(--primary-l)">📱</div>
+          <div class="sr-content">
+            <div class="sr-label">TAF Finance</div>
+            <div class="sr-desc">Gestion financière personnelle</div>
+          </div>
+          <div class="sr-value">v2.0.0</div>
+        </div>
+        <div class="settings-row">
+          <div class="sr-icon" style="background:#f0f9ff">🛡️</div>
+          <div class="sr-content">
+            <div class="sr-label" id="lbl-local-only">100% Local</div>
+            <div class="sr-desc" id="lbl-local-desc">Données sur votre appareil uniquement</div>
+          </div>
+          <div class="sr-control">
+            <span class="badge badge-green">Privé</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="version-tag">TAF Finance v2.0.0 · Données 100% locales · Made with 💚</div>
+
+  </div><!-- /container -->
+</main>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <div class="bnav-item" data-page="app" data-href="app.html">
+    <span class="bnav-icon">🏠</span><span>Accueil</span><div class="bnav-dot"></div>
+  </div>
+  <div class="bnav-item" data-page="dashboard" data-href="dashboard.html">
+    <span class="bnav-icon">📊</span><span>Stats</span><div class="bnav-dot"></div>
+  </div>
+  <div class="bnav-item" data-page="history" data-href="history.html">
+    <span class="bnav-icon">📜</span><span>Historique</span><div class="bnav-dot"></div>
+  </div>
+  <div class="bnav-item active" data-page="settings" data-href="settings.html">
+    <span class="bnav-icon">⚙️</span><span>Réglages</span><div class="bnav-dot"></div>
+  </div>
+</nav>
+
+<!-- MODAL: Confirm reset -->
+<div class="modal-overlay" id="modal-reset">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div style="text-align:center;padding:8px 0 20px">
+      <div style="font-size:52px;margin-bottom:12px">⚠️</div>
+      <h3 style="color:var(--red);margin-bottom:8px" id="modal-reset-title">Réinitialiser les données</h3>
+      <p style="font-size:0.88rem;color:var(--text-3)" id="modal-reset-desc">
+        Cette action est <strong>irréversible</strong>. Toutes vos dépenses, objectifs et paramètres seront supprimés.
+      </p>
+    </div>
+    <div class="flex flex-col gap-10">
+      <button class="danger-btn" id="btn-confirm-reset">🗑 Oui, tout supprimer</button>
+      <button class="btn btn-outline btn-full" onclick="Modal.close('modal-reset')" id="btn-cancel-reset">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+<script src="script.js"></script>
+<script>
+/* ════════════════════════════════════
+   SETTINGS PAGE CONTROLLER
+════════════════════════════════════ */
+(function() {
+  'use strict';
+
+  let settings = {};
+
+  function init() {
+    settings = Store.getSettings();
+    setActiveNav('settings');
+    applyCurrentSettings();
+    loadDataStats();
+    attachEvents();
+  }
+
+  /* ── Apply current settings to UI ── */
+  function applyCurrentSettings() {
+    // Theme toggle
+    const dark = settings.theme === 'dark';
+    document.getElementById('toggle-dark').checked = dark;
+    document.getElementById('btn-theme-toggle').textContent = dark ? '☀️' : '🌙';
+
+    // Currency
+    const currSel = document.getElementById('select-currency');
+    currSel.value = settings.currency || 'XOF';
+
+    // Language
+    const langSel = document.getElementById('select-language');
+    langSel.value = settings.language || 'fr';
+
+    // Username
+    const uname = settings.username || '';
+    document.getElementById('input-username').value = uname;
+    document.getElementById('avatar-name-display').textContent = uname || '—';
+
+    // Income & budget — convert from EUR to display currency
+    const inc = parseFloat(settings.income) || 0;
+    const bud = parseFloat(settings.budget) || 0;
+    document.getElementById('display-income').textContent = inc > 0 ? formatCurrency(inc) : '—';
+    document.getElementById('display-budget').textContent = bud > 0 ? formatCurrency(bud) : '—';
+    document.getElementById('input-income').value = inc > 0 ? fromEUR(inc).toFixed(2) : '';
+    document.getElementById('input-budget').value = bud > 0 ? fromEUR(bud).toFixed(2) : '';
+
+    // Notifications toggle
+    const notif = settings.budgetAlert !== false; // default true
+    document.getElementById('toggle-notif').checked = notif;
+
+    // Avatar from localStorage
+    const savedAvatar = Store.get('avatar', null);
+    if (savedAvatar) {
+      const img = document.getElementById('avatar-img');
+      img.src = savedAvatar;
+      img.style.display = 'block';
+      document.getElementById('avatar-emoji').style.display = 'none';
+    }
+
+    // Conversion info
+    updateConversionInfo();
+    applyTranslations();
+  }
+
+  /* ── Translations ── */
+  function applyTranslations() {
+    const pairs = [
+      ['lbl-profile',        'profile'],
+      ['lbl-username',       'username'],
+      ['lbl-currency',       'currency'],
+      ['lbl-language',       'language'],
+      ['lbl-dark-mode',      'theme'],
+      ['lbl-export',         'export'],
+      ['lbl-storage',        'Stockage local'],
+    ];
+    // Only translate known keys
+    document.title = 'TAF — ' + t('settings');
+  }
+
+  /* ── Currency conversion info ── */
+  function updateConversionInfo() {
+    const cur = settings.currency || 'XOF';
+    const cfg = CURRENCIES[cur] || CURRENCIES['EUR'];
+    const rate = (cfg.rate).toFixed(cur === 'XOF' || cur === 'NGN' ? 0 : 4);
+    const txt = cur === 'EUR'
+      ? 'Les montants sont stockés en EUR (devise de référence).'
+      : `1 EUR = ${rate} ${cfg.symbol}. Conversion automatique appliquée à l'affichage.`;
+    document.getElementById('conversion-text').textContent = txt;
+  }
+
+  /* ── Data stats ── */
+  function loadDataStats() {
+    const expenses  = Expenses.getAll();
+    const objectives= Objectives.getAll();
+    const totalMonth= Expenses.totalMonth();
+
+    document.getElementById('data-summary').textContent =
+      `${expenses.length} dépense${expenses.length!==1?'s':''} · ${objectives.length} objectif${objectives.length!==1?'s':''}`;
+
+    // Approximate localStorage size
+    let size = 0;
+    try {
+      for (const k in localStorage) {
+        if (localStorage.hasOwnProperty(k) && k.startsWith('taf_')) {
+          size += (localStorage[k].length + k.length) * 2;
+        }
+      }
+    } catch(e) { size = 0; }
+    const kb = (size / 1024).toFixed(1);
+    document.getElementById('data-size').textContent = kb + ' KB';
+  }
+
+  /* ── EVENTS ── */
+  function attachEvents() {
+
+    // ── Theme toggle
+    document.getElementById('btn-theme-toggle').addEventListener('click', () => {
+      Theme.toggle();
+      settings = Store.getSettings();
+      const dark = settings.theme === 'dark';
+      document.getElementById('toggle-dark').checked = dark;
+      document.getElementById('btn-theme-toggle').textContent = dark ? '☀️' : '🌙';
+    });
+
+    document.getElementById('toggle-dark').addEventListener('change', function() {
+      settings.theme = this.checked ? 'dark' : 'light';
+      Store.saveSettings(settings);
+      Theme.apply();
+      document.getElementById('btn-theme-toggle').textContent = this.checked ? '☀️' : '🌙';
+    });
+
+    // ── Notifications toggle
+    document.getElementById('toggle-notif').addEventListener('change', function() {
+      settings.budgetAlert = this.checked;
+      Store.saveSettings(settings);
+      Toast.success(t('saved'));
+    });
+
+    // ── Currency change
+    document.getElementById('select-currency').addEventListener('change', function() {
+      settings.currency = this.value;
+      Store.saveSettings(settings);
+      updateConversionInfo();
+      // Refresh displayed amounts
+      const inc = parseFloat(settings.income) || 0;
+      const bud = parseFloat(settings.budget) || 0;
+      document.getElementById('display-income').textContent = inc > 0 ? formatCurrency(inc) : '—';
+      document.getElementById('display-budget').textContent = bud > 0 ? formatCurrency(bud) : '—';
+      document.getElementById('input-income').value = inc > 0 ? fromEUR(inc).toFixed(2) : '';
+      document.getElementById('input-budget').value = bud > 0 ? fromEUR(bud).toFixed(2) : '';
+      Toast.success(t('saved'));
+    });
+
+    // ── Language change
+    document.getElementById('select-language').addEventListener('change', function() {
+      settings.language = this.value;
+      Store.saveSettings(settings);
+      document.documentElement.lang = this.value;
+      Toast.success(t('saved'));
+      // Reload to apply all translations
+      setTimeout(() => window.location.reload(), 600);
+    });
+
+    // ── Save profile
+    document.getElementById('btn-save-profile').addEventListener('click', () => {
+      const name = document.getElementById('input-username').value.trim();
+      settings.username = name;
+      Store.saveSettings(settings);
+      document.getElementById('avatar-name-display').textContent = name || '—';
+      Toast.success(t('saved'));
+    });
+
+    // ── Save finances
+    document.getElementById('btn-save-finances').addEventListener('click', () => {
+      const rawInc = parseFloat(document.getElementById('input-income').value) || 0;
+      const rawBud = parseFloat(document.getElementById('input-budget').value) || 0;
+      settings.income = toEUR(rawInc);
+      settings.budget = toEUR(rawBud);
+      Store.saveSettings(settings);
+      document.getElementById('display-income').textContent = rawInc > 0 ? formatCurrency(toEUR(rawInc)) : '—';
+      document.getElementById('display-budget').textContent = rawBud > 0 ? formatCurrency(toEUR(rawBud)) : '—';
+      Toast.success(t('saved'));
+    });
+
+    // ── Avatar upload
+    document.getElementById('avatar-input').addEventListener('change', function() {
+      const file = this.files && this.files[0];
+      if (!file) return;
+      if (file.size > 2 * 1024 * 1024) { Toast.error('Image trop lourde (max 2 Mo)'); return; }
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const dataUrl = e.target.result;
+        // Save to localStorage
+        try {
+          Store.set('avatar', dataUrl);
+          const img = document.getElementById('avatar-img');
+          img.src = dataUrl;
+          img.style.display = 'block';
+          document.getElementById('avatar-emoji').style.display = 'none';
+          Toast.success('Photo mise à jour !');
+        } catch(err) {
+          Toast.error('Image trop volumineuse pour le stockage local.');
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // ── Export
+    document.getElementById('row-export').addEventListener('click', exportCSV);
+
+    // ── Privacy
+    document.getElementById('row-privacy').addEventListener('click', () => {
+      PageTransition.go('privacy.html');
+    });
+
+    // ── Terms
+    document.getElementById('row-terms').addEventListener('click', () => {
+      PageTransition.go('terms.html');
+    });
+
+    // ── Reset data
+    document.getElementById('row-reset').addEventListener('click', () => Modal.open('modal-reset'));
+
+    document.getElementById('btn-confirm-reset').addEventListener('click', () => {
+      Store.clearAll();
+      Modal.close('modal-reset');
+      Toast.success('Données effacées.');
+      setTimeout(() => PageTransition.go('index.html'), 800);
+    });
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>

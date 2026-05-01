@@ -1,526 +1,308 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="description" content="TAF — Gérez vos finances personnelles simplement et efficacement."/>
+  <title>TAF — Gestion Financière Personnelle</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    /* ── Landing-specific styles ── */
+    body { overflow-x: hidden; }
 
+    /* Hero */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      background: linear-gradient(160deg, #f0fdf4 0%, #ffffff 50%, #f0fdf4 100%);
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -30%; right: -20%;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(34,197,94,0.12) 0%, transparent 70%);
+      border-radius: 50%; pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; bottom: -20%; left: -15%;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(34,197,94,0.08) 0%, transparent 70%);
+      border-radius: 50%; pointer-events: none;
+    }
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-YK6N81VKSH"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    /* Landing Nav */
+    .land-nav {
+      position: relative; z-index: 10;
+      padding: 20px 24px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .land-logo {
+      font-family: var(--font-head); font-size: 1.6rem; font-weight: 700;
+      color: var(--primary); letter-spacing: -1px;
+    }
+    .land-logo span { color: var(--text-1); }
+    .land-nav-link {
+      font-size: 0.85rem; font-weight: 600; color: var(--text-3);
+      transition: color var(--transition);
+    }
+    .land-nav-link:hover { color: var(--primary); }
 
-  gtag('config', 'G-YK6N81VKSH');
-</script>
+    /* Hero content */
+    .hero-content {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 40px 24px;
+      position: relative; z-index: 1;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 20px;
+      background: var(--primary-l); color: var(--primary-d);
+      font-size: 0.78rem; font-weight: 700; letter-spacing: 0.5px;
+      margin-bottom: 24px;
+      animation: fadeUp 0.5s ease both;
+    }
+    .hero-title {
+      font-family: var(--font-head); font-size: clamp(2.4rem, 8vw, 4rem);
+      font-weight: 800; line-height: 1.1; color: var(--text-1);
+      letter-spacing: -1.5px; margin-bottom: 16px;
+      animation: fadeUp 0.5s 0.1s ease both;
+    }
+    .hero-title .green { color: var(--primary); }
+    .hero-desc {
+      font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+      color: var(--text-3); max-width: 420px;
+      line-height: 1.65; margin-bottom: 36px;
+      animation: fadeUp 0.5s 0.2s ease both;
+    }
+    .hero-cta {
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+      animation: fadeUp 0.5s 0.3s ease both;
+    }
+    .btn-hero {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 16px 36px; border-radius: var(--radius-xl);
+      background: var(--primary); color: #fff;
+      font-size: 1.05rem; font-weight: 700;
+      box-shadow: var(--shadow-green), 0 0 0 0 rgba(34,197,94,0.4);
+      transition: all 0.25s;
+      animation: pulseGreen 2.5s 1.5s ease-in-out infinite;
+    }
+    @keyframes pulseGreen {
+      0%,100% { box-shadow: var(--shadow-green), 0 0 0 0 rgba(34,197,94,0.3); }
+      50%      { box-shadow: var(--shadow-green), 0 0 0 12px rgba(34,197,94,0); }
+    }
+    .btn-hero:hover { background: var(--primary-d); transform: translateY(-2px); }
+    .btn-hero:active { transform: scale(0.97); }
+    .hero-sub { font-size: 0.8rem; color: var(--text-4); }
 
+    /* Feature cards */
+    .features {
+      background: var(--bg-2); padding: 60px 24px;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px; max-width: 900px; margin: 32px auto 0;
+    }
+    .feat-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-xl); padding: 24px;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .feat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+    .feat-icon {
+      width: 48px; height: 48px; border-radius: var(--radius-lg);
+      background: var(--primary-l); display: flex; align-items: center; justify-content: center;
+      font-size: 22px; margin-bottom: 14px;
+    }
+    .feat-card h3 { font-size: 1rem; margin-bottom: 6px; }
+    .feat-card p  { font-size: 0.85rem; color: var(--text-3); line-height: 1.55; }
 
-  <meta name="monetag" content="a8a3038d8311b72527893a2b6c43c3d9">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TAF (Take All Finances)</title>
+    /* Stats band */
+    .stats-band {
+      background: var(--primary); padding: 44px 24px;
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 32px;
+    }
+    .sb-item { text-align: center; color: #fff; }
+    .sb-val { font-family: var(--font-head); font-size: 2rem; font-weight: 800; }
+    .sb-label { font-size: 0.82rem; opacity: 0.82; margin-top: 2px; }
 
-  <link rel="stylesheet" href="style.css">
+    /* CTA section */
+    .cta-section {
+      text-align: center; padding: 70px 24px;
+      background: var(--bg);
+    }
+    .cta-section h2 { margin-bottom: 12px; }
+    .cta-section p  { color: var(--text-3); margin-bottom: 28px; max-width: 380px; margin-inline: auto; }
+
+    /* Footer */
+    .footer {
+      background: var(--text-1); color: rgba(255,255,255,0.6);
+      padding: 28px 24px; text-align: center;
+    }
+    .footer-logo { font-family: var(--font-head); font-size: 1.3rem; font-weight: 700; color: var(--primary); margin-bottom: 12px; }
+    .footer-links { display: flex; justify-content: center; gap: 20px; margin-bottom: 16px; }
+    .footer-links a { font-size: 0.82rem; color: rgba(255,255,255,0.55); transition: color var(--transition); }
+    .footer-links a:hover { color: var(--primary); }
+    .footer-copy { font-size: 0.75rem; opacity: 0.4; }
+
+    /* Mockup card */
+    .hero-mockup {
+      position: relative; z-index: 1;
+      margin: 0 auto 20px; max-width: 340px; width: 100%;
+      animation: fadeUp 0.6s 0.4s ease both;
+    }
+    .mockup-phone {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 28px; padding: 20px;
+      box-shadow: var(--shadow-lg), 0 0 0 8px rgba(34,197,94,0.06);
+    }
+    .mockup-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .mockup-bal { font-family: var(--font-head); font-size: 1.7rem; font-weight: 800; color: var(--primary); }
+    .mockup-label { font-size: 0.72rem; color: var(--text-3); font-weight: 600; text-transform: uppercase; }
+    .mockup-cards { display: flex; gap: 10px; }
+    .mockup-mini {
+      flex: 1; padding: 12px; background: var(--bg-2); border-radius: 14px;
+      border: 1px solid var(--border);
+    }
+    .mockup-mini .mm-val { font-size: 1rem; font-weight: 700; margin-top: 4px; }
+    .mockup-bar-section { margin-top: 14px; }
+    .mockup-pb { height: 8px; background: var(--bg-3); border-radius: 4px; overflow: hidden; margin-top: 6px; }
+    .mockup-pb-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--green-300)); border-radius: 4px; }
+  </style>
 </head>
-
 <body>
 
-  <!-- HEADER -->
-  <header class="topbar">
-    <div class="logo">TAF</div>
-    <button onclick="toggleMenu()" class="menu-btn">☰</button>
-  </header>
+  <section class="hero">
+    <!-- Nav -->
+    <nav class="land-nav">
+      <div class="land-logo">T<span>AF</span></div>
+      <a href="app.html" class="land-nav-link">Ouvrir l'app →</a>
+    </nav>
 
-  <!-- SIDEBAR -->
- <nav id="sidebar" class="sidebar">
+    <!-- Hero content -->
+    <div class="hero-content">
+      <div class="hero-badge">✦ Application Gratuite &amp; 100% Privée</div>
 
-  <h2>💰 TAF</h2>
+      <h1 class="hero-title">
+        Gérez vos finances<br>avec <span class="green">intelligence</span>
+      </h1>
 
-  <a href="#" onclick="showSection('home')">🏠 Accueil</a>
-  <a href="#" onclick="showSection('budget')">💼 Budget Mensuel</a>
-  <a href="#" onclick="showSection('stats')">📊 Statistiques</a>
-  <a href="#" onclick="showSection('savings')">🎯 Épargne & Objectifs</a>
-  <a href="#" onclick="showSection('privacy')">🔒 Confidentialité</a> 
-  <a href="#" onclick="showSection('settings')">⚙️ Paramètres</a>
+      <p class="hero-desc">
+        TAF vous aide à suivre vos dépenses, atteindre vos objectifs d'épargne
+        et comprendre vos habitudes financières — simplement, depuis votre téléphone.
+      </p>
 
-</nav>
-  <!-- CONTENU -->
-  <main class="content">
+      <!-- Phone mockup -->
+      <div class="hero-mockup">
+        <div class="mockup-phone">
+          <div class="mockup-row">
+            <div>
+              <div class="mockup-label">Solde ce mois</div>
+              <div class="mockup-bal">285 000 FCFA</div>
+            </div>
+            <div style="font-size:28px">💳</div>
+          </div>
+          <div class="mockup-cards">
+            <div class="mockup-mini">
+              <div class="mockup-label">Revenus</div>
+              <div class="mm-val text-green">450 000</div>
+            </div>
+            <div class="mockup-mini">
+              <div class="mockup-label">Dépenses</div>
+              <div class="mm-val text-red">165 000</div>
+            </div>
+            <div class="mockup-mini">
+              <div class="mockup-label">Épargne</div>
+              <div class="mm-val" style="color:var(--blue)">63%</div>
+            </div>
+          </div>
+          <div class="mockup-bar-section">
+            <div class="mockup-label">Budget utilisé — 37%</div>
+            <div class="mockup-pb"><div class="mockup-pb-fill" style="width:37%"></div></div>
+          </div>
+        </div>
+      </div>
 
-    <!-- HOME -->
-    <section id="home" class="active">
+      <div class="hero-cta">
+        <a href="app.html" class="btn-hero">
+          <span>🚀</span>
+          <span>Commencer gratuitement</span>
+        </a>
+        <p class="hero-sub">Aucun compte requis · Vos données restent sur votre appareil</p>
+      </div>
+    </div>
+  </section>
 
-  <!-- HERO -->
-  <div class="card">
+  <!-- Features -->
+  <section class="features">
+    <div style="max-width:900px;margin:0 auto;text-align:center">
+      <h2>Tout ce dont vous avez besoin</h2>
+      <p style="color:var(--text-3);margin-top:8px">Un outil complet, pensé pour votre quotidien.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feat-card">
+        <div class="feat-icon">📊</div>
+        <h3>Statistiques visuelles</h3>
+        <p>Graphiques interactifs pour visualiser vos habitudes de dépenses par catégorie et dans le temps.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🎯</div>
+        <h3>Objectifs d'épargne</h3>
+        <p>Définissez des objectifs financiers et suivez votre progression avec des indicateurs clairs.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🔒</div>
+        <h3>100% Privé</h3>
+        <p>Toutes vos données sont stockées localement sur votre appareil. Aucun serveur, aucune connexion requise.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🌍</div>
+        <h3>Multi-devises</h3>
+        <p>Support du FCFA, EUR, USD, GBP, NGN et bien d'autres avec conversion automatique.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🌙</div>
+        <h3>Thème sombre</h3>
+        <p>Interface claire ou sombre selon vos préférences, conçue pour être agréable à utiliser en toute circonstance.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">📤</div>
+        <h3>Export CSV</h3>
+        <p>Exportez l'intégralité de votre historique en fichier CSV pour une analyse approfondie.</p>
+      </div>
+    </div>
+  </section>
 
-    <h1>POUR COMMENCER OUVREZ LE MENU ☰ </h1>
-
-    
-    <h1>💰 TAF</h1>
-    <h2>Take All Finances</h2>
-
-    <p>
-      TAF est une application de gestion financière conçue pour t’aider à comprendre,
-      contrôler et améliorer ton argent au quotidien.
-    </p>
-
-    <p>
-      Simple, rapide et pensée pour mobile, TAF transforme ta manière de gérer ton budget.
-    </p>
-  </div>
-
-  <!-- PROBLEME -->
-  <div class="card">
-    <h3>❌ Le problème de la plupart des gens</h3>
-
-    <p>
-      Chaque mois, des milliers de personnes gagnent de l’argent mais ne savent pas exactement :
-    </p>
-
-    <ul>
-      <li>Où part leur argent</li>
-      <li>Combien ils dépensent réellement</li>
-      <li>S’ils économisent vraiment</li>
-      <li>S’ils respectent leur budget</li>
-    </ul>
-
-    <p>
-      Résultat : argent mal géré, dépenses invisibles et impossibilité d’économiser correctement.
-    </p>
-  </div>
-
-  <!-- SOLUTION -->
-  <div class="card">
-    <h3>✅ La solution : TAF</h3>
-
-    <p>
-      TAF centralise toutes tes finances dans un seul endroit.
-      Tu n’as plus besoin de feuilles Excel compliquées ou de calculs manuels.
-    </p>
-
-    <ul>
-      <li>📊 Suivi complet de ton budget</li>
-      <li>💸 Analyse de tes dépenses</li>
-      <li>💰 Gestion de tes revenus</li>
-      <li>📈 Statistiques automatiques</li>
-      <li>🎯 Suivi de ton épargne</li>
-    </ul>
-  </div>
-
-  <!-- COMMENT CA MARCHE -->
-  <div class="card">
-    <h3>⚙️ Comment fonctionne TAF ?</h3>
-
-    <p>
-      TAF est simple à utiliser, même si tu n’as aucune connaissance en finance :
-    </p>
-
-    <p><b>1.</b> Tu ajoutes tes revenus (argent que tu gagnes)</p>
-    <p><b>2.</b> Tu ajoutes tes dépenses (argent que tu utilises)</p>
-    <p><b>3.</b> TAF calcule automatiquement ton solde</p>
-    <p><b>4.</b> Tu vois tout en temps réel</p>
-  </div>
-
-  <!-- BUDGET -->
-  <div class="card">
-    <h3>💰 Gestion de budget</h3>
-
-    <p>
-      Avec TAF, tu peux organiser ton argent en catégories :
-    </p>
-
-    <ul>
-      <li>Nourriture</li>
-      <li>Transport</li>
-      <li>Logement</li>
-      <li>Loisirs</li>
-      <li>Épargne</li>
-    </ul>
-
-    <p>
-      Tu définis ton budget prévu et tu compares avec tes dépenses réelles.
-      TAF te montre automatiquement si tu dépasses ou non.
-    </p>
-  </div>
-
-  <!-- STATISTIQUES -->
-  <div class="card">
-    <h3>📊 Statistiques intelligentes</h3>
-
-    <p>
-      TAF analyse automatiquement ton comportement financier :
-    </p>
-
-    <ul>
-      <li>Ton budget total</li>
-      <li>Tes dépenses réelles</li>
-      <li>Ton taux de consommation</li>
-      <li>Ton écart financier</li>
-    </ul>
-
-    <p>
-      Tu comprends rapidement si tu gères bien ton argent ou non.
-    </p>
-  </div>
-
-  <!-- EPARGNE -->
-  <div class="card">
-    <h3>💰 Épargne & objectifs</h3>
-
-    <p>
-      Avec TAF, tu peux créer des objectifs :
-    </p>
-
-    <ul>
-      <li>Acheter un téléphone</li>
-      <li>Voyager</li>
-      <li>Économiser pour un projet</li>
-    </ul>
-
-    <p>
-      Tu suis automatiquement ta progression jusqu’à atteindre ton objectif.
-    </p>
-  </div>
-
-  <!-- AVANTAGES -->
-  <div class="card">
-    <h3>🚀 Pourquoi utiliser TAF ?</h3>
-
-    <ul>
-      <li>✔ Interface simple et rapide</li>
-      <li>✔ Optimisé pour mobile</li>
-      <li>✔ Aucun compte requis</li>
-      <li>✔ Données privées sur ton appareil</li>
-      <li>✔ Compréhension immédiate de tes finances</li>
-    </ul>
-  </div>
-
-  <!-- TRANSPARENCE -->
-  
-
-  <!-- RESUME -->
-  <div class="card">
-    <h2>🧠 En résumé</h2>
-
-    <p>
-      TAF répond à 3 questions essentielles :
-    </p>
-
-    <ul>
-      <li>💸 Combien je gagne ?</li>
-      <li>💰 Combien je dépense ?</li>
-      <li>📊 Est-ce que je gère bien mon argent ?</li>
-    </ul>
+  <!-- Stats band -->
+  <div class="stats-band">
+    <div class="sb-item"><div class="sb-val">100%</div><div class="sb-label">Gratuit &amp; Open</div></div>
+    <div class="sb-item"><div class="sb-val">0</div><div class="sb-label">Données envoyées</div></div>
+    <div class="sb-item"><div class="sb-val">9</div><div class="sb-label">Catégories</div></div>
+    <div class="sb-item"><div class="sb-val">∞</div><div class="sb-label">Dépenses</div></div>
   </div>
 
   <!-- CTA -->
-  <div class="card">
-    <h2>👉 Commence maintenant</h2>
+  <section class="cta-section">
+    <h2>Prêt à reprendre<br>le contrôle ?</h2>
+    <p>Rejoignez des milliers d'utilisateurs qui gèrent leurs finances avec TAF.</p>
+    <a href="app.html" class="btn btn-primary btn-lg">Ouvrir TAF →</a>
+  </section>
 
-    <p>
-      Prends le contrôle de ton argent et améliore ta gestion financière dès aujourd’hui.
-    </p>
-  </div>
-
-</section>
-    <!-- BUDGET (CORRIGÉ) -->
-    <section id="budget">
-
-      <h2>💰 Budget Mensuel</h2>
-
-      <div class="card">
-
-        <table class="budget-table">
-
-          <thead>
-            <tr>
-              <th>Catégorie</th>
-              <th>Budget prévu</th>
-              <th>Dépenses réelles</th>
-              <th>Écart</th>
-              <th>Commentaires</th>
-            </tr>
-          </thead>
-
-<div class="card">
-<button type="button" onclick="addRow()">➕ Ajouter une ligne</button>
-</div>
-
-<th>Action</th>
-
-         <tbody id="budgetTableBody"></tbody>
-
-
-        </table>
-        
-
-      </div>
-
-      
-
-    </section>
-
-    <!-- STATS -->
-    <section id="stats" class="stats">
-
-  <h2 class="title">📊 Statistiques</h2>
-
-  <div class="stats-grid">
-
-    <div class="stat-card budget">
-      <h3>💰 Budget total</h3>
-      <p id="statBudget">0 FCFA</p>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-logo">TAF</div>
+    <div class="footer-links">
+      <a href="privacy.html">Confidentialité</a>
+      <a href="terms.html">Conditions</a>
+      <a href="app.html">Application</a>
     </div>
-
-    <div class="stat-card depenses">
-      <h3>💸 Dépenses</h3>
-      <p id="statDepenses">0 FCFA</p>
-    </div>
-
-    <div class="stat-card epargne">
-      <h3>🏦 Épargne</h3>
-      <p id="statEpargne">0 FCFA</p>
-    </div>
-
-    <div class="stat-card taux">
-      <h3>📈 Taux d'utilisation</h3>
-      <p id="statTaux">0%</p>
-    </div>
-
-    <div class="stat-card ecart">
-      <h3>⚖️ Écart</h3>
-      <p id="statEcart">0 FCFA</p>
-    </div>
-
-  </div>
-
-</section>
-
-    <!-- SAVINGS -->
-    <section id="savings" class="savings">
-
-  <h2 class="title">💰 Épargne & Objectifs</h2>
-
-  <!-- CREATION OBJECTIF -->
-  <div class="card">
-
-    <h3>🎯 Créer un objectif</h3>
-
-    <input id="goalName" placeholder="Ex: Téléphone, Voyage, Loyer...">
-    <input id="goalAmount" type="number" placeholder="Montant cible">
-
-    <button onclick="createGoal()">+ Ajouter objectif</button>
-
-  </div>
-
-  <!-- LISTE OBJECTIFS -->
-  <div id="goalsContainer"></div>
-
-</section>
-
-    <!-- SETTINGS -->
-    <section id="settings" class="settings">
-
-  <h2 class="title">⚙️ Paramètres</h2>
-
-  <!-- MONNAIE -->
-  <div class="card">
-    <h3>💱 Devise</h3>
-
-    <select id="currencySelect" onchange="setCurrency()">
-      <option value="FCFA">FCFA</option>
-      <option value="USD">USD</option>
-      <option value="EUR">EUR</option>
-    </select>
-  </div>
-
-  
-
-  <!-- MODE CALCUL -->
-  <div class="card">
-    <h3>🧠 Mode de calcul</h3>
-
-    <select id="calcMode" onchange="setCalcMode()">
-      <option value="simple">Simple</option>
-      <option value="detailed">Détaillé</option>
-    </select>
-  </div>
-
-  <!-- ALERTES -->
-  <div class="card">
-    <h3>🔔 Alertes budget</h3>
-
-    <label>
-      <input type="checkbox" id="budgetAlert" onchange="setAlert()">
-      Activer les alertes de dépassement
-    </label>
-  </div>
-
-  
-  
-
-  <!-- RESET -->
-  <div class="card danger">
-    <h3>⚠️ Réinitialisation</h3>
-
-    <p>Supprimer toutes les données de l’application.</p>
-
-    <button onclick="resetAll()">Réinitialiser</button>
-  </div>
-
-</section>
-
-
-<section id="privacy">
-
-  <h2>🔒 Politique de Confidentialité – TAF</h2>
-
-  <div class="card">
-
-    <p><strong>Dernière mise à jour :</strong> Avril 2026</p>
-
-    <p>
-      Bienvenue sur <strong>TAF (Take All Finances)</strong>.
-      La protection de vos données personnelles est une priorité.
-      Cette politique explique de manière claire comment vos données sont utilisées.
-    </p>
-
-    <h3>1. 📌 Qui sommes-nous ?</h3>
-    <p>
-      TAF est une plateforme web dédiée à la gestion de finances personnelles :
-      suivi des dépenses, revenus, budgets et statistiques.
-    </p>
-
-    <h3>2. 📊 Données collectées</h3>
-
-    <p><strong>a) Données fournies</strong></p>
-    <ul>
-      <li>Revenus et dépenses</li>
-      <li>Catégories de budget</li>
-      <li>Paramètres (devise, mode, alertes)</li>
-    </ul>
-
-    <p>👉 Ces données restent stockées localement dans votre navigateur.</p>
-
-    <p><strong>b) Données automatiques</strong></p>
-    <ul>
-      <li>Adresse IP</li>
-      <li>Type d’appareil</li>
-      <li>Navigateur</li>
-      <li>Pages visitées</li>
-      <li>Temps passé</li>
-    </ul>
-
-    <p><strong>c) Cookies</strong></p>
-    <p>
-      Utilisés pour améliorer l’expérience, sauvegarder vos préférences
-      et analyser le trafic.
-    </p>
-
-    <h3>3. 🎯 Utilisation des données</h3>
-    <ul>
-      <li>Fonctionnement du site</li>
-      <li>Amélioration de l’interface</li>
-      <li>Personnalisation</li>
-      <li>Analyse des performances</li>
-      <li>Affichage de publicités</li>
-    </ul>
-
-    <h3>4. 💰 Publicité et services tiers</h3>
-    <p>
-      TAF utilise des services publicitaires (ex : PropellerAds).
-    </p>
-    <ul>
-      <li>Cookies</li>
-      <li>Données de navigation</li>
-      <li>Identifiants publicitaires</li>
-    </ul>
-
-    <p>
-      ⚠️ Ces services sont indépendants. Consultez leurs politiques pour plus d’informations.
-    </p>
-
-    <h3>5. 🔐 Stockage et sécurité</h3>
-    <ul>
-      <li>Stockage local sécurisé</li>
-      <li>Aucune base centrale</li>
-      <li>Protection contre accès non autorisés</li>
-    </ul>
-
-    <p>
-      Aucun système n’est totalement sécurisé.
-    </p>
-
-    <h3>6. 🧠 Données sensibles</h3>
-    <p>
-      Ne saisissez pas d’informations bancaires sensibles.
-    </p>
-
-    <h3>7. 👶 Protection des mineurs</h3>
-    <p>
-      TAF n’est pas destiné aux moins de 13 ans.
-    </p>
-
-    <h3>8. 🌍 Transfert de données</h3>
-    <p>
-      Certains services tiers peuvent être situés à l’étranger.
-    </p>
-
-    <h3>9. ⚙️ Vos droits</h3>
-    <ul>
-      <li>Accès à vos données</li>
-      <li>Modification / suppression</li>
-      <li>Désactivation des cookies</li>
-    </ul>
-
-    <p>
-      👉 Vous contrôlez tout via votre navigateur.
-    </p>
-
-    <h3>10. 🗑️ Suppression</h3>
-    <p>
-      Supprimez vos données en vidant le stockage du navigateur.
-    </p>
-
-    <h3>11. 🔄 Modifications</h3>
-    <p>
-      Cette politique peut évoluer à tout moment.
-    </p>
-
-    <h3>12. 📩 Contact</h3>
-    <p>
-      Contact via le site TAF (section paramètres).
-    </p>
-
-    <h3>13. ✅ Consentement</h3>
-    <p>
-      En utilisant TAF, vous acceptez cette politique.
-    </p>
-
-    <hr>
-
-    <h3>💡 Résumé simple</h3>
-    <ul>
-      <li>✔ Données stockées localement</li>
-      <li>✔ Cookies utilisés</li>
-      <li>✔ Publicités via services tiers</li>
-      <li>✔ Contrôle total utilisateur</li>
-    </ul>
-
-    <p style="text-align:center; margin-top:20px;">
-      Merci d’utiliser <strong>TAF</strong> 🙌
-    </p>
-
-  </div>
-
-</section>
-
-  </main>
+    <p class="footer-copy">© 2025 TAF · Tous droits réservés · Données locales uniquement</p>
+  </footer>
 
   <script src="script.js"></script>
-
-  <!-- PUB MONETAG -->
-  
-   <script>(function(s){s.dataset.zone='10938123',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-
 </body>
 </html>
