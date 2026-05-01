@@ -9,6 +9,11 @@
   <style>
     /* ── Landing-specific styles ── */
     body { overflow-x: hidden; }
+    /* Landing nav hidden on desktop (sidebar replaces it) */
+    @media (min-width: 900px) {
+      .land-nav { display: none; }
+      .hero { min-height: 100vh; }
+    }
 
     /* Hero */
     .hero {
@@ -304,5 +309,11 @@
   </footer>
 
   <script src="script.js"></script>
+  <script>
+    /* Index page — sidebar auto-inits via DOMContentLoaded in script.js */
+    document.addEventListener('DOMContentLoaded', () => {
+      Theme.apply();
+    });
+  </script>
 </body>
 </html>

@@ -433,10 +433,16 @@ const Charts = {
    BOTTOM NAV ACTIVE STATE
 ══════════════════════════════════════════ */
 function setActiveNav(page) {
+  // Bottom nav (mobile)
   document.querySelectorAll('.bnav-item').forEach(el => {
     el.classList.toggle('active', el.dataset.page === page);
   });
+  // Old desktop-nav (kept for backward compat, hidden via CSS)
   document.querySelectorAll('.desktop-nav a').forEach(el => {
+    el.classList.toggle('active', el.dataset.page === page);
+  });
+  // Sidebar nav items (desktop)
+  document.querySelectorAll('.taf-sidebar .sb-item').forEach(el => {
     el.classList.toggle('active', el.dataset.page === page);
   });
 }
@@ -591,4 +597,271 @@ const PageTransition = {
 // Auto-init on every page load
 document.addEventListener('DOMContentLoaded', () => {
   PageTransition.init();
+});
+
+/* ══════════════════════════════════════════════════════════
+   TAF DESKTOP SIDEBAR
+   Injecté dynamiquement sur toutes les pages ≥ 900px.
+   Mobile intact — aucune interaction sous 900px.
+══════════════════════════════════════════════════════════ */
+const Sidebar = {
+
+  /* ── Config des pages ── */
+  MAIN_PAGES: [
+    { id: 'index',     href: 'index.html',     icon: '🏠', label: 'Accueil',       section: 'main' },
+    { id: 'app',       href: 'app.html',        icon: '💳', label: 'Application',   section: 'main' },
+    { id: 'dashboard', href: 'dashboard.html',  icon: '📊', label: 'Statistiques',  section: 'main' },
+    { id: 'history',   href: 'history.html',    icon: '📜', label: 'Historique',    section: 'main' },
+  ],
+  SETTINGS_PAGES: [
+    { id: 'settings',  href: 'settings.html',   icon: '⚙️', label: 'Paramètres',   section: 'settings' },
+  ],
+  LEGAL_PAGES: [
+    { id: 'privacy',   href: 'privacy.html',    icon: '🔐', label: 'Confidentialité', section: 'legal' },
+    { id: 'terms',     href: 'terms.html',      icon: '📋', label: 'Conditions',    section: 'legal' },
+  ],
+
+  _el: null,       // sidebar DOM element
+  _activePage: '', // page id actuelle
+
+  /* ── Detect current page from URL ── */
+  _detectPage() {
+    const path = window.location.pathname.split('/').pop() || 'index.html';
+    const all  = [...this.MAIN_PAGES, ...this.SETTINGS_PAGES, ...this.LEGAL_PAGES];
+    const match= all.find(p => p.href === path);
+    return match ? match.id : 'index';
+  },
+
+  /* ── Detect collapsed state from localStorage ── */
+  _isCollapsed() {
+    return localStorage.getItem('taf_sidebar_collapsed') === '1';
+  },
+  _setCollapsed(v) {
+    localStorage.setItem('taf_sidebar_collapsed', v ? '1' : '0');
+  },
+
+  /* ── Build sidebar HTML ── */
+  _buildHTML() {
+    const s    = Store.getSettings();
+    const name = (s.username || '').trim() || 'Utilisateur';
+    const initial = name.charAt(0).toUpperCase();
+
+    const buildItems = (pages) => pages.map(p => {
+      const isActive = p.id === this._activePage;
+      return `
+        <a class="sb-item ${isActive ? 'active' : ''}"
+           href="${p.href}" data-page="${p.id}" data-href="${p.href}">
+          <span class="sb-item-icon">${p.icon}</span>
+          <span class="sb-item-label">${p.label}</span>
+          <span class="sb-tooltip">${p.label}</span>
+        </a>`;
+    }).join('');
+
+    const now  = new Date();
+    const isDay= now.getHours() >= 6 && now.getHours() < 20;
+
+    return `
+      <!-- Header logo + toggle -->
+      <div class="sb-header">
+        <div class="sb-logo">T<span>AF</span></div>
+        <button class="sb-toggle" id="sb-toggle-btn" title="Réduire le menu">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M10 3L5 8l5 5"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- User block -->
+      <div class="sb-user">
+        <div class="sb-avatar" id="sb-avatar">
+          <span id="sb-avatar-initial">${initial}</span>
+          <img id="sb-avatar-img" src="" alt=""/>
+        </div>
+        <div class="sb-user-info">
+          <div class="sb-user-name" id="sb-user-name">${name}</div>
+          <div class="sb-user-role">
+            <div class="sb-user-dot"></div>
+            <span>Premium · Local</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nav items -->
+      <nav class="sb-nav">
+        <div class="sb-section-label">Navigation</div>
+        ${buildItems(this.MAIN_PAGES)}
+
+        <div class="sb-divider"></div>
+        <div class="sb-section-label">Configuration</div>
+        ${buildItems(this.SETTINGS_PAGES)}
+
+        <div class="sb-divider"></div>
+        <div class="sb-section-label">Légal</div>
+        ${buildItems(this.LEGAL_PAGES)}
+      </nav>
+
+      <!-- Mini stats chips -->
+      <div class="sb-stats" id="sb-stats">
+        <div class="sb-stat-chip">
+          <span class="sb-stat-chip-label">Dépenses mois</span>
+          <span class="sb-stat-chip-val text-red" id="sb-chip-exp">—</span>
+        </div>
+        <div class="sb-stat-chip">
+          <span class="sb-stat-chip-label">Solde</span>
+          <span class="sb-stat-chip-val" id="sb-chip-bal">—</span>
+        </div>
+      </div>
+
+      <!-- Footer theme + version -->
+      <div class="sb-footer">
+        <button class="sb-theme-btn" id="sb-theme-btn" title="Changer de thème">
+          ${isDay ? '🌙' : '☀️'}
+        </button>
+        <span class="sb-footer-text">TAF Finance v2.0</span>
+      </div>
+    `;
+  },
+
+  /* ── Inject sidebar into DOM ── */
+  _inject() {
+    const sidebar = document.createElement('nav');
+    sidebar.className = 'taf-sidebar';
+    sidebar.setAttribute('aria-label', 'Navigation principale');
+    sidebar.innerHTML = this._buildHTML();
+    document.body.prepend(sidebar);
+    this._el = sidebar;
+  },
+
+  /* ── Update mini stat chips ── */
+  _updateStats() {
+    const s    = Store.getSettings();
+    const exps = Expenses.getMonth();
+    const total= exps.reduce((a, e) => a + (parseFloat(e.amount) || 0), 0);
+    const inc  = parseFloat(s.income) || 0;
+    const bal  = inc - total;
+
+    const expEl = document.getElementById('sb-chip-exp');
+    const balEl = document.getElementById('sb-chip-bal');
+    if (expEl) expEl.textContent = formatCurrency(total);
+    if (balEl) {
+      balEl.textContent = formatCurrency(bal);
+      balEl.style.color = bal >= 0 ? 'var(--primary)' : 'var(--red)';
+    }
+  },
+
+  /* ── Update avatar from localStorage ── */
+  _updateAvatar() {
+    const img     = document.getElementById('sb-avatar-img');
+    const initial = document.getElementById('sb-avatar-initial');
+    const saved   = Store.get('avatar', null);
+    const s       = Store.getSettings();
+    const name    = (s.username || '').trim() || 'U';
+
+    if (initial) initial.textContent = name.charAt(0).toUpperCase();
+    if (img && saved) {
+      img.src = saved;
+      img.style.display = 'block';
+      if (initial) initial.style.display = 'none';
+    }
+
+    const nameEl = document.getElementById('sb-user-name');
+    if (nameEl) nameEl.textContent = (s.username || '').trim() || 'Utilisateur';
+  },
+
+  /* ── Toggle collapsed state ── */
+  _toggleCollapse() {
+    const collapsed = !this._isCollapsed();
+    this._setCollapsed(collapsed);
+    document.body.classList.toggle('sidebar-collapsed', collapsed);
+  },
+
+  /* ── Attach all sidebar events ── */
+  _attachEvents() {
+    // Toggle button
+    const toggleBtn = document.getElementById('sb-toggle-btn');
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', () => this._toggleCollapse());
+    }
+
+    // Theme button
+    const themeBtn = document.getElementById('sb-theme-btn');
+    if (themeBtn) {
+      themeBtn.addEventListener('click', () => {
+        Theme.toggle();
+        themeBtn.textContent = Store.getSettings().theme === 'dark' ? '☀️' : '🌙';
+      });
+    }
+
+    // Active state on nav items
+    this._el.querySelectorAll('.sb-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        this._el.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+      });
+    });
+
+    // Keyboard shortcut: Ctrl+B to toggle sidebar
+    window.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
+        e.preventDefault();
+        this._toggleCollapse();
+      }
+    });
+
+    // Sync stats when storage changes from another tab
+    window.addEventListener('storage', () => {
+      this._updateStats();
+      this._updateAvatar();
+    });
+  },
+
+  /* ── Main init ── */
+  init() {
+    // Only on desktop — no sidebar on mobile
+    const isDesktop = window.matchMedia('(min-width: 900px)').matches;
+    if (!isDesktop) return;
+
+    this._activePage = this._detectPage();
+
+    // Inject sidebar
+    this._inject();
+
+    // Add body class for layout shift
+    document.body.classList.add('has-sidebar');
+
+    // Apply collapsed state
+    if (this._isCollapsed()) {
+      document.body.classList.add('sidebar-collapsed');
+    }
+
+    this._attachEvents();
+    this._updateStats();
+    this._updateAvatar();
+
+    // Re-check on resize: destroy/show based on breakpoint
+    const mq = window.matchMedia('(min-width: 900px)');
+    mq.addEventListener('change', (e) => {
+      if (!e.matches) {
+        // Switched to mobile: remove sidebar layout
+        document.body.classList.remove('has-sidebar', 'sidebar-collapsed');
+        const existing = document.querySelector('.taf-sidebar');
+        if (existing) existing.style.display = 'none';
+      } else {
+        // Switched back to desktop
+        document.body.classList.add('has-sidebar');
+        if (this._isCollapsed()) document.body.classList.add('sidebar-collapsed');
+        const existing = document.querySelector('.taf-sidebar');
+        if (existing) existing.style.display = '';
+        else { this._inject(); this._attachEvents(); }
+        this._updateStats();
+      }
+    });
+  }
+};
+
+/* ── Auto-init sidebar on DOMContentLoaded ─────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+  // Small delay to let Store load first
+  setTimeout(() => Sidebar.init(), 0);
 });
