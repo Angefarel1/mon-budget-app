@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+  <link rel="icon" type="image/png" href="favicon.png">
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <meta name="description" content="TAF — Gérez vos finances personnelles simplement et efficacement."/>
@@ -19,21 +20,21 @@
     .hero {
       min-height: 100vh;
       display: flex; flex-direction: column;
-      background: linear-gradient(160deg, #f0fdf4 0%, #ffffff 50%, #f0fdf4 100%);
+      background: linear-gradient(160deg, #faf5ff 0%, #ffffff 50%, #faf5ff 100%);
       position: relative; overflow: hidden;
     }
     .hero::before {
       content: '';
       position: absolute; top: -30%; right: -20%;
       width: 600px; height: 600px;
-      background: radial-gradient(circle, rgba(34,197,94,0.12) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%);
       border-radius: 50%; pointer-events: none;
     }
     .hero::after {
       content: '';
       position: absolute; bottom: -20%; left: -15%;
       width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(34,197,94,0.08) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 70%);
       border-radius: 50%; pointer-events: none;
     }
 
@@ -91,13 +92,13 @@
       padding: 16px 36px; border-radius: var(--radius-xl);
       background: var(--primary); color: #fff;
       font-size: 1.05rem; font-weight: 700;
-      box-shadow: var(--shadow-green), 0 0 0 0 rgba(34,197,94,0.4);
+      box-shadow: var(--shadow-mauve), 0 0 0 0 rgba(139,92,246,0.4);
       transition: all 0.25s;
       animation: pulseGreen 2.5s 1.5s ease-in-out infinite;
     }
     @keyframes pulseGreen {
-      0%,100% { box-shadow: var(--shadow-green), 0 0 0 0 rgba(34,197,94,0.3); }
-      50%      { box-shadow: var(--shadow-green), 0 0 0 12px rgba(34,197,94,0); }
+      0%,100% { box-shadow: var(--shadow-mauve), 0 0 0 0 rgba(139,92,246,0.3); }
+      50%      { box-shadow: var(--shadow-mauve), 0 0 0 12px rgba(139,92,246,0); }
     }
     .btn-hero:hover { background: var(--primary-d); transform: translateY(-2px); }
     .btn-hero:active { transform: scale(0.97); }
@@ -163,7 +164,7 @@
     .mockup-phone {
       background: var(--surface); border: 1px solid var(--border);
       border-radius: 28px; padding: 20px;
-      box-shadow: var(--shadow-lg), 0 0 0 8px rgba(34,197,94,0.06);
+      box-shadow: var(--shadow-lg), 0 0 0 8px rgba(139,92,246,0.06);
     }
     .mockup-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
     .mockup-bal { font-family: var(--font-head); font-size: 1.7rem; font-weight: 800; color: var(--primary); }
@@ -176,7 +177,7 @@
     .mockup-mini .mm-val { font-size: 1rem; font-weight: 700; margin-top: 4px; }
     .mockup-bar-section { margin-top: 14px; }
     .mockup-pb { height: 8px; background: var(--bg-3); border-radius: 4px; overflow: hidden; margin-top: 6px; }
-    .mockup-pb-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--green-300)); border-radius: 4px; }
+    .mockup-pb-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--mauve-300)); border-radius: 4px; }
   </style>
 </head>
 <body>

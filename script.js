@@ -264,7 +264,7 @@ const Objectives = {
     const id   = Date.now().toString(36);
     const obj  = {
       id, name: data.name || '', target: parseFloat(data.target) || 0,
-      saved: parseFloat(data.saved) || 0, color: data.color || '#22c55e',
+      saved: parseFloat(data.saved) || 0, color: data.color || '#8b5cf6',
       createdAt: new Date().toISOString()
     };
     objs.push(obj);
@@ -392,7 +392,7 @@ const Charts = {
     });
   },
 
-  drawBars(canvasId, labels, values, color = '#22c55e') {
+  drawBars(canvasId, labels, values, color = '#8b5cf6') {
     const canvas = document.getElementById(canvasId);
     if (!canvas) return;
     const ctx  = canvas.getContext('2d');
@@ -949,7 +949,7 @@ const Ripple = {
         left: ${x}px;
         top: ${y}px;
         border-radius: 50%;
-        background: rgba(34,197,94,0.15);
+        background: rgba(139,92,246,0.15);
         transform: scale(0);
         animation: ripple 0.55s cubic-bezier(0.4,0,0.2,1) forwards;
         pointer-events: none;
@@ -1024,7 +1024,7 @@ Charts.drawDonut = function(canvasId, data, colors) {
 
 /* ─── ANIMATED BAR CHART ─────────────────────────────────── */
 const _originalDrawBars = Charts.drawBars.bind(Charts);
-Charts.drawBars = function(canvasId, labels, values, color = '#22c55e') {
+Charts.drawBars = function(canvasId, labels, values, color = '#8b5cf6') {
   const canvas = document.getElementById(canvasId);
   if (!canvas) { _originalDrawBars(canvasId, labels, values, color); return; }
 
