@@ -865,3 +865,276 @@ document.addEventListener('DOMContentLoaded', () => {
   // Small delay to let Store load first
   setTimeout(() => Sidebar.init(), 0);
 });
+/* ══════════════════════════════════════════════════════════
+   TAF ANIMATIONS JS v2.0
+   Scroll Reveal · Charts animés · Ripple · Compteurs
+══════════════════════════════════════════════════════════ */
+
+/* ─── SCROLL REVEAL (Intersection Observer) ──────────────── */
+const ScrollReveal = {
+  observer: null,
+
+  init() {
+    if (typeof IntersectionObserver === 'undefined') return;
+
+    const options = {
+      root: null,
+      rootMargin: '0px 0px -48px 0px',
+      threshold: 0.08
+    };
+
+    this.observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          // Unobserve after reveal (performance)
+          this.observer.unobserve(entry.target);
+        }
+      });
+    }, options);
+
+    // Auto-observe elements with reveal classes
+    this._observe();
+  },
+
+  _observe() {
+    const selectors = ['.reveal', '.reveal-left', '.reveal-right', '.reveal-scale'];
+    selectors.forEach(sel => {
+      document.querySelectorAll(sel).forEach(el => {
+        this.observer && this.observer.observe(el);
+      });
+    });
+
+    // Auto-apply reveal to cards and sections not already animated
+    document.querySelectorAll('.card:not(.no-reveal), .stat-card:not(.no-reveal), .kpi-card:not(.no-reveal), .settings-section:not(.no-reveal), .legal-card:not(.no-reveal)').forEach((el, i) => {
+      if (!el.classList.contains('reveal') && !el.classList.contains('reveal-scale')) {
+        el.classList.add('reveal');
+        el.style.transitionDelay = `${Math.min(i * 0.06, 0.4)}s`;
+        this.observer && this.observer.observe(el);
+      }
+    });
+  },
+
+  // Refresh after dynamic content changes
+  refresh() {
+    this._observe();
+  }
+};
+
+
+
+/* ─── RIPPLE EFFECT ──────────────────────────────────────── */
+const Ripple = {
+  init() {
+    // Add ripple to all buttons
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('.btn, .nav-btn, .month-btn, .filter-chip, .cat-filter-item, .bnav-item');
+      if (!btn) return;
+
+      const rect = btn.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height) * 2;
+      const x = e.clientX - rect.left - size / 2;
+      const y = e.clientY - rect.top - size / 2;
+
+      // Avoid creating too many ripples
+      const existing = btn.querySelector('.taf-ripple');
+      if (existing) existing.remove();
+
+      const rippleEl = document.createElement('span');
+      rippleEl.className = 'taf-ripple';
+      rippleEl.style.cssText = `
+        position: absolute;
+        width: ${size}px;
+        height: ${size}px;
+        left: ${x}px;
+        top: ${y}px;
+        border-radius: 50%;
+        background: rgba(34,197,94,0.15);
+        transform: scale(0);
+        animation: ripple 0.55s cubic-bezier(0.4,0,0.2,1) forwards;
+        pointer-events: none;
+        z-index: 0;
+      `;
+
+      // Ensure btn has position:relative and overflow:hidden
+      const pos = window.getComputedStyle(btn).position;
+      if (pos === 'static') btn.style.position = 'relative';
+
+      btn.appendChild(rippleEl);
+      setTimeout(() => rippleEl.remove(), 600);
+    }, true);
+  }
+};
+
+/* ─── ANIMATED DONUT CHART ───────────────────────────────── */
+// Override Charts.drawDonut to add animated drawing
+const _originalDrawDonut = Charts.drawDonut.bind(Charts);
+Charts.drawDonut = function(canvasId, data, colors) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) { _originalDrawDonut(canvasId, data, colors); return; }
+
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const cx = W/2, cy = H/2;
+  const outerR = Math.min(W,H)/2 - 10;
+  const innerR = outerR * 0.58;
+  const total = data.reduce((s,d) => s + d.value, 0);
+
+  if (total === 0) { _originalDrawDonut(canvasId, data, colors); return; }
+
+  const gap = 0.025;
+  const duration = 650; // ms
+  const startTime = performance.now();
+
+  // Pre-compute slice angles
+  const slices = [];
+  let angle = -Math.PI / 2;
+  data.forEach((d, i) => {
+    const sweep = (d.value / total) * (Math.PI * 2 - gap * data.length);
+    slices.push({ start: angle + gap/2, end: angle + sweep + gap/2, color: colors[i % colors.length] });
+    angle += sweep + gap;
+  });
+
+  function drawFrame(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    // Ease out quart
+    const ease = 1 - Math.pow(1 - progress, 4);
+
+    ctx.clearRect(0, 0, W, H);
+
+    slices.forEach(s => {
+      const sweep = s.end - s.start;
+      const currentEnd = s.start + sweep * ease;
+
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, outerR, s.start, currentEnd);
+      ctx.arc(cx, cy, innerR, currentEnd, s.start, true);
+      ctx.closePath();
+      ctx.fillStyle = s.color;
+      ctx.fill();
+    });
+
+    if (progress < 1) requestAnimationFrame(drawFrame);
+  }
+
+  requestAnimationFrame(drawFrame);
+};
+
+/* ─── ANIMATED BAR CHART ─────────────────────────────────── */
+const _originalDrawBars = Charts.drawBars.bind(Charts);
+Charts.drawBars = function(canvasId, labels, values, color = '#22c55e') {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) { _originalDrawBars(canvasId, labels, values, color); return; }
+
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const maxVal = Math.max(...values, 1);
+  const barW = Math.floor((W - 20) / values.length - 6);
+  const padX = 10, padB = 28, chartH = H - padB - 10;
+  const duration = 600;
+  const startTime = performance.now();
+
+  const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-3').trim() || '#64748b';
+
+  function drawFrame(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+
+    ctx.clearRect(0, 0, W, H);
+
+    values.forEach((v, i) => {
+      const x = padX + i * (barW + 6);
+      const targetH = Math.max(4, (v / maxVal) * chartH);
+      const bh = targetH * ease;
+      const y = H - padB - bh;
+      const r = Math.min(4, barW / 2);
+
+      ctx.beginPath();
+      ctx.roundRect(x, y, barW, bh, [r, r, 0, 0]);
+      ctx.fillStyle = color;
+      ctx.fill();
+
+      if (labels[i]) {
+        ctx.fillStyle = textColor;
+        ctx.font = '10px Plus Jakarta Sans';
+        ctx.textAlign = 'center';
+        ctx.fillText(labels[i], x + barW/2, H - 8);
+      }
+    });
+
+    if (progress < 1) requestAnimationFrame(drawFrame);
+  }
+
+  requestAnimationFrame(drawFrame);
+};
+
+/* ─── THEME TRANSITION ───────────────────────────────────── */
+// Enhance Theme.toggle with a smooth flash transition
+const _originalThemeToggle = Theme.toggle.bind(Theme);
+Theme.toggle = function() {
+  // Add transition class
+  document.documentElement.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+  _originalThemeToggle();
+  setTimeout(() => {
+    document.documentElement.style.transition = '';
+  }, 350);
+};
+
+/* ─── PAGE LOAD ANIMATIONS ───────────────────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+  // Init scroll reveal
+  ScrollReveal.init();
+
+  // Init ripple
+  Ripple.init();
+
+  // Animate number counters after a brief delay
+  setTimeout(() => AnimCounter.initPage(), 450);
+
+  // Stagger bottom nav items
+  document.querySelectorAll('.bnav-item').forEach((item, i) => {
+    item.style.animation = `slideUp 0.35s cubic-bezier(0.34,1.56,0.64,1) both`;
+    item.style.animationDelay = `${i * 0.06}s`;
+  });
+
+  // Add ripple keyframe if not present
+  if (!document.getElementById('taf-ripple-style')) {
+    const s = document.createElement('style');
+    s.id = 'taf-ripple-style';
+    s.textContent = `@keyframes ripple { 0% { transform:scale(0);opacity:0.4; } 100% { transform:scale(4);opacity:0; } }`;
+    document.head.appendChild(s);
+  }
+});
+
+/* ─── DYNAMIC CONTENT OBSERVER ──────────────────────────── */
+// Re-run scroll reveal when new content is added to the page
+const DOMWatcher = {
+  observer: null,
+  init() {
+    if (typeof MutationObserver === 'undefined') return;
+    this.observer = new MutationObserver((mutations) => {
+      let hasNew = false;
+      mutations.forEach(m => {
+        if (m.addedNodes.length) hasNew = true;
+      });
+      if (hasNew) {
+        // Debounce
+        clearTimeout(this._t);
+        this._t = setTimeout(() => {
+          ScrollReveal.refresh();
+          AnimCounter.initPage();
+        }, 80);
+      }
+    });
+    this.observer.observe(document.body, { childList: true, subtree: true });
+  }
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  DOMWatcher.init();
+});
+
+/* ─── FIN ANIMATIONS JS TAF v2.0 ─────────────────────────── */

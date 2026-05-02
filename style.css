@@ -929,3 +929,840 @@ p  { color: var(--text-2); }
   cursor: pointer; transition: opacity var(--transition);
 }
 .back-link:hover { opacity: 0.75; }
+/* ══════════════════════════════════════════════════════════
+   TAF ANIMATIONS v2.0 — Professional Fintech Layer
+   Thème : vert clair + blanc | Style : moderne & premium
+══════════════════════════════════════════════════════════ */
+
+/* ─── 1. KEYFRAMES GLOBAUX ──────────────────────────────── */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes scaleInBounce {
+  0%   { opacity: 0; transform: scale(0.85); }
+  70%  { transform: scale(1.04); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(8px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes progressGrow {
+  from { width: 0% !important; }
+}
+
+@keyframes ripple {
+  0%   { transform: scale(0); opacity: 0.4; }
+  100% { transform: scale(4); opacity: 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+  50%       { box-shadow: 0 0 0 6px rgba(34,197,94,0.15); }
+}
+
+@keyframes navItemAppear {
+  from { opacity: 0; transform: translateX(-12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes badgePop {
+  0%   { transform: scale(0); }
+  70%  { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+@keyframes numberRoll {
+  from { opacity: 0; transform: translateY(10px); filter: blur(4px); }
+  to   { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+@keyframes cardFlicker {
+  0%   { box-shadow: var(--shadow-sm); }
+  50%  { box-shadow: var(--shadow), 0 0 0 2px rgba(34,197,94,0.1); }
+  100% { box-shadow: var(--shadow-sm); }
+}
+
+@keyframes iconBounce {
+  0%, 100% { transform: translateY(0) scale(1); }
+  30%       { transform: translateY(-4px) scale(1.1); }
+  60%       { transform: translateY(0) scale(0.97); }
+}
+
+@keyframes dotPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%       { transform: scale(1.5); opacity: 0.7; }
+}
+
+@keyframes barGrow {
+  from { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+  to   { transform: scaleY(1); transform-origin: bottom; opacity: 1; }
+}
+
+@keyframes logoPulse {
+  0%  { text-shadow: 0 0 0 rgba(34,197,94,0); }
+  50% { text-shadow: 0 0 24px rgba(34,197,94,0.35); }
+  100%{ text-shadow: 0 0 0 rgba(34,197,94,0); }
+}
+
+/* ─── 2. PAGE TRANSITION — AMÉLIORÉE ────────────────────── */
+
+#page-loader {
+  background: var(--bg);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 24px;
+}
+
+/* Logo animé dans le loader */
+.loader-logo {
+  animation: loaderPulse 1.2s ease-in-out infinite, logoPulse 2s ease-in-out infinite;
+  position: relative;
+}
+
+/* Cercles décoratifs autour du loader */
+.loader-logo::before,
+.loader-logo::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  border: 1.5px solid rgba(34,197,94,0.2);
+  animation: loaderRing 1.8s ease-in-out infinite;
+}
+.loader-logo::before {
+  inset: -16px;
+  animation-delay: 0s;
+}
+.loader-logo::after {
+  inset: -28px;
+  animation-delay: 0.3s;
+}
+@keyframes loaderRing {
+  0%   { opacity: 0; transform: scale(0.9); }
+  50%  { opacity: 1; }
+  100% { opacity: 0; transform: scale(1.1); }
+}
+
+/* Entrance page */
+.page-enter {
+  animation: slideUp 0.38s cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+/* ─── 3. SCROLL REVEAL (Intersection Observer) ───────────── */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.45s cubic-bezier(0.4,0,0.2,1),
+              transform 0.45s cubic-bezier(0.4,0,0.2,1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-18px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.reveal-left.visible { opacity: 1; transform: translateX(0); }
+
+.reveal-right {
+  opacity: 0;
+  transform: translateX(18px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.94);
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+.reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+/* Délais pour staggering automatique */
+.reveal-stagger > *:nth-child(1)  { transition-delay: 0.04s; }
+.reveal-stagger > *:nth-child(2)  { transition-delay: 0.09s; }
+.reveal-stagger > *:nth-child(3)  { transition-delay: 0.14s; }
+.reveal-stagger > *:nth-child(4)  { transition-delay: 0.19s; }
+.reveal-stagger > *:nth-child(5)  { transition-delay: 0.24s; }
+.reveal-stagger > *:nth-child(6)  { transition-delay: 0.29s; }
+.reveal-stagger > *:nth-child(7)  { transition-delay: 0.34s; }
+.reveal-stagger > *:nth-child(8)  { transition-delay: 0.39s; }
+
+/* ─── 4. BOUTONS — micro-interactions ───────────────────── */
+
+/* Ripple effect sur tous les boutons */
+.btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255,255,255,0.25) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+.btn:active::after { opacity: 1; }
+
+/* Hover lift subtil */
+.btn-primary:hover,
+.btn-secondary:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-green), 0 4px 16px rgba(34,197,94,0.2);
+}
+.btn-primary:active,
+.btn-secondary:active {
+  transform: translateY(0) scale(0.97);
+}
+
+/* Navigation buttons */
+.nav-btn {
+  transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
+}
+.nav-btn:hover {
+  background: var(--primary-l) !important;
+  color: var(--primary-d) !important;
+  transform: scale(1.08);
+}
+.nav-btn:active { transform: scale(0.92) !important; }
+
+/* Danger button pulse on hover */
+.btn-danger:hover {
+  animation: glow 0.6s ease forwards;
+  transform: translateY(-1px);
+}
+
+/* ─── 5. CARTES (cards) — hover élévation ───────────────── */
+
+.card {
+  transition: transform 0.22s cubic-bezier(0.4,0,0.2,1),
+              box-shadow 0.22s cubic-bezier(0.4,0,0.2,1);
+}
+
+@media (hover: hover) {
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+/* Stat cards */
+.stat-card {
+  transition: transform 0.22s cubic-bezier(0.4,0,0.2,1),
+              box-shadow 0.22s cubic-bezier(0.4,0,0.2,1),
+              border-color 0.22s ease;
+}
+@media (hover: hover) {
+  .stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary);
+  }
+}
+
+/* KPI cards */
+.kpi-card {
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+@media (hover: hover) {
+  .kpi-card:hover {
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: var(--shadow);
+    border-color: rgba(34,197,94,0.4);
+  }
+}
+
+/* Settings rows */
+.settings-row {
+  transition: background 0.18s ease, padding-left 0.18s ease;
+}
+@media (hover: hover) {
+  .settings-row:hover {
+    background: var(--bg-2);
+    padding-left: 22px;
+  }
+}
+
+/* Legal cards */
+.legal-card {
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+@media (hover: hover) {
+  .legal-card:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow);
+  }
+}
+
+/* Feature cards (landing) */
+.feat-card {
+  transition: transform 0.25s cubic-bezier(0.4,0,0.2,1),
+              box-shadow 0.25s ease,
+              border-color 0.25s ease;
+}
+@media (hover: hover) {
+  .feat-card:hover {
+    transform: translateY(-5px) scale(1.01);
+    box-shadow: var(--shadow-md), 0 0 0 1px rgba(34,197,94,0.15);
+    border-color: rgba(34,197,94,0.3);
+  }
+  .feat-card:hover .feat-icon {
+    animation: iconBounce 0.5s ease;
+  }
+}
+
+/* ─── 6. ICÔNES (icon-circle) — interactions ─────────────── */
+
+.icon-circle {
+  transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1);
+}
+@media (hover: hover) {
+  .icon-circle:hover { transform: scale(1.12) rotate(-4deg); }
+}
+
+/* ─── 7. PROGRESS BARS — animation grow ─────────────────── */
+
+.progress-fill {
+  animation: progressGrow 0.8s cubic-bezier(0.4,0,0.2,1) both;
+  animation-delay: 0.2s;
+}
+
+/* Shimmer sur les progress bars */
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255,255,255,0.35) 50%,
+    transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2.4s ease-in-out infinite;
+  border-radius: inherit;
+}
+.progress-bar { position: relative; }
+
+/* ─── 8. BADGES — pop animation ─────────────────────────── */
+
+.badge {
+  animation: badgePop 0.35s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+
+/* ─── 9. BOTTOM NAV — interactions ──────────────────────── */
+
+.bnav-item {
+  transition: color 0.2s ease, transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
+}
+.bnav-item:active { transform: scale(0.88); }
+.bnav-item.active {
+  animation: navItemAppear 0.3s cubic-bezier(0.4,0,0.2,1) both;
+}
+
+.bnav-item .bnav-icon {
+  transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+}
+.bnav-item:active .bnav-icon { transform: scale(0.82) !important; }
+.bnav-item.active .bnav-icon { transform: scale(1.18) !important; }
+
+.bnav-dot {
+  animation: dotPulse 1.8s ease-in-out infinite;
+  transition: transform 0.25s ease;
+}
+
+/* ─── 10. MODAL — animation entrée ──────────────────────── */
+
+.modal {
+  transition: transform 0.38s cubic-bezier(0.32, 0.72, 0, 1),
+              opacity 0.3s ease;
+}
+.modal-overlay { transition: opacity 0.28s ease; }
+.modal-overlay.open .modal {
+  animation: none; /* override for smooth slide */
+}
+
+/* Handle geste */
+.modal-handle {
+  transition: background 0.2s ease, width 0.2s ease;
+  cursor: grab;
+}
+.modal-handle:hover { background: var(--primary); width: 48px; margin: 0 auto 20px; }
+
+/* ─── 11. SIDEBAR DESKTOP — animations ──────────────────── */
+
+@media (min-width: 900px) {
+
+  /* Items sidebar apparition séquentielle */
+  .taf-sidebar .sb-item {
+    animation: navItemAppear 0.3s cubic-bezier(0.4,0,0.2,1) both;
+  }
+  .taf-sidebar .sb-item:nth-child(1) { animation-delay: 0.05s; }
+  .taf-sidebar .sb-item:nth-child(2) { animation-delay: 0.10s; }
+  .taf-sidebar .sb-item:nth-child(3) { animation-delay: 0.15s; }
+  .taf-sidebar .sb-item:nth-child(4) { animation-delay: 0.20s; }
+  .taf-sidebar .sb-item:nth-child(5) { animation-delay: 0.25s; }
+  .taf-sidebar .sb-item:nth-child(6) { animation-delay: 0.30s; }
+  .taf-sidebar .sb-item:nth-child(7) { animation-delay: 0.35s; }
+
+  /* Active item glow */
+  .sb-item.active {
+    animation: none;
+    position: relative;
+  }
+  .sb-item.active::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-lg);
+    background: radial-gradient(ellipse at left, rgba(34,197,94,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* Hover sidebar item */
+  .sb-item {
+    transition: all 0.18s cubic-bezier(0.4,0,0.2,1);
+  }
+  @media (hover: hover) {
+    .sb-item:hover {
+      background: var(--bg-2);
+      color: var(--text-1);
+      padding-left: 16px;
+    }
+    .sb-item:hover .sb-item-icon {
+      transform: scale(1.15) rotate(-3deg);
+    }
+  }
+
+  /* Logo sidebar pulse */
+  .sb-logo {
+    transition: all 0.28s ease;
+  }
+  @media (hover: hover) {
+    .sb-logo:hover { letter-spacing: 0px; }
+  }
+
+  /* Toggle button rotate */
+  .sb-toggle {
+    transition: all 0.22s ease;
+  }
+  @media (hover: hover) {
+    .sb-toggle:hover { transform: scale(1.08); }
+  }
+  .sb-toggle:active { transform: scale(0.92); }
+
+  /* Stat chips hover */
+  .sb-stat-chip {
+    transition: all 0.2s ease;
+  }
+  @media (hover: hover) {
+    .sb-stat-chip:hover {
+      border-color: var(--primary);
+      background: var(--primary-l);
+    }
+  }
+
+  /* Avatar pulse */
+  .sb-avatar {
+    transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  @media (hover: hover) {
+    .sb-avatar:hover { transform: scale(1.1); border-color: var(--primary-d); }
+  }
+
+  /* Theme button spin on click */
+  .sb-theme-btn {
+    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), background 0.2s ease;
+  }
+  .sb-theme-btn:active { transform: rotate(180deg) scale(0.9); }
+
+}
+
+/* ─── 12. TOAST — améliorée ──────────────────────────────── */
+
+@keyframes toastIn {
+  from { opacity:0; transform: translateY(-16px) scale(0.92) translateX(10px); }
+  to   { opacity:1; transform: translateY(0) scale(1) translateX(0); }
+}
+@keyframes toastOut {
+  to { opacity:0; transform: translateY(-12px) scale(0.92); }
+}
+
+.toast {
+  animation: toastIn 0.32s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+
+/* ─── 13. ÉLÉMENTS SPÉCIAUX ──────────────────────────────── */
+
+/* Valeurs financières (countUp) */
+.stat-card-value,
+.kpi-val,
+.balance-amount,
+.donut-total {
+  animation: numberRoll 0.5s cubic-bezier(0.4,0,0.2,1) both;
+  animation-delay: 0.1s;
+}
+
+/* Empty state icon */
+.empty-state .es-icon {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Logo nav */
+.nav-logo,
+.land-logo,
+.sb-logo {
+  transition: color 0.2s ease, transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
+}
+@media (hover: hover) {
+  .nav-logo:hover,
+  .land-logo:hover { transform: scale(1.04); }
+}
+
+/* Hero CTA button */
+.btn-hero {
+  transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+  position: relative;
+  overflow: hidden;
+}
+.btn-hero::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+@media (hover: hover) {
+  .btn-hero:hover::before { opacity: 1; }
+  .btn-hero:hover { transform: translateY(-3px) scale(1.02); }
+}
+.btn-hero:active { transform: scale(0.97) !important; }
+
+/* Filter chips */
+.filter-chip,
+.cat-filter-item {
+  transition: all 0.18s cubic-bezier(0.4,0,0.2,1);
+}
+@media (hover: hover) {
+  .filter-chip:hover,
+  .cat-filter-item:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+  }
+}
+.filter-chip:active,
+.cat-filter-item:active { transform: scale(0.94); }
+
+.filter-chip.active,
+.cat-filter-item.active {
+  animation: scaleInBounce 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+
+/* Historique items */
+.hist-item {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+@media (hover: hover) {
+  .hist-item:hover {
+    transform: translateX(3px);
+    box-shadow: var(--shadow);
+  }
+}
+
+/* Delete button */
+.hi-del {
+  transition: all 0.2s cubic-bezier(0.34,1.56,0.64,1) !important;
+}
+@media (hover: hover) {
+  .hi-del:hover {
+    transform: scale(1.15) rotate(5deg) !important;
+    background: var(--red) !important;
+    color: #fff !important;
+  }
+}
+
+/* Search input focus */
+.search-input:focus {
+  transform: scaleX(1.005);
+  transform-origin: left;
+}
+
+/* Back link */
+.back-link {
+  transition: all 0.2s ease;
+}
+@media (hover: hover) {
+  .back-link:hover {
+    transform: translateX(-3px);
+    opacity: 0.8;
+  }
+}
+
+/* Month selector buttons */
+.month-btn {
+  transition: all 0.2s cubic-bezier(0.34,1.56,0.64,1) !important;
+}
+@media (hover: hover) {
+  .month-btn:hover {
+    transform: scale(1.12);
+  }
+}
+.month-btn:active { transform: scale(0.88) !important; }
+
+/* ─── 14. GRAPHIQUES — canvas animations ─────────────────── */
+
+/* Wrapper pour les canvas avec effet d'apparition */
+.donut-wrap canvas,
+.bar-chart-wrap canvas {
+  animation: scaleIn 0.5s cubic-bezier(0.4,0,0.2,1) both;
+  animation-delay: 0.15s;
+}
+
+.donut-center {
+  animation: fadeIn 0.6s ease both;
+  animation-delay: 0.35s;
+}
+
+/* Légende items */
+.legend-item {
+  animation: slideUp 0.35s cubic-bezier(0.4,0,0.2,1) both;
+}
+.legend-item:nth-child(1) { animation-delay: 0.25s; }
+.legend-item:nth-child(2) { animation-delay: 0.32s; }
+.legend-item:nth-child(3) { animation-delay: 0.39s; }
+.legend-item:nth-child(4) { animation-delay: 0.46s; }
+.legend-item:nth-child(5) { animation-delay: 0.53s; }
+
+/* Top cat items */
+.top-cat-item {
+  animation: slideInLeft 0.35s cubic-bezier(0.4,0,0.2,1) both;
+}
+.top-cat-item:nth-child(1) { animation-delay: 0.1s; }
+.top-cat-item:nth-child(2) { animation-delay: 0.17s; }
+.top-cat-item:nth-child(3) { animation-delay: 0.24s; }
+.top-cat-item:nth-child(4) { animation-delay: 0.31s; }
+.top-cat-item:nth-child(5) { animation-delay: 0.38s; }
+
+/* ─── 15. LANDING PAGE — animations spéciales ────────────── */
+
+/* Stats band items */
+.sb-item-band {
+  transition: transform 0.25s ease;
+}
+@media (hover: hover) {
+  .sb-item-band:hover { transform: translateY(-3px); }
+}
+
+/* Features grid animation */
+.feat-card:nth-child(1) { animation: slideUp 0.45s ease both; animation-delay: 0.1s; }
+.feat-card:nth-child(2) { animation: slideUp 0.45s ease both; animation-delay: 0.18s; }
+.feat-card:nth-child(3) { animation: slideUp 0.45s ease both; animation-delay: 0.26s; }
+.feat-card:nth-child(4) { animation: slideUp 0.45s ease both; animation-delay: 0.34s; }
+.feat-card:nth-child(5) { animation: slideUp 0.45s ease both; animation-delay: 0.42s; }
+.feat-card:nth-child(6) { animation: slideUp 0.45s ease both; animation-delay: 0.50s; }
+
+/* ─── 16. TOGGLE SWITCH — animation ─────────────────────── */
+
+.toggle-track {
+  transition: background 0.25s ease, box-shadow 0.25s ease;
+}
+.toggle-switch input:checked + .toggle-track {
+  box-shadow: 0 0 0 3px rgba(34,197,94,0.15);
+}
+.toggle-track::after {
+  transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1),
+              box-shadow 0.2s ease !important;
+}
+.toggle-switch input:checked + .toggle-track::after {
+  box-shadow: 0 2px 8px rgba(34,197,94,0.3);
+}
+
+/* ─── 17. INPUT FIELDS — focus animations ────────────────── */
+
+.input {
+  transition: border-color 0.22s ease,
+              box-shadow 0.22s ease,
+              background 0.22s ease,
+              transform 0.15s ease;
+}
+.input:focus { transform: translateY(-1px); }
+
+/* ─── 18. PROFILE AVATAR ─────────────────────────────────── */
+
+.profile-avatar {
+  transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+}
+@media (hover: hover) {
+  .profile-avatar:hover {
+    transform: scale(1.06);
+    box-shadow: 0 0 0 4px rgba(34,197,94,0.2);
+  }
+}
+
+/* ─── 19. DANGER BUTTON ──────────────────────────────────── */
+
+.danger-btn {
+  transition: all 0.22s cubic-bezier(0.4,0,0.2,1);
+  position: relative;
+  overflow: hidden;
+}
+.danger-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(239,68,68,0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+@media (hover: hover) {
+  .danger-btn:hover::after { opacity: 1; }
+  .danger-btn:hover { transform: translateY(-1px); }
+}
+
+/* ─── 20. SCROLLBAR ANIMÉE ───────────────────────────────── */
+
+::-webkit-scrollbar-thumb {
+  transition: background 0.2s ease;
+}
+
+/* ─── 21. ACCESSIBILITÉ — respect prefers-reduced-motion ─── */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ─── 22. THEME SWITCH — transition globale ──────────────── */
+
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ─── 23. OBJECTIFS — progress bars animées ──────────────── */
+
+.obj-card .progress-fill,
+#dash-objectives .progress-fill {
+  animation: progressGrow 1s cubic-bezier(0.4,0,0.2,1) both;
+  animation-delay: 0.3s;
+}
+
+/* ─── 24. SECTION HEADERS ────────────────────────────────── */
+
+.sec-header {
+  animation: slideDown 0.35s ease both;
+}
+.sec-title {
+  position: relative;
+}
+.sec-title::after {
+  content: '';
+  position: absolute;
+  bottom: -3px; left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--primary);
+  border-radius: 1px;
+  transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+@media (hover: hover) {
+  .card:hover .sec-title::after { width: 100%; }
+}
+
+/* ─── 25. CATEGORY FILTER — animations ───────────────────── */
+
+.cat-filter {
+  animation: slideDown 0.35s ease both;
+}
+#cat-filter .cat-filter-item {
+  animation: scaleIn 0.3s ease both;
+}
+#cat-filter .cat-filter-item:nth-child(1) { animation-delay: 0.04s; }
+#cat-filter .cat-filter-item:nth-child(2) { animation-delay: 0.08s; }
+#cat-filter .cat-filter-item:nth-child(3) { animation-delay: 0.12s; }
+#cat-filter .cat-filter-item:nth-child(4) { animation-delay: 0.16s; }
+#cat-filter .cat-filter-item:nth-child(5) { animation-delay: 0.20s; }
+#cat-filter .cat-filter-item:nth-child(6) { animation-delay: 0.24s; }
+
+/* ─── 26. SUMMARY BAR ────────────────────────────────────── */
+
+.summary-bar {
+  animation: slideDown 0.4s cubic-bezier(0.4,0,0.2,1) both;
+}
+.sb-stat {
+  animation: countUp 0.5s ease both;
+}
+.sb-stat:nth-child(1) { animation-delay: 0.1s; }
+.sb-stat:nth-child(2) { animation-delay: 0.2s; }
+.sb-stat:nth-child(3) { animation-delay: 0.3s; }
+
+/* ─── 27. LEGAL PAGES ─────────────────────────────────────── */
+
+.legal-hero {
+  animation: slideDown 0.4s ease both;
+}
+.legal-badge {
+  animation: badgePop 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
+  animation-delay: 0.2s;
+}
+.legal-card:nth-child(1) { animation: slideUp 0.4s ease both; animation-delay: 0.1s; }
+.legal-card:nth-child(2) { animation: slideUp 0.4s ease both; animation-delay: 0.15s; }
+.legal-card:nth-child(3) { animation: slideUp 0.4s ease both; animation-delay: 0.20s; }
+.legal-card:nth-child(4) { animation: slideUp 0.4s ease both; animation-delay: 0.25s; }
+.legal-card:nth-child(5) { animation: slideUp 0.4s ease both; animation-delay: 0.30s; }
+.legal-card:nth-child(6) { animation: slideUp 0.4s ease both; animation-delay: 0.35s; }
+.legal-card:nth-child(7) { animation: slideUp 0.4s ease both; animation-delay: 0.40s; }
+.legal-card:nth-child(8) { animation: slideUp 0.4s ease both; animation-delay: 0.45s; }
+.legal-card:nth-child(9) { animation: slideUp 0.4s ease both; animation-delay: 0.50s; }
+
+/* ─── FIN DES ANIMATIONS TAF v2.0 ─────────────────────────── */
