@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <title>TAF — Statistiques</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+
+    /* ═══════════════════════════════════════════
+       STATISTIQUES — styles propres à la page
+    ═══════════════════════════════════════════ */
+
+    /* ── Period tabs ── */
+    .period-tabs {
+      display: flex;
+      gap: 4px;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 4px;
+      margin-bottom: 20px;
+    }
+    .period-tab {
+      flex: 1;
+      padding: 8px 4px;
+      border-radius: var(--radius-lg);
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--text-3);
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition);
+      -webkit-tap-highlight-color: transparent;
+      white-space: nowrap;
+    }
+    .period-tab.active {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: var(--shadow-green);
+    }
+
+    /* ── KPI 2×2 grid ── */
+    .kpi-grid-4 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .kpi-s-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 14px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .kpi-s-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 100%;
+    }
+    .kpi-s-card.k-green::before  { background: var(--primary); }
+    .kpi-s-card.k-red::before    { background: var(--red); }
+    .kpi-s-card.k-amber::before  { background: var(--amber); }
+    .kpi-s-card.k-blue::before   { background: var(--blue); }
+    .kpi-s-icon  { font-size: 1.2rem; margin-bottom: 6px; display: block; }
+    .kpi-s-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-3);
+      margin-bottom: 3px;
+    }
+    .kpi-s-val {
+      font-family: var(--font-head);
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--text-1);
+      line-height: 1.15;
+      word-break: break-all;
+    }
+    .kpi-s-sub {
+      font-size: 0.65rem;
+      color: var(--text-4);
+      margin-top: 3px;
+    }
+
+    /* ── Budget progress ── */
+    .bud-track {
+      height: 10px;
+      background: var(--bg-3);
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 8px 0;
+    }
+    .bud-fill {
+      height: 100%;
+      border-radius: 8px;
+      background: linear-gradient(90deg, var(--primary), var(--green-300));
+      transition: width 0.9s cubic-bezier(0.4,0,0.2,1);
+    }
+    .bud-fill.danger {
+      background: linear-gradient(90deg, var(--amber), var(--red));
+    }
+
+    /* ── Donut ── */
+    .donut-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .donut-center {
+      position: absolute;
+      text-align: center;
+      pointer-events: none;
+    }
+    .donut-total {
+      font-family: var(--font-head);
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--text-1);
+    }
+    .donut-lbl { font-size: 0.6rem; color: var(--text-3); margin-top: 2px; }
+
+    /* ── Legend ── */
+    .s-legend { display: flex; flex-direction: column; gap: 7px; margin-top: 14px; }
+    .s-leg-item { display: flex; align-items: center; gap: 7px; }
+    .s-leg-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .s-leg-name { flex: 1; font-size: 0.78rem; color: var(--text-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .s-leg-val  { font-size: 0.78rem; font-weight: 700; font-family: var(--font-head); color: var(--text-1); white-space: nowrap; }
+    .s-leg-pct  { font-size: 0.68rem; color: var(--text-3); width: 34px; text-align: right; flex-shrink: 0; }
+
+    /* ── Category bars ── */
+    .cat-bars-list { display: flex; flex-direction: column; gap: 13px; }
+    .cb-item {}
+    .cb-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; }
+    .cb-name { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 600; color: var(--text-1); }
+    .cb-right { display: flex; gap: 6px; align-items: center; }
+    .cb-amt   { font-size: 0.8rem; font-weight: 700; font-family: var(--font-head); color: var(--text-1); }
+    .cb-pct   { font-size: 0.68rem; color: var(--text-3); }
+    .cb-track { height: 5px; background: var(--bg-3); border-radius: 4px; overflow: hidden; }
+    .cb-fill  { height: 100%; border-radius: 4px; transition: width 0.85s cubic-bezier(0.4,0,0.2,1); }
+
+    /* ── Chart type toggle ── */
+    .chart-toggle { display: flex; gap: 4px; }
+    .ct-btn {
+      padding: 4px 9px;
+      border-radius: var(--radius-sm);
+      font-size: 0.7rem; font-weight: 600;
+      color: var(--text-3);
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .ct-btn.active {
+      background: var(--primary-l);
+      border-color: var(--primary);
+      color: var(--primary-d);
+    }
+
+    /* ── Top transactions ── */
+    .top-list { display: flex; flex-direction: column; }
+    .top-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      animation: fadeUp 0.25s ease both;
+    }
+    .top-item:last-child { border-bottom: none; }
+    .top-rank { font-family: var(--font-head); font-size: 0.82rem; font-weight: 800; color: var(--text-4); width: 18px; text-align: center; flex-shrink: 0; }
+    .top-info { flex: 1; min-width: 0; }
+    .top-desc { font-size: 0.83rem; font-weight: 600; color: var(--text-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .top-meta { font-size: 0.68rem; color: var(--text-3); margin-top: 1px; }
+    .top-amt  { font-family: var(--font-head); font-size: 0.88rem; font-weight: 700; color: var(--red); white-space: nowrap; }
+
+    /* ── Heatmap ── */
+    .heatmap-row { display: flex; gap: 6px; justify-content: space-between; }
+    .hm-cell { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .hm-box {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.55rem;
+      font-weight: 700;
+      font-family: var(--font-head);
+      transition: background 0.3s;
+    }
+    .hm-day { font-size: 0.66rem; font-weight: 600; color: var(--text-3); }
+
+    /* ── Objectifs ── */
+    .obj-item { padding: 11px 0; border-bottom: 1px solid var(--border); }
+    .obj-item:last-child { border-bottom: none; }
+    .obj-row { display: flex; justify-content: space-between; margin-bottom: 6px; }
+    .obj-name { font-size: 0.85rem; font-weight: 600; color: var(--text-1); }
+    .obj-pct  { font-size: 0.8rem; font-weight: 700; color: var(--primary); }
+    .obj-bar  { height: 6px; background: var(--bg-3); border-radius: 4px; overflow: hidden; margin-bottom: 4px; }
+    .obj-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+    .obj-amts { display: flex; justify-content: space-between; }
+    .obj-amts span { font-size: 0.68rem; color: var(--text-4); }
+
+    /* ── Section header ── */
+    .sec-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .sec-title  { font-family: var(--font-head); font-size: 0.92rem; font-weight: 700; color: var(--text-1); }
+
+    /* ── Page header ── */
+    .stat-ph { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+    .stat-ph-left h2 { font-family: var(--font-head); font-size: 1.1rem; font-weight: 800; color: var(--text-1); }
+    .stat-ph-left p  { font-size: 0.72rem; color: var(--text-3); margin-top: 1px; }
+
+    /* ── Live badge ── */
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.67rem;
+      font-weight: 600;
+      color: var(--primary);
+      background: var(--primary-l);
+      padding: 3px 9px;
+      border-radius: 20px;
+    }
+    .live-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--primary);
+      animation: livePulse 1.6s ease-in-out infinite;
+    }
+    @keyframes livePulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: 0.35; transform: scale(0.65); }
+    }
+
+    /* ── Stat empty state ── */
+    .s-empty { text-align: center; padding: 24px 12px; color: var(--text-3); font-size: 0.82rem; }
+    .s-empty .esi { font-size: 1.8rem; margin-bottom: 7px; }
+
+    /* ── Desktop 2-col ── */
+    @media (min-width: 900px) {
+      .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+      .kpi-grid-4 { grid-template-columns: repeat(4, 1fr); }
+      .kpi-s-val  { font-size: 0.9rem; }
+    }
+    @media (min-width: 480px) {
+      .kpi-grid-4 { grid-template-columns: repeat(4, 1fr); }
+    }
+
+  </style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="top-nav">
+  <div class="top-nav-inner">
+    <div class="nav-logo">T<span>AF</span></div>
+    <nav class="desktop-nav">
+      <a href="app.html"       data-page="app">🏠 Accueil</a>
+      <a href="dashboard.html" data-page="dashboard" class="active">📊 Stats</a>
+      <a href="history.html"   data-page="history">📜 Historique</a>
+      <a href="settings.html"  data-page="settings">⚙️ Réglages</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="nav-btn" id="btn-export" title="Exporter CSV">📤</button>
+      <button class="nav-btn" id="btn-theme">🌙</button>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="page-content">
+  <div class="container" style="padding-top:20px;padding-bottom:90px">
+
+    <!-- Page header -->
+    <div class="stat-ph">
+      <div class="stat-ph-left">
+        <h2>📊 Statistiques</h2>
+        <p id="period-lbl">Ce mois</p>
+      </div>
+      <div class="live-badge"><div class="live-dot"></div>Temps réel</div>
+    </div>
+
+    <!-- Period tabs -->
+    <div class="period-tabs" id="period-tabs">
+      <div class="period-tab"         data-period="today">Auj.</div>
+      <div class="period-tab active"  data-period="month">Mois</div>
+      <div class="period-tab"         data-period="week">Sem.</div>
+      <div class="period-tab"         data-period="year">Année</div>
+      <div class="period-tab"         data-period="all">Tout</div>
+    </div>
+
+    <!-- KPI 4-up -->
+    <div class="kpi-grid-4" id="kpi-grid"></div>
+
+    <!-- Budget progress -->
+    <div class="card mb-20" id="budget-card"></div>
+
+    <!-- Donut + Category bars -->
+    <div class="two-col">
+      <div class="card chart-card mb-20">
+        <div class="sec-header">
+          <span class="sec-title">🍩 Répartition</span>
+          <span class="badge badge-green" id="donut-badge">Ce mois</span>
+        </div>
+        <div class="donut-wrap" style="height:190px">
+          <canvas id="donut-canvas" width="190" height="190" style="max-width:190px"></canvas>
+          <div class="donut-center">
+            <div class="donut-total" id="donut-total">—</div>
+            <div class="donut-lbl">Total</div>
+          </div>
+        </div>
+        <div class="s-legend" id="donut-legend"></div>
+      </div>
+
+      <div class="card mb-20">
+        <div class="sec-header">
+          <span class="sec-title">🏷️ Par catégorie</span>
+        </div>
+        <div class="cat-bars-list" id="cat-bars"></div>
+      </div>
+    </div>
+
+    <!-- Evolution chart -->
+    <div class="card chart-card mb-20">
+      <div class="sec-header">
+        <span class="sec-title">📈 Évolution</span>
+        <div class="chart-toggle">
+          <button class="ct-btn active" data-type="bar">▊ Barres</button>
+          <button class="ct-btn"        data-type="line">∿ Ligne</button>
+        </div>
+      </div>
+      <canvas id="evo-canvas" width="440" height="155" style="width:100%;height:155px;display:block"></canvas>
+      <div class="flex justify-between mt-8">
+        <span class="text-xs text-muted" id="evo-sub">Moy. / jour</span>
+        <span class="text-xs font-600"   id="evo-avg">—</span>
+      </div>
+    </div>
+
+    <!-- Top transactions + Objectifs -->
+    <div class="two-col">
+      <div class="card mb-20">
+        <div class="sec-header">
+          <span class="sec-title">🔝 Top dépenses</span>
+          <span class="badge badge-green" id="top-badge">—</span>
+        </div>
+        <div class="top-list" id="top-list"></div>
+      </div>
+
+      <div class="card mb-20">
+        <div class="sec-header">
+          <span class="sec-title">🎯 Objectifs</span>
+          <a href="app.html" class="badge badge-green">+ Créer</a>
+        </div>
+        <div id="stat-obj"></div>
+      </div>
+    </div>
+
+    <!-- Heatmap semaine -->
+    <div class="card mb-20">
+      <div class="sec-header">
+        <span class="sec-title">📅 Heatmap 7 jours</span>
+        <span class="badge badge-green">Cette semaine</span>
+      </div>
+      <div class="heatmap-row" id="heatmap"></div>
+    </div>
+
+  </div>
+</main>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <div class="bnav-item"        data-page="app"       data-href="app.html">
+    <span class="bnav-icon">🏠</span><span>Accueil</span><div class="bnav-dot"></div>
+  </div>
+  <div class="bnav-item active" data-page="dashboard" data-href="dashboard.html">
+    <span class="bnav-icon">📊</span><span>Stats</span><div class="bnav-dot"></div>
+  </div>
+  <div class="bnav-item"        data-page="history"   data-href="history.html">
+    <span class="bnav-icon">📜</span><span>Historique</span><div class="bnav-dot"></div>
+  </div>
+  <div class="bnav-item"        data-page="settings"  data-href="settings.html">
+    <span class="bnav-icon">⚙️</span><span>Réglages</span><div class="bnav-dot"></div>
+  </div>
+</nav>
+
+<div id="toast-container"></div>
+<script src="script.js"></script>
+<script>
+/* ═══════════════════════════════════════════════════════════
+   STATISTIQUES.HTML — Page logic
+   Utilise UNIQUEMENT les APIs natives de script.js :
+     Store, Expenses, Objectives, CATEGORIES, getCatConfig,
+     formatCurrency, Charts, Theme, Toast, exportCSV,
+     isThisMonth, isThisWeek, today, thisMonth, t,
+     setActiveNav, PageTransition
+═══════════════════════════════════════════════════════════ */
+(function () {
+  'use strict';
+
+  /* ── Palette ── */
+  const COLORS = [
+    '#22c55e','#3b82f6','#f59e0b','#ef4444',
+    '#8b5cf6','#06b6d4','#ec4899','#84cc16','#64748b'
+  ];
+
+  /* ── State ── */
+  let period    = 'month';
+  let chartType = 'bar';
+
+  /* ─────────────────────────────────────────────────────────
+     DATA HELPERS
+  ───────────────────────────────────────────────────────── */
+  function getFiltered() {
+    const all = Expenses.getAll();
+    switch (period) {
+      case 'today': return all.filter(e => e.date === today());
+      case 'week':  return all.filter(e => isThisWeek(e.date));
+      case 'month': return all.filter(e => isThisMonth(e.date));
+      case 'year': {
+        const y = new Date().getFullYear().toString();
+        return all.filter(e => e.date && e.date.startsWith(y));
+      }
+      default: return all;
+    }
+  }
+
+  function periodLabel() {
+    const map = {
+      today: "Aujourd'hui", week: 'Cette semaine',
+      month: 'Ce mois',     year: 'Cette année',
+      all:   'Toutes périodes'
+    };
+    return map[period] || 'Ce mois';
+  }
+
+  function sum(list) {
+    return list.reduce((s, e) => s + (parseFloat(e.amount) || 0), 0);
+  }
+
+  function byCat(list) {
+    const m = {};
+    list.forEach(e => {
+      const k = e.category || 'other';
+      m[k] = (m[k] || 0) + (parseFloat(e.amount) || 0);
+    });
+    return m;
+  }
+
+  function byDate(list) {
+    const m = {};
+    const lang   = (Store.getSettings().language || 'fr') === 'fr' ? 'fr-FR' : 'en-US';
+    list.forEach(e => {
+      if (!e.date) return;
+      const d = new Date(e.date + 'T00:00:00');
+      let key;
+      switch (period) {
+        case 'today': key = e.date; break;
+        case 'week':
+          key = d.toLocaleDateString(lang, { weekday: 'short', day: 'numeric' }); break;
+        case 'month':
+          key = d.getDate() + '/' + (d.getMonth() + 1); break;
+        case 'year':
+          key = d.toLocaleDateString(lang, { month: 'short' }); break;
+        default:
+          key = d.toLocaleDateString(lang, { month: 'short', year: '2-digit' });
+      }
+      m[key] = (m[key] || 0) + (parseFloat(e.amount) || 0);
+    });
+    return m;
+  }
+
+  function safeDate(ds) {
+    try {
+      const lang = (Store.getSettings().language || 'fr') === 'fr' ? 'fr-FR' : 'en-US';
+      return new Date(ds + 'T00:00:00').toLocaleDateString(lang, { day: '2-digit', month: 'short' });
+    } catch { return ds || ''; }
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     RENDER KPIs
+  ───────────────────────────────────────────────────────── */
+  function renderKPIs(filtered) {
+    const s         = Store.getSettings();
+    const budget    = parseFloat(s.budget) || 0;
+    const income    = parseFloat(s.income) || 0;
+    const total     = sum(filtered);
+    const allTotal  = Expenses.totalAll();
+    const monthTotal= Expenses.totalMonth();
+    const remaining = budget - monthTotal;
+    const remColor  = remaining >= 0 ? 'var(--primary)' : 'var(--red)';
+    const exRate    = income > 0 ? Math.min(100, Math.round((monthTotal / income) * 100)) : 0;
+
+    const el = document.getElementById('kpi-grid');
+    if (!el) return;
+    el.innerHTML = `
+      <div class="kpi-s-card k-green">
+        <span class="kpi-s-icon">💰</span>
+        <div class="kpi-s-label">Budget restant</div>
+        <div class="kpi-s-val" style="color:${remColor}">${formatCurrency(Math.max(0, remaining))}</div>
+        <div class="kpi-s-sub">/${formatCurrency(budget)}</div>
+      </div>
+      <div class="kpi-s-card k-red">
+        <span class="kpi-s-icon">💸</span>
+        <div class="kpi-s-label">Dépenses période</div>
+        <div class="kpi-s-val text-red">${formatCurrency(total)}</div>
+        <div class="kpi-s-sub">${filtered.length} tx</div>
+      </div>
+      <div class="kpi-s-card k-amber">
+        <span class="kpi-s-icon">📊</span>
+        <div class="kpi-s-label">Total cumulé</div>
+        <div class="kpi-s-val">${formatCurrency(allTotal)}</div>
+        <div class="kpi-s-sub">${Expenses.getAll().length} tx</div>
+      </div>
+      <div class="kpi-s-card k-blue">
+        <span class="kpi-s-icon">📈</span>
+        <div class="kpi-s-label">Taux dépense</div>
+        <div class="kpi-s-val" style="color:var(--blue)">${exRate}%</div>
+        <div class="kpi-s-sub">Revenus: ${formatCurrency(income)}</div>
+      </div>
+    `;
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     RENDER BUDGET BAR
+  ───────────────────────────────────────────────────────── */
+  function renderBudget() {
+    const s      = Store.getSettings();
+    const budget = parseFloat(s.budget) || 0;
+    const spent  = Expenses.totalMonth();
+    const pct    = budget > 0 ? Math.min(100, Math.round((spent / budget) * 100)) : 0;
+    const danger = pct >= 85;
+    const el     = document.getElementById('budget-card');
+    if (!el) return;
+
+    el.innerHTML = `
+      <div class="sec-header" style="margin-bottom:8px">
+        <span class="sec-title">💳 Budget mensuel</span>
+        <span class="badge ${danger ? 'badge-red' : 'badge-green'}">${pct}% utilisé</span>
+      </div>
+      <div class="flex justify-between" style="font-size:0.74rem;color:var(--text-3);margin-bottom:4px">
+        <span>Dépensé : <strong style="color:var(--text-1)">${formatCurrency(spent)}</strong></span>
+        <span>Budget : <strong style="color:var(--text-1)">${formatCurrency(budget)}</strong></span>
+      </div>
+      <div class="bud-track">
+        <div class="bud-fill ${danger ? 'danger' : ''}" id="bud-fill" style="width:0%"></div>
+      </div>
+      <div class="flex justify-between" style="font-size:0.68rem;color:var(--text-4)">
+        <span>0</span>
+        <span style="color:${danger ? 'var(--red)' : 'var(--primary)'};font-weight:600">
+          ${formatCurrency(Math.max(0, budget - spent))} restants
+        </span>
+        <span>${formatCurrency(budget)}</span>
+      </div>
+    `;
+    requestAnimationFrame(() => {
+      const fill = document.getElementById('bud-fill');
+      if (fill) fill.style.width = pct + '%';
+    });
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     RENDER DONUT — utilise Charts.drawDonut() de script.js
+  ───────────────────────────────────────────────────────── */
+  function renderDonut(filtered) {
+    const catMap = byCat(filtered);
+    const total  = sum(filtered);
+    const sorted = Object.entries(catMap).sort((a, b) => b[1] - a[1]);
+
+    const totEl = document.getElementById('donut-total');
+    if (totEl) totEl.textContent = formatCurrency(total);
+
+    const bdg = document.getElementById('donut-badge');
+    if (bdg) bdg.textContent = periodLabel();
+
+    Charts.drawDonut('donut-canvas', sorted.map(([c, v]) => ({ label: c, value: v })), COLORS);
+
+    const legEl = document.getElementById('donut-legend');
+    if (!legEl) return;
+    if (!sorted.length) {
+      legEl.innerHTML = `<p class="text-sm text-muted text-center">${t('no_data')}</p>`;
+      return;
+    }
+    legEl.innerHTML = sorted.map(([cat, val], i) => {
+      const cfg = getCatConfig(cat);
+      const pct = total > 0 ? Math.round((val / total) * 100) : 0;
+      return `
+        <div class="s-leg-item">
+          <div class="s-leg-dot" style="background:${COLORS[i % COLORS.length]}"></div>
+          <span class="s-leg-name">${cfg.icon} ${t(cfg.key)}</span>
+          <span class="s-leg-val">${formatCurrency(val)}</span>
+          <span class="s-leg-pct">${pct}%</span>
+        </div>
+      `;
+    }).join('');
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     RENDER CATEGORY BARS
+  ───────────────────────────────────────────────────────── */
+  function renderCatBars(filtered) {
+    const catMap = byCat(filtered);
+    const total  = sum(filtered);
+    const sorted = Object.entries(catMap).sort((a, b) => b[1] - a[1]);
+    const el = document.getElementById('cat-bars');
+    if (!el) return;
+
+    if (!sorted.length) {
+      el.innerHTML = `<div class="s-empty"><div class="esi">📭</div>Aucune donnée</div>`;
+      return;
+    }
+    el.innerHTML = sorted.map(([cat, val], i) => {
+      const cfg   = getCatConfig(cat);
+      const pct   = total > 0 ? Math.round((val / total) * 100) : 0;
+      const color = COLORS[i % COLORS.length];
+      return `
+        <div class="cb-item">
+          <div class="cb-head">
+            <div class="cb-name">
+              <span class="icon-circle ${cfg.class}" style="width:24px;height:24px;font-size:11px">${cfg.icon}</span>
+              ${t(cfg.key)}
+            </div>
+            <div class="cb-right">
+              <span class="cb-amt">${formatCurrency(val)}</span>
+              <span class="cb-pct">${pct}%</span>
+            </div>
+          </div>
+          <div class="cb-track">
+            <div class="cb-fill" style="width:0%;background:${color}" data-w="${pct}"></div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    requestAnimationFrame(() => {
+      el.querySelectorAll('.cb-fill').forEach(f => {
+        f.style.width = f.dataset.w + '%';
+      });
+    });
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     RENDER EVOLUTION CHART
+     Barres → Charts.drawBars() (script.js)
+     Ligne  → drawLine() (canvas natif)
+  ───────────────────────────────────────────────────────── */
+  function renderEvolution(filtered) {
+    const dateMap = byDate(filtered);
+    const labels  = Object.keys(dateMap);
+    const values  = Object.values(dateMap);
+    const avg     = values.length > 0
+      ? values.reduce((a, b) => a + b, 0) / values.length : 0;
+
+    const avgEl = document.getElementById('evo-avg');
+    const subEl = document.getElementById('evo-sub');
+    if (avgEl) avgEl.textContent = formatCurrency(avg);
+    if (subEl) {
+      subEl.textContent = period === 'year' ? 'Moy. / mois' : 'Moy. / jour';
+    }
+
+    if (chartType === 'bar') {
+      Charts.drawBars('evo-canvas', labels, values, 'var(--primary)');
+    } else {
+      drawLine('evo-canvas', labels, values);
+    }
+  }
+
+  function drawLine(id, labels, values) {
+    const canvas = document.getElementById(id);
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+    if (!values.length) return;
+
+    const max  = Math.max(...values, 1);
+    const pX   = 16, pB = 26, pT = 10;
+    const cW   = W - pX * 2;
+    const cH   = H - pB - pT;
+    const step = values.length > 1 ? cW / (values.length - 1) : cW;
+
+    const pts = values.map((v, i) => ({
+      x: pX + i * step,
+      y: pT + cH - (v / max) * cH
+    }));
+
+    /* gradient fill */
+    const gr = ctx.createLinearGradient(0, pT, 0, H - pB);
+    gr.addColorStop(0, 'rgba(34,197,94,0.22)');
+    gr.addColorStop(1, 'rgba(34,197,94,0)');
+    ctx.beginPath();
+    ctx.moveTo(pts[0].x, pts[0].y);
+    pts.forEach((p, i) => {
+      if (i === 0) return;
+      const cp = (pts[i-1].x + p.x) / 2;
+      ctx.bezierCurveTo(cp, pts[i-1].y, cp, p.y, p.x, p.y);
+    });
+    ctx.lineTo(pts[pts.length-1].x, H - pB);
+    ctx.lineTo(pts[0].x, H - pB);
+    ctx.closePath();
+    ctx.fillStyle = gr;
+    ctx.fill();
+
+    /* line */
+    ctx.beginPath();
+    ctx.moveTo(pts[0].x, pts[0].y);
+    pts.forEach((p, i) => {
+      if (i === 0) return;
+      const cp = (pts[i-1].x + p.x) / 2;
+      ctx.bezierCurveTo(cp, pts[i-1].y, cp, p.y, p.x, p.y);
+    });
+    ctx.strokeStyle = '#22c55e';
+    ctx.lineWidth   = 2.5;
+    ctx.lineJoin    = 'round';
+    ctx.stroke();
+
+    /* dots */
+    pts.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 3.5, 0, Math.PI * 2);
+      ctx.fillStyle   = '#22c55e';
+      ctx.fill();
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth   = 1.5;
+      ctx.stroke();
+    });
+
+    /* x labels (every N to avoid overlap) */
+    const skip = Math.ceil(labels.length / 7);
+    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text-3').trim() || '#64748b';
+    ctx.font      = '9px Plus Jakarta Sans, sans-serif';
+    ctx.textAlign = 'center';
+    labels.forEach((lbl, i) => {
+      if (i % skip !== 0 && i !== labels.length - 1) return;
+      ctx.fillText(lbl, pts[i].x, H - 8);
+    });
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     RENDER TOP TRANSACTIONS
+  ───────────────────────────────────────────────────────── */
+  function renderTop(filtered) {
+    const sorted = [...filtered]
+      .sort((a, b) => (parseFloat(b.amount) || 0) - (parseFloat(a.amount) || 0))
+      .slice(0, 7);
+
+    const bdg = document.getElementById('top-badge');
+    if (bdg) bdg.textContent = filtered.length + ' tx';
+
+    const el = document.getElementById('top-list');
+    if (!el) return;
+
+    if (!sorted.length) {
+      el.innerHTML = `<div class="s-empty"><div class="esi">💸</div>Aucune dépense</div>`;
+      return;
+    }
+    el.innerHTML = sorted.map((e, i) => {
+      const cfg = getCatConfig(e.category);
+      const amt = parseFloat(e.amount) || 0;
+      const dsc = e.description || t(cfg.key);
+      return `
+        <div class="top-item" style="animation-delay:${i * 0.04}s">
+          <span class="top-rank">#${i + 1}</span>
+          <div class="icon-circle ${cfg.class}" style="width:32px;height:32px;font-size:13px;flex-shrink:0">${cfg.icon}</div>
+          <div class="top-info">
+            <div class="top-desc">${dsc}</div>
+            <div class="top-meta">${t(cfg.key)} · ${safeDate(e.date)}</div>
+          </div>
+          <span class="top-amt">${formatCurrency(amt)}</span>
+        </div>
+      `;
+    }).join('');
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     RENDER OBJECTIVES
+  ───────────────────────────────────────────────────────── */
+  function renderObjectives() {
+    const objs = Objectives.getAll();
+    const el   = document.getElementById('stat-obj');
+    if (!el) return;
+
+    if (!objs.length) {
+      el.innerHTML = `<div class="s-empty"><div class="esi">🎯</div>Aucun objectif</div>`;
+      return;
+    }
+    el.innerHTML = objs.map(o => {
+      const saved  = parseFloat(o.saved)  || 0;
+      const target = parseFloat(o.target) || 0;
+      const pct    = target > 0 ? Math.min(100, Math.round((saved / target) * 100)) : 0;
+      const color  = o.color || 'var(--primary)';
+      return `
+        <div class="obj-item">
+          <div class="obj-row">
+            <span class="obj-name">${o.name || 'Objectif'}</span>
+            <span class="obj-pct">${pct}%</span>
+          </div>
+          <div class="obj-bar">
+            <div class="obj-fill" style="width:${pct}%;background:${color}"></div>
+          </div>
+          <div class="obj-amts">
+            <span>${formatCurrency(saved)}</span>
+            <span>${formatCurrency(target)}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     RENDER WEEKLY HEATMAP
+  ───────────────────────────────────────────────────────── */
+  function renderHeatmap() {
+    const el = document.getElementById('heatmap');
+    if (!el) return;
+
+    const dayNames = ['L','M','M','J','V','S','D'];
+    const all = Expenses.getAll();
+    const now = new Date();
+    const monday = new Date(now);
+    monday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+
+    const cells = [];
+    let maxV = 0;
+
+    for (let i = 0; i < 7; i++) {
+      const d   = new Date(monday);
+      d.setDate(monday.getDate() + i);
+      const ds  = d.toISOString().split('T')[0];
+      const tot = all
+        .filter(e => e.date === ds)
+        .reduce((s, e) => s + (parseFloat(e.amount) || 0), 0);
+      cells.push({ label: dayNames[i], tot, ds });
+      if (tot > maxV) maxV = tot;
+    }
+
+    const todayStr = today();
+    el.innerHTML = cells.map(({ label, tot, ds }) => {
+      const intensity = maxV > 0 ? tot / maxV : 0;
+      const alpha     = tot > 0 ? 0.15 + intensity * 0.82 : 0;
+      const bg        = tot > 0 ? `rgba(34,197,94,${alpha.toFixed(2)})` : 'var(--bg-3)';
+      const txtColor  = intensity > 0.55 ? '#fff' : 'var(--text-2)';
+      const isToday   = ds === todayStr;
+      const displayAmt = tot > 0
+        ? formatCurrency(tot).replace(/\s/g, '')
+        : '—';
+      return `
+        <div class="hm-cell">
+          <div class="hm-box" title="${formatCurrency(tot)}"
+               style="background:${bg};color:${txtColor};border:2px solid ${isToday ? 'var(--primary)' : 'transparent'}">
+            ${displayAmt}
+          </div>
+          <span class="hm-day">${label}</span>
+        </div>
+      `;
+    }).join('');
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     RENDER ALL
+  ───────────────────────────────────────────────────────── */
+  function renderAll() {
+    const filtered = getFiltered();
+
+    const plbl = document.getElementById('period-lbl');
+    if (plbl) plbl.textContent = periodLabel();
+
+    renderKPIs(filtered);
+    renderBudget();
+    renderDonut(filtered);
+    renderCatBars(filtered);
+    renderEvolution(filtered);
+    renderTop(filtered);
+    renderObjectives();
+    renderHeatmap();
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     INIT
+  ───────────────────────────────────────────────────────── */
+  function init() {
+    setActiveNav('dashboard');
+
+    /* Theme button */
+    const themeBtn = document.getElementById('btn-theme');
+    if (themeBtn) {
+      themeBtn.textContent = Store.getSettings().theme === 'dark' ? '☀️' : '🌙';
+      themeBtn.addEventListener('click', () => {
+        Theme.toggle();
+        themeBtn.textContent = Store.getSettings().theme === 'dark' ? '☀️' : '🌙';
+      });
+    }
+
+    /* Export */
+    const expBtn = document.getElementById('btn-export');
+    if (expBtn) expBtn.addEventListener('click', exportCSV);
+
+    /* Period tabs */
+    document.querySelectorAll('#period-tabs .period-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        period = tab.dataset.period;
+        document.querySelectorAll('#period-tabs .period-tab')
+          .forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        renderAll();
+      });
+    });
+
+    /* Chart type */
+    document.querySelectorAll('.ct-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        chartType = btn.dataset.type;
+        document.querySelectorAll('.ct-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderEvolution(getFiltered());
+      });
+    });
+
+    /* ── Temps réel ──────────────────────────────────────── */
+    /* Autre onglet → storage event */
+    window.addEventListener('storage', e => {
+      if (e.key && e.key.startsWith('taf_')) renderAll();
+    });
+
+    /* Même onglet → polling 800ms (localStorage change pas d'event natif) */
+    let _snap = JSON.stringify(Store.getExpenses());
+    setInterval(() => {
+      const cur = JSON.stringify(Store.getExpenses());
+      if (cur !== _snap) { _snap = cur; renderAll(); }
+    }, 800);
+
+    renderAll();
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+
+})();
+</script>
+
+</body>
+</html>
