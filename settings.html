@@ -258,17 +258,6 @@
       <div class="settings-section-title" id="lbl-danger">Zone de danger</div>
       <div class="settings-card" style="border-color:rgba(239,68,68,0.3)">
 
-        <div class="settings-row" style="cursor:pointer" id="row-logout">
-          <div class="sr-icon" style="background:rgba(139,92,246,0.12)">🚪</div>
-          <div class="sr-content">
-            <div class="sr-label" style="color:var(--primary)">Se déconnecter</div>
-            <div class="sr-desc">Fermer votre session et retourner à l'écran de connexion</div>
-          </div>
-          <div class="sr-control">
-            <span style="color:var(--primary);font-size:12px">›</span>
-          </div>
-        </div>
-
         <div class="settings-row" style="cursor:pointer" id="row-reset">
           <div class="sr-icon" style="background:var(--red-l)">⚠️</div>
           <div class="sr-content">
@@ -348,9 +337,7 @@
 </div>
 
 <div id="toast-container"></div>
-<script src="auth-guard.js"></script>
 <script src="script.js"></script>
-<script>TAFAuth.injectLogoutBtn(".nav-actions");</script>
 <script>
 /* ════════════════════════════════════
    SETTINGS PAGE CONTROLLER
@@ -568,11 +555,6 @@
     // ── Terms
     document.getElementById('row-terms').addEventListener('click', () => {
       PageTransition.go('terms.html');
-    });
-
-    // ── Logout
-    document.getElementById('row-logout').addEventListener('click', () => {
-      if (confirm('Se déconnecter de TAF ?')) TAFAuth.logout();
     });
 
     // ── Reset data
