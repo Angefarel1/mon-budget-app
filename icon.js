@@ -103,3 +103,4 @@ function getCategoryIcon(catId, size = 20) {
   };
   return map[catId] || Icons.moreHorizontal(size);
 }
+
