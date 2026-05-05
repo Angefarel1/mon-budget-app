@@ -5,7 +5,7 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-  <title>TAF - Paramètres</title>
+  <title>TAF - Paramètres et personnalisation du compte</title>
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
@@ -15,10 +15,10 @@
   <div class="top-nav-inner">
     <div class="nav-logo">T<span>AF</span></div>
     <nav class="desktop-nav">
-      <a href="app.html"       data-page="app"       data-i18n="nav_home">🏠 Accueil</a>
-      <a href="dashboard.html" data-page="dashboard"  data-i18n="nav_stats">📊 Stats</a>
-      <a href="history.html"   data-page="history"    data-i18n="nav_history">📜 Historique</a>
-      <a href="settings.html"  data-page="settings"   data-i18n="nav_settings" class="active">⚙️ Réglages</a>
+      <a href="app.html"       data-page="app">🏠 Accueil</a>
+      <a href="dashboard.html" data-page="dashboard">📊 Stats</a>
+      <a href="history.html"   data-page="history">📜 Historique</a>
+      <a href="settings.html"  data-page="settings" class="active">⚙️ Réglages</a>
     </nav>
     <div class="nav-actions">
       <button class="nav-btn" id="btn-theme-toggle" title="Changer thème">🌙</button>
@@ -32,7 +32,7 @@
 
     <!-- ── PROFILE CARD ─────────────────── -->
     <div class="settings-section">
-      <div class="settings-section-title" data-i18n="section_profile">Profil</div>
+      <div class="settings-section-title" id="lbl-profile">Profil</div>
       <div class="settings-card">
 
         <!-- Avatar + name display -->
@@ -46,7 +46,7 @@
           </div>
           <input type="file" id="avatar-input" accept="image/*" style="display:none"/>
           <div id="avatar-name-display" style="font-family:var(--font-head);font-size:1.1rem;font-weight:700;color:var(--text-1)">—</div>
-          <div style="font-size:0.78rem;color:var(--text-3);margin-top:2px" data-i18n="avatar_tap">Appuyez sur la photo pour changer</div>
+          <div style="font-size:0.78rem;color:var(--text-3);margin-top:2px" id="avatar-sub">Appuyez sur la photo pour changer</div>
         </div>
 
         <!-- Username field -->
@@ -54,16 +54,16 @@
           <div style="display:flex;align-items:center;gap:14px;width:100%">
             <div class="sr-icon" style="background:var(--primary-l)">👤</div>
             <div class="sr-content">
-              <div class="sr-label" data-i18n="lbl_username">Prénom / Nom</div>
-              <div class="sr-desc" data-i18n="lbl_username_desc">Affiché sur la page d'accueil</div>
+              <div class="sr-label" id="lbl-username">Prénom / Nom</div>
+              <div class="sr-desc" id="lbl-username-desc">Affiché sur la page d'accueil</div>
             </div>
           </div>
-          <input type="text" id="input-username" class="input" data-i18n-placeholder="ph_username" placeholder="Ex : Marie, Jean..." style="width:100%"/>
+          <input type="text" id="input-username" class="input" placeholder="Ex : Marie, Jean..." style="width:100%"/>
         </div>
 
         <!-- Save profile btn -->
         <div style="padding:14px 18px">
-          <button class="btn btn-primary btn-full" id="btn-save-profile" data-i18n="btn_save_profile">💾 Enregistrer le profil</button>
+          <button class="btn btn-primary btn-full" id="btn-save-profile">💾 Enregistrer le profil</button>
         </div>
 
       </div>
@@ -71,7 +71,7 @@
 
     <!-- ── FINANCES ─────────────────────── -->
     <div class="settings-section">
-      <div class="settings-section-title" data-i18n="section_finances">Finances</div>
+      <div class="settings-section-title" id="lbl-finances-section">Finances</div>
       <div class="settings-card">
 
         <!-- Monthly income -->
@@ -79,8 +79,8 @@
           <div style="display:flex;align-items:center;gap:14px;width:100%">
             <div class="sr-icon" style="background:#ede9fe">💵</div>
             <div class="sr-content">
-              <div class="sr-label" data-i18n="lbl_income">Revenus mensuels</div>
-              <div class="sr-desc" data-i18n="lbl_income_desc">Montant net reçu par mois</div>
+              <div class="sr-label" id="lbl-income-setting">Revenus mensuels</div>
+              <div class="sr-desc" id="lbl-income-desc">Montant net reçu par mois</div>
             </div>
             <div class="sr-value" id="display-income">—</div>
           </div>
@@ -92,8 +92,8 @@
           <div style="display:flex;align-items:center;gap:14px;width:100%">
             <div class="sr-icon" style="background:#fef3c7">🎯</div>
             <div class="sr-content">
-              <div class="sr-label" data-i18n="lbl_budget">Budget mensuel</div>
-              <div class="sr-desc" data-i18n="lbl_budget_desc">Limite de dépenses mensuelle</div>
+              <div class="sr-label" id="lbl-budget-setting">Budget mensuel</div>
+              <div class="sr-desc" id="lbl-budget-desc">Limite de dépenses mensuelle</div>
             </div>
             <div class="sr-value" id="display-budget">—</div>
           </div>
@@ -102,7 +102,7 @@
 
         <!-- Save finances -->
         <div style="padding:14px 18px">
-          <button class="btn btn-primary btn-full" id="btn-save-finances" data-i18n="btn_save_finances">💾 Enregistrer les finances</button>
+          <button class="btn btn-primary btn-full" id="btn-save-finances">💾 Enregistrer les finances</button>
         </div>
 
       </div>
@@ -110,15 +110,15 @@
 
     <!-- ── DEVISE & LANGUE ──────────────── -->
     <div class="settings-section">
-      <div class="settings-section-title" data-i18n="section_region">Région & Devise</div>
+      <div class="settings-section-title" id="lbl-region-section">Région & Devise</div>
       <div class="settings-card">
 
         <!-- Currency -->
         <div class="settings-row">
           <div class="sr-icon" style="background:#dbeafe">💱</div>
           <div class="sr-content">
-            <div class="sr-label" data-i18n="lbl_currency">Devise</div>
-            <div class="sr-desc" data-i18n="lbl_currency_desc">Conversion automatique appliquée</div>
+            <div class="sr-label" id="lbl-currency">Devise</div>
+            <div class="sr-desc" id="lbl-currency-desc">Conversion automatique appliquée</div>
           </div>
           <div class="sr-control">
             <select class="settings-select" id="select-currency">
@@ -139,16 +139,13 @@
         <div class="settings-row">
           <div class="sr-icon" style="background:#ede9fe">🌍</div>
           <div class="sr-content">
-            <div class="sr-label" data-i18n="lbl_language">Langue</div>
-            <div class="sr-desc" data-i18n="lbl_language_desc">Langue de l'interface</div>
+            <div class="sr-label" id="lbl-language">Langue</div>
+            <div class="sr-desc" id="lbl-language-desc">Langue de l'interface</div>
           </div>
           <div class="sr-control">
             <select class="settings-select" id="select-language">
               <option value="fr">🇫🇷 Français</option>
               <option value="en">🇬🇧 English</option>
-              <option value="es">🇪🇸 Español</option>
-              <option value="ar">🇸🇦 العربية</option>
-              <option value="pt">🇧🇷 Português</option>
             </select>
           </div>
         </div>
@@ -166,15 +163,15 @@
 
     <!-- ── APPARENCE ─────────────────────── -->
     <div class="settings-section">
-      <div class="settings-section-title" data-i18n="section_appearance">Apparence</div>
+      <div class="settings-section-title" id="lbl-appearance">Apparence</div>
       <div class="settings-card">
 
         <!-- Dark mode -->
         <div class="settings-row">
           <div class="sr-icon" style="background:#1e293b">🌙</div>
           <div class="sr-content">
-            <div class="sr-label" data-i18n="lbl_dark_mode">Mode sombre</div>
-            <div class="sr-desc" data-i18n="lbl_dark_mode_desc">Interface en thème sombre</div>
+            <div class="sr-label" id="lbl-dark-mode">Mode sombre</div>
+            <div class="sr-desc" id="lbl-dark-mode-desc">Interface en thème sombre</div>
           </div>
           <div class="sr-control">
             <label class="toggle-switch">
@@ -184,12 +181,12 @@
           </div>
         </div>
 
-        <!-- Notifications -->
+        <!-- Notifications (cosmetic, local) -->
         <div class="settings-row">
           <div class="sr-icon" style="background:#fef3c7">🔔</div>
           <div class="sr-content">
-            <div class="sr-label" data-i18n="lbl_notif">Alertes budget</div>
-            <div class="sr-desc" data-i18n="lbl_notif_desc">Prévenir quand le budget est dépassé</div>
+            <div class="sr-label" id="lbl-notif">Alertes budget</div>
+            <div class="sr-desc" id="lbl-notif-desc">Prévenir quand le budget est dépassé</div>
           </div>
           <div class="sr-control">
             <label class="toggle-switch">
@@ -204,14 +201,14 @@
 
     <!-- ── DONNÉES ───────────────────────── -->
     <div class="settings-section">
-      <div class="settings-section-title" data-i18n="section_data">Données</div>
+      <div class="settings-section-title" id="lbl-data-section">Données</div>
       <div class="settings-card">
 
         <!-- Data size -->
         <div class="settings-row">
           <div class="sr-icon" style="background:var(--primary-l)">📦</div>
           <div class="sr-content">
-            <div class="sr-label" data-i18n="lbl_storage">Stockage local</div>
+            <div class="sr-label" id="lbl-storage">Stockage local</div>
             <div class="sr-desc" id="data-summary">Calcul en cours…</div>
           </div>
           <div class="sr-value" id="data-size">—</div>
@@ -221,30 +218,36 @@
         <div class="settings-row" id="row-export" style="cursor:pointer">
           <div class="sr-icon" style="background:#dbeafe">📤</div>
           <div class="sr-content">
-            <div class="sr-label" data-i18n="lbl_export">Exporter en CSV</div>
-            <div class="sr-desc" data-i18n="lbl_export_desc">Télécharger toutes vos dépenses</div>
+            <div class="sr-label" id="lbl-export">Exporter en CSV</div>
+            <div class="sr-desc" id="lbl-export-desc">Télécharger toutes vos dépenses</div>
           </div>
-          <div class="sr-control"><span class="sr-arrow">›</span></div>
+          <div class="sr-control">
+            <span class="sr-arrow">›</span>
+          </div>
         </div>
 
         <!-- Privacy -->
         <div class="settings-row" id="row-privacy" style="cursor:pointer">
           <div class="sr-icon" style="background:#ede9fe">🔐</div>
           <div class="sr-content">
-            <div class="sr-label" data-i18n="lbl_privacy">Confidentialité</div>
-            <div class="sr-desc" data-i18n="lbl_privacy_desc">Voir notre politique de données</div>
+            <div class="sr-label" id="lbl-privacy-link">Confidentialité</div>
+            <div class="sr-desc" id="lbl-privacy-desc">Voir notre politique de données</div>
           </div>
-          <div class="sr-control"><span class="sr-arrow">›</span></div>
+          <div class="sr-control">
+            <span class="sr-arrow">›</span>
+          </div>
         </div>
 
         <!-- Terms -->
         <div class="settings-row" id="row-terms" style="cursor:pointer">
           <div class="sr-icon" style="background:#fce7f3">📜</div>
           <div class="sr-content">
-            <div class="sr-label" data-i18n="lbl_terms">Conditions d'utilisation</div>
-            <div class="sr-desc" data-i18n="lbl_terms_desc">Lire les conditions générales</div>
+            <div class="sr-label" id="lbl-terms-link">Conditions d'utilisation</div>
+            <div class="sr-desc" id="lbl-terms-desc">Lire les conditions générales</div>
           </div>
-          <div class="sr-control"><span class="sr-arrow">›</span></div>
+          <div class="sr-control">
+            <span class="sr-arrow">›</span>
+          </div>
         </div>
 
       </div>
@@ -252,37 +255,29 @@
 
     <!-- ── ZONE DANGEREUSE ──────────────── -->
     <div class="settings-section">
-      <div class="settings-section-title" data-i18n="section_danger">Zone de danger</div>
+      <div class="settings-section-title" id="lbl-danger">Zone de danger</div>
       <div class="settings-card" style="border-color:rgba(239,68,68,0.3)">
 
-        <!-- LOGOUT — NE supprime PAS les données -->
         <div class="settings-row" style="cursor:pointer" id="row-logout">
           <div class="sr-icon" style="background:rgba(139,92,246,0.12)">🚪</div>
           <div class="sr-content">
-            <div class="sr-label" style="color:var(--primary)" data-i18n="lbl_logout">Se déconnecter</div>
-            <div class="sr-desc" data-i18n="lbl_logout_desc">Fermer la session, retour à la connexion</div>
+            <div class="sr-label" style="color:var(--primary)">Se déconnecter</div>
+            <div class="sr-desc">Fermer votre session et retourner à l'écran de connexion</div>
           </div>
-          <div class="sr-control"><span style="color:var(--primary);font-size:12px">›</span></div>
+          <div class="sr-control">
+            <span style="color:var(--primary);font-size:12px">›</span>
+          </div>
         </div>
 
-        <!-- RESET DATA -->
         <div class="settings-row" style="cursor:pointer" id="row-reset">
           <div class="sr-icon" style="background:var(--red-l)">⚠️</div>
           <div class="sr-content">
-            <div class="sr-label" style="color:var(--red)" data-i18n="lbl_reset">Réinitialiser les données</div>
-            <div class="sr-desc" data-i18n="lbl_reset_desc">Supprimer toutes les dépenses et objectifs</div>
+            <div class="sr-label" style="color:var(--red)" id="lbl-reset">Réinitialiser les données</div>
+            <div class="sr-desc" id="lbl-reset-desc">Supprimer toutes les dépenses et objectifs</div>
           </div>
-          <div class="sr-control"><span style="color:var(--red);font-size:12px">›</span></div>
-        </div>
-
-        <!-- DELETE ACCOUNT — supprime TOUT -->
-        <div class="settings-row" style="cursor:pointer" id="row-delete-account">
-          <div class="sr-icon" style="background:rgba(239,68,68,0.15)">🗑️</div>
-          <div class="sr-content">
-            <div class="sr-label" style="color:#ef4444" data-i18n="lbl_delete_account">Supprimer le compte</div>
-            <div class="sr-desc" data-i18n="lbl_delete_account_desc">Effacer définitivement toutes vos données</div>
+          <div class="sr-control">
+            <span style="color:var(--red);font-size:12px">›</span>
           </div>
-          <div class="sr-control"><span style="color:#ef4444;font-size:12px">›</span></div>
         </div>
 
       </div>
@@ -290,23 +285,25 @@
 
     <!-- ── ABOUT ─────────────────────────── -->
     <div class="settings-section">
-      <div class="settings-section-title" data-i18n="section_about">À propos</div>
+      <div class="settings-section-title" id="lbl-about">À propos</div>
       <div class="settings-card">
         <div class="settings-row">
           <div class="sr-icon" style="background:var(--primary-l)">📱</div>
           <div class="sr-content">
             <div class="sr-label">TAF Finance</div>
-            <div class="sr-desc" data-i18n="about_desc">Gestion financière personnelle</div>
+            <div class="sr-desc">Gestion financière personnelle</div>
           </div>
           <div class="sr-value">v2.0.0</div>
         </div>
         <div class="settings-row">
           <div class="sr-icon" style="background:#f0f9ff">🛡️</div>
           <div class="sr-content">
-            <div class="sr-label" data-i18n="lbl_local_only">100% Local</div>
-            <div class="sr-desc" data-i18n="lbl_local_desc">Données sur votre appareil uniquement</div>
+            <div class="sr-label" id="lbl-local-only">100% Local</div>
+            <div class="sr-desc" id="lbl-local-desc">Données sur votre appareil uniquement</div>
           </div>
-          <div class="sr-control"><span class="badge badge-green" data-i18n="badge_private">Privé</span></div>
+          <div class="sr-control">
+            <span class="badge badge-green">Privé</span>
+          </div>
         </div>
       </div>
     </div>
@@ -319,73 +316,33 @@
 <!-- BOTTOM NAV -->
 <nav class="bottom-nav">
   <div class="bnav-item" data-page="app" data-href="app.html">
-    <span class="bnav-icon">🏠</span><span data-i18n="nav_home">Accueil</span><div class="bnav-dot"></div>
+    <span class="bnav-icon">🏠</span><span>Accueil</span><div class="bnav-dot"></div>
   </div>
   <div class="bnav-item" data-page="dashboard" data-href="dashboard.html">
-    <span class="bnav-icon">📊</span><span data-i18n="nav_stats">Stats</span><div class="bnav-dot"></div>
+    <span class="bnav-icon">📊</span><span>Stats</span><div class="bnav-dot"></div>
   </div>
   <div class="bnav-item" data-page="history" data-href="history.html">
-    <span class="bnav-icon">📜</span><span data-i18n="nav_history">Historique</span><div class="bnav-dot"></div>
+    <span class="bnav-icon">📜</span><span>Historique</span><div class="bnav-dot"></div>
   </div>
   <div class="bnav-item active" data-page="settings" data-href="settings.html">
-    <span class="bnav-icon">⚙️</span><span data-i18n="nav_settings">Réglages</span><div class="bnav-dot"></div>
+    <span class="bnav-icon">⚙️</span><span>Réglages</span><div class="bnav-dot"></div>
   </div>
 </nav>
 
-<!-- MODAL: Confirm reset data only -->
+<!-- MODAL: Confirm reset -->
 <div class="modal-overlay" id="modal-reset">
   <div class="modal">
     <div class="modal-handle"></div>
     <div style="text-align:center;padding:8px 0 20px">
       <div style="font-size:52px;margin-bottom:12px">⚠️</div>
-      <h3 style="color:var(--red);margin-bottom:8px" data-i18n="modal_reset_title">Réinitialiser les données</h3>
-      <p style="font-size:0.88rem;color:var(--text-3)" data-i18n="modal_reset_desc">
-        Cette action est irréversible. Toutes vos dépenses, objectifs et paramètres seront supprimés.
+      <h3 style="color:var(--red);margin-bottom:8px" id="modal-reset-title">Réinitialiser les données</h3>
+      <p style="font-size:0.88rem;color:var(--text-3)" id="modal-reset-desc">
+        Cette action est <strong>irréversible</strong>. Toutes vos dépenses, objectifs et paramètres seront supprimés.
       </p>
     </div>
     <div class="flex flex-col gap-10">
-      <button class="danger-btn" id="btn-confirm-reset" data-i18n="btn_confirm_reset">🗑 Oui, tout supprimer</button>
-      <button class="btn btn-outline btn-full" onclick="Modal.close('modal-reset')" data-i18n="btn_cancel">Annuler</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL: Confirm logout (ne supprime PAS les données) -->
-<div class="modal-overlay" id="modal-logout">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <div style="text-align:center;padding:8px 0 20px">
-      <div style="font-size:52px;margin-bottom:12px">🚪</div>
-      <h3 style="color:var(--primary);margin-bottom:8px" data-i18n="modal_logout_title">Se déconnecter ?</h3>
-      <p style="font-size:0.88rem;color:var(--text-3)" data-i18n="modal_logout_desc">
-        Votre session sera fermée. Vos données restent sauvegardées sur cet appareil.
-      </p>
-    </div>
-    <div class="flex flex-col gap-10">
-      <button class="btn btn-primary btn-full" id="btn-confirm-logout" data-i18n="btn_confirm_logout">🚪 Se déconnecter</button>
-      <button class="btn btn-outline btn-full" onclick="Modal.close('modal-logout')" data-i18n="btn_cancel">Annuler</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL: Confirm delete account (supprime TOUT) -->
-<div class="modal-overlay" id="modal-delete-account">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <div style="text-align:center;padding:8px 0 20px">
-      <div style="font-size:52px;margin-bottom:12px">🗑️</div>
-      <h3 style="color:#ef4444;margin-bottom:8px" data-i18n="modal_delete_title">Supprimer le compte ?</h3>
-      <p style="font-size:0.88rem;color:var(--text-3)" data-i18n="modal_delete_desc">
-        Cette action est <strong>définitive et irréversible</strong>. Votre compte, mot de passe, date de naissance, session et toutes vos données seront effacés.
-      </p>
-      <!-- Confirmation input -->
-      <div style="margin-top:16px">
-        <input type="text" id="input-delete-confirm" class="input" data-i18n-placeholder="ph_delete_confirm" placeholder='Tapez "SUPPRIMER" pour confirmer' style="width:100%;text-align:center"/>
-      </div>
-    </div>
-    <div class="flex flex-col gap-10">
-      <button class="danger-btn" id="btn-confirm-delete" style="background:#ef4444;opacity:0.5;cursor:not-allowed" disabled data-i18n="btn_confirm_delete">🗑️ Supprimer définitivement</button>
-      <button class="btn btn-outline btn-full" onclick="Modal.close('modal-delete-account'); document.getElementById('input-delete-confirm').value=''; document.getElementById('btn-confirm-delete').disabled=true; document.getElementById('btn-confirm-delete').style.opacity='0.5';" data-i18n="btn_cancel">Annuler</button>
+      <button class="danger-btn" id="btn-confirm-reset">🗑 Oui, tout supprimer</button>
+      <button class="btn btn-outline btn-full" onclick="Modal.close('modal-reset')" id="btn-cancel-reset">Annuler</button>
     </div>
   </div>
 </div>
@@ -393,293 +350,20 @@
 <div id="toast-container"></div>
 <script src="auth-guard.js"></script>
 <script src="script.js"></script>
+<script>TAFAuth.injectLogoutBtn(".nav-actions");</script>
 <script>
-/* ════════════════════════════════════════════════════════════
-   TAF TRANSLATIONS — Système multilingue complet
-   Langues: fr, en, es, ar, pt
-════════════════════════════════════════════════════════════ */
-const TAF_TRANSLATIONS = {
-  fr: {
-    // Navigation
-    nav_home: '🏠 Accueil', nav_stats: '📊 Stats', nav_history: '📜 Historique', nav_settings: '⚙️ Réglages',
-    // Sections
-    section_profile: 'Profil', section_finances: 'Finances', section_region: 'Région & Devise',
-    section_appearance: 'Apparence', section_data: 'Données', section_danger: 'Zone de danger',
-    section_about: 'À propos',
-    // Profile
-    lbl_username: 'Prénom / Nom', lbl_username_desc: 'Affiché sur la page d\'accueil',
-    avatar_tap: 'Appuyez sur la photo pour changer',
-    btn_save_profile: '💾 Enregistrer le profil',
-    ph_username: 'Ex : Marie, Jean...',
-    // Finances
-    lbl_income: 'Revenus mensuels', lbl_income_desc: 'Montant net reçu par mois',
-    lbl_budget: 'Budget mensuel', lbl_budget_desc: 'Limite de dépenses mensuelle',
-    btn_save_finances: '💾 Enregistrer les finances',
-    // Region
-    lbl_currency: 'Devise', lbl_currency_desc: 'Conversion automatique appliquée',
-    lbl_language: 'Langue', lbl_language_desc: 'Langue de l\'interface',
-    // Appearance
-    lbl_dark_mode: 'Mode sombre', lbl_dark_mode_desc: 'Interface en thème sombre',
-    lbl_notif: 'Alertes budget', lbl_notif_desc: 'Prévenir quand le budget est dépassé',
-    // Data
-    lbl_storage: 'Stockage local', lbl_export: 'Exporter en CSV',
-    lbl_export_desc: 'Télécharger toutes vos dépenses',
-    lbl_privacy: 'Confidentialité', lbl_privacy_desc: 'Voir notre politique de données',
-    lbl_terms: 'Conditions d\'utilisation', lbl_terms_desc: 'Lire les conditions générales',
-    // Danger zone
-    lbl_logout: 'Se déconnecter', lbl_logout_desc: 'Fermer la session, retour à la connexion',
-    lbl_reset: 'Réinitialiser les données', lbl_reset_desc: 'Supprimer toutes les dépenses et objectifs',
-    lbl_delete_account: 'Supprimer le compte', lbl_delete_account_desc: 'Effacer définitivement toutes vos données',
-    // About
-    about_desc: 'Gestion financière personnelle', lbl_local_only: '100% Local',
-    lbl_local_desc: 'Données sur votre appareil uniquement', badge_private: 'Privé',
-    // Modals
-    modal_logout_title: 'Se déconnecter ?',
-    modal_logout_desc: 'Votre session sera fermée. Vos données restent sauvegardées sur cet appareil.',
-    btn_confirm_logout: '🚪 Se déconnecter',
-    modal_reset_title: 'Réinitialiser les données',
-    modal_reset_desc: 'Cette action est irréversible. Toutes vos dépenses, objectifs et paramètres seront supprimés.',
-    btn_confirm_reset: '🗑 Oui, tout supprimer',
-    modal_delete_title: 'Supprimer le compte ?',
-    modal_delete_desc: 'Cette action est définitive et irréversible. Votre compte, mot de passe, date de naissance, session et toutes vos données seront effacés.',
-    btn_confirm_delete: '🗑️ Supprimer définitivement',
-    ph_delete_confirm: 'Tapez "SUPPRIMER" pour confirmer',
-    confirm_word: 'SUPPRIMER',
-    btn_cancel: 'Annuler',
-    saved: 'Enregistré !', logout_success: 'Déconnexion réussie.', delete_success: 'Compte supprimé.',
-    toast_image_large: 'Image trop lourde (max 2 Mo)',
-    toast_avatar_ok: 'Photo mise à jour !',
-    toast_avatar_err: 'Image trop volumineuse.',
-    page_title: 'TAF — Paramètres',
-    data_expenses: 'dépense', data_expenses_pl: 'dépenses',
-    data_objectives: 'objectif', data_objectives_pl: 'objectifs',
-  },
-  en: {
-    nav_home: '🏠 Home', nav_stats: '📊 Stats', nav_history: '📜 History', nav_settings: '⚙️ Settings',
-    section_profile: 'Profile', section_finances: 'Finances', section_region: 'Region & Currency',
-    section_appearance: 'Appearance', section_data: 'Data', section_danger: 'Danger zone',
-    section_about: 'About',
-    lbl_username: 'First / Last name', lbl_username_desc: 'Displayed on the home page',
-    avatar_tap: 'Tap the photo to change',
-    btn_save_profile: '💾 Save profile',
-    ph_username: 'E.g.: Marie, Jean...',
-    lbl_income: 'Monthly income', lbl_income_desc: 'Net amount received per month',
-    lbl_budget: 'Monthly budget', lbl_budget_desc: 'Monthly spending limit',
-    btn_save_finances: '💾 Save finances',
-    lbl_currency: 'Currency', lbl_currency_desc: 'Automatic conversion applied',
-    lbl_language: 'Language', lbl_language_desc: 'Interface language',
-    lbl_dark_mode: 'Dark mode', lbl_dark_mode_desc: 'Dark theme interface',
-    lbl_notif: 'Budget alerts', lbl_notif_desc: 'Notify when budget is exceeded',
-    lbl_storage: 'Local storage', lbl_export: 'Export as CSV',
-    lbl_export_desc: 'Download all your expenses',
-    lbl_privacy: 'Privacy', lbl_privacy_desc: 'View our data policy',
-    lbl_terms: 'Terms of use', lbl_terms_desc: 'Read the general terms',
-    lbl_logout: 'Log out', lbl_logout_desc: 'Close session, return to login',
-    lbl_reset: 'Reset data', lbl_reset_desc: 'Delete all expenses and goals',
-    lbl_delete_account: 'Delete account', lbl_delete_account_desc: 'Permanently erase all your data',
-    about_desc: 'Personal finance management', lbl_local_only: '100% Local',
-    lbl_local_desc: 'Data on your device only', badge_private: 'Private',
-    modal_logout_title: 'Log out?',
-    modal_logout_desc: 'Your session will be closed. Your data remains saved on this device.',
-    btn_confirm_logout: '🚪 Log out',
-    modal_reset_title: 'Reset data',
-    modal_reset_desc: 'This action is irreversible. All your expenses, goals and settings will be deleted.',
-    btn_confirm_reset: '🗑 Yes, delete everything',
-    modal_delete_title: 'Delete account?',
-    modal_delete_desc: 'This action is permanent and irreversible. Your account, password, date of birth, session and all your data will be erased.',
-    btn_confirm_delete: '🗑️ Delete permanently',
-    ph_delete_confirm: 'Type "DELETE" to confirm',
-    confirm_word: 'DELETE',
-    btn_cancel: 'Cancel',
-    saved: 'Saved!', logout_success: 'Logged out.', delete_success: 'Account deleted.',
-    toast_image_large: 'Image too large (max 2 MB)',
-    toast_avatar_ok: 'Photo updated!', toast_avatar_err: 'Image too large for local storage.',
-    page_title: 'TAF — Settings',
-    data_expenses: 'expense', data_expenses_pl: 'expenses',
-    data_objectives: 'goal', data_objectives_pl: 'goals',
-  },
-  es: {
-    nav_home: '🏠 Inicio', nav_stats: '📊 Stats', nav_history: '📜 Historial', nav_settings: '⚙️ Ajustes',
-    section_profile: 'Perfil', section_finances: 'Finanzas', section_region: 'Región y Moneda',
-    section_appearance: 'Apariencia', section_data: 'Datos', section_danger: 'Zona de peligro',
-    section_about: 'Acerca de',
-    lbl_username: 'Nombre / Apellido', lbl_username_desc: 'Mostrado en la página de inicio',
-    avatar_tap: 'Toca la foto para cambiarla',
-    btn_save_profile: '💾 Guardar perfil',
-    ph_username: 'Ej.: María, Juan...',
-    lbl_income: 'Ingresos mensuales', lbl_income_desc: 'Monto neto recibido por mes',
-    lbl_budget: 'Presupuesto mensual', lbl_budget_desc: 'Límite de gastos mensuales',
-    btn_save_finances: '💾 Guardar finanzas',
-    lbl_currency: 'Moneda', lbl_currency_desc: 'Conversión automática aplicada',
-    lbl_language: 'Idioma', lbl_language_desc: 'Idioma de la interfaz',
-    lbl_dark_mode: 'Modo oscuro', lbl_dark_mode_desc: 'Interfaz con tema oscuro',
-    lbl_notif: 'Alertas de presupuesto', lbl_notif_desc: 'Notificar cuando se supere el presupuesto',
-    lbl_storage: 'Almacenamiento local', lbl_export: 'Exportar como CSV',
-    lbl_export_desc: 'Descargar todos tus gastos',
-    lbl_privacy: 'Privacidad', lbl_privacy_desc: 'Ver nuestra política de datos',
-    lbl_terms: 'Términos de uso', lbl_terms_desc: 'Leer los términos generales',
-    lbl_logout: 'Cerrar sesión', lbl_logout_desc: 'Cerrar sesión, volver al inicio',
-    lbl_reset: 'Restablecer datos', lbl_reset_desc: 'Eliminar todos los gastos y objetivos',
-    lbl_delete_account: 'Eliminar cuenta', lbl_delete_account_desc: 'Borrar definitivamente todos tus datos',
-    about_desc: 'Gestión financiera personal', lbl_local_only: '100% Local',
-    lbl_local_desc: 'Datos solo en tu dispositivo', badge_private: 'Privado',
-    modal_logout_title: '¿Cerrar sesión?',
-    modal_logout_desc: 'Tu sesión se cerrará. Tus datos permanecen guardados en este dispositivo.',
-    btn_confirm_logout: '🚪 Cerrar sesión',
-    modal_reset_title: 'Restablecer datos',
-    modal_reset_desc: 'Esta acción es irreversible. Todos tus gastos, objetivos y configuraciones serán eliminados.',
-    btn_confirm_reset: '🗑 Sí, eliminar todo',
-    modal_delete_title: '¿Eliminar cuenta?',
-    modal_delete_desc: 'Esta acción es permanente e irreversible. Tu cuenta, contraseña, fecha de nacimiento, sesión y todos tus datos serán borrados.',
-    btn_confirm_delete: '🗑️ Eliminar permanentemente',
-    ph_delete_confirm: 'Escribe "ELIMINAR" para confirmar',
-    confirm_word: 'ELIMINAR',
-    btn_cancel: 'Cancelar',
-    saved: '¡Guardado!', logout_success: 'Sesión cerrada.', delete_success: 'Cuenta eliminada.',
-    toast_image_large: 'Imagen demasiado grande (máx. 2 MB)',
-    toast_avatar_ok: '¡Foto actualizada!', toast_avatar_err: 'Imagen demasiado grande.',
-    page_title: 'TAF — Ajustes',
-    data_expenses: 'gasto', data_expenses_pl: 'gastos',
-    data_objectives: 'objetivo', data_objectives_pl: 'objetivos',
-  },
-  ar: {
-    nav_home: '🏠 الرئيسية', nav_stats: '📊 إحصائيات', nav_history: '📜 السجل', nav_settings: '⚙️ الإعدادات',
-    section_profile: 'الملف الشخصي', section_finances: 'الشؤون المالية', section_region: 'المنطقة والعملة',
-    section_appearance: 'المظهر', section_data: 'البيانات', section_danger: 'منطقة الخطر',
-    section_about: 'حول التطبيق',
-    lbl_username: 'الاسم الأول / الأخير', lbl_username_desc: 'يظهر على الصفحة الرئيسية',
-    avatar_tap: 'اضغط على الصورة للتغيير',
-    btn_save_profile: '💾 حفظ الملف الشخصي',
-    ph_username: 'مثال: محمد...',
-    lbl_income: 'الدخل الشهري', lbl_income_desc: 'المبلغ الصافي المستلم شهريًا',
-    lbl_budget: 'الميزانية الشهرية', lbl_budget_desc: 'حد الإنفاق الشهري',
-    btn_save_finances: '💾 حفظ البيانات المالية',
-    lbl_currency: 'العملة', lbl_currency_desc: 'يتم التحويل تلقائيًا',
-    lbl_language: 'اللغة', lbl_language_desc: 'لغة الواجهة',
-    lbl_dark_mode: 'الوضع الداكن', lbl_dark_mode_desc: 'واجهة بثيم داكن',
-    lbl_notif: 'تنبيهات الميزانية', lbl_notif_desc: 'إشعار عند تجاوز الميزانية',
-    lbl_storage: 'التخزين المحلي', lbl_export: 'تصدير بصيغة CSV',
-    lbl_export_desc: 'تنزيل جميع نفقاتك',
-    lbl_privacy: 'الخصوصية', lbl_privacy_desc: 'عرض سياسة البيانات',
-    lbl_terms: 'شروط الاستخدام', lbl_terms_desc: 'قراءة الشروط العامة',
-    lbl_logout: 'تسجيل الخروج', lbl_logout_desc: 'إغلاق الجلسة والعودة إلى تسجيل الدخول',
-    lbl_reset: 'إعادة تعيين البيانات', lbl_reset_desc: 'حذف جميع المصروفات والأهداف',
-    lbl_delete_account: 'حذف الحساب', lbl_delete_account_desc: 'مسح جميع بياناتك نهائيًا',
-    about_desc: 'إدارة مالية شخصية', lbl_local_only: '100% محلي',
-    lbl_local_desc: 'البيانات على جهازك فقط', badge_private: 'خاص',
-    modal_logout_title: 'تسجيل الخروج؟',
-    modal_logout_desc: 'سيتم إغلاق جلستك. تبقى بياناتك محفوظة على هذا الجهاز.',
-    btn_confirm_logout: '🚪 تسجيل الخروج',
-    modal_reset_title: 'إعادة تعيين البيانات',
-    modal_reset_desc: 'هذا الإجراء لا يمكن التراجع عنه. سيتم حذف جميع نفقاتك وأهدافك وإعداداتك.',
-    btn_confirm_reset: '🗑 نعم، احذف كل شيء',
-    modal_delete_title: 'حذف الحساب؟',
-    modal_delete_desc: 'هذا الإجراء دائم ولا يمكن التراجع عنه. سيتم مسح حسابك وكلمة مرورك وتاريخ ميلادك والجلسة وجميع بياناتك.',
-    btn_confirm_delete: '🗑️ حذف نهائي',
-    ph_delete_confirm: 'اكتب "حذف" للتأكيد',
-    confirm_word: 'حذف',
-    btn_cancel: 'إلغاء',
-    saved: 'تم الحفظ!', logout_success: 'تم تسجيل الخروج.', delete_success: 'تم حذف الحساب.',
-    toast_image_large: 'الصورة كبيرة جدًا (الحد الأقصى 2 ميغابايت)',
-    toast_avatar_ok: 'تم تحديث الصورة!', toast_avatar_err: 'الصورة كبيرة جدًا.',
-    page_title: 'TAF — الإعدادات',
-    data_expenses: 'مصروف', data_expenses_pl: 'مصروفات',
-    data_objectives: 'هدف', data_objectives_pl: 'أهداف',
-  },
-  pt: {
-    nav_home: '🏠 Início', nav_stats: '📊 Stats', nav_history: '📜 Histórico', nav_settings: '⚙️ Configurações',
-    section_profile: 'Perfil', section_finances: 'Finanças', section_region: 'Região e Moeda',
-    section_appearance: 'Aparência', section_data: 'Dados', section_danger: 'Zona de perigo',
-    section_about: 'Sobre',
-    lbl_username: 'Primeiro / Último nome', lbl_username_desc: 'Exibido na página inicial',
-    avatar_tap: 'Toque na foto para alterar',
-    btn_save_profile: '💾 Salvar perfil',
-    ph_username: 'Ex: Maria, João...',
-    lbl_income: 'Renda mensal', lbl_income_desc: 'Valor líquido recebido por mês',
-    lbl_budget: 'Orçamento mensal', lbl_budget_desc: 'Limite de gastos mensais',
-    btn_save_finances: '💾 Salvar finanças',
-    lbl_currency: 'Moeda', lbl_currency_desc: 'Conversão automática aplicada',
-    lbl_language: 'Idioma', lbl_language_desc: 'Idioma da interface',
-    lbl_dark_mode: 'Modo escuro', lbl_dark_mode_desc: 'Interface com tema escuro',
-    lbl_notif: 'Alertas de orçamento', lbl_notif_desc: 'Notificar quando o orçamento for excedido',
-    lbl_storage: 'Armazenamento local', lbl_export: 'Exportar como CSV',
-    lbl_export_desc: 'Baixar todas as suas despesas',
-    lbl_privacy: 'Privacidade', lbl_privacy_desc: 'Ver nossa política de dados',
-    lbl_terms: 'Termos de uso', lbl_terms_desc: 'Ler os termos gerais',
-    lbl_logout: 'Sair', lbl_logout_desc: 'Encerrar sessão, voltar ao login',
-    lbl_reset: 'Redefinir dados', lbl_reset_desc: 'Excluir todas as despesas e metas',
-    lbl_delete_account: 'Excluir conta', lbl_delete_account_desc: 'Apagar permanentemente todos os seus dados',
-    about_desc: 'Gestão financeira pessoal', lbl_local_only: '100% Local',
-    lbl_local_desc: 'Dados apenas no seu dispositivo', badge_private: 'Privado',
-    modal_logout_title: 'Sair?',
-    modal_logout_desc: 'Sua sessão será encerrada. Seus dados permanecem salvos neste dispositivo.',
-    btn_confirm_logout: '🚪 Sair',
-    modal_reset_title: 'Redefinir dados',
-    modal_reset_desc: 'Esta ação é irreversível. Todas as suas despesas, metas e configurações serão excluídas.',
-    btn_confirm_reset: '🗑 Sim, excluir tudo',
-    modal_delete_title: 'Excluir conta?',
-    modal_delete_desc: 'Esta ação é permanente e irreversível. Sua conta, senha, data de nascimento, sessão e todos os seus dados serão apagados.',
-    btn_confirm_delete: '🗑️ Excluir permanentemente',
-    ph_delete_confirm: 'Digite "EXCLUIR" para confirmar',
-    confirm_word: 'EXCLUIR',
-    btn_cancel: 'Cancelar',
-    saved: 'Salvo!', logout_success: 'Sessão encerrada.', delete_success: 'Conta excluída.',
-    toast_image_large: 'Imagem muito grande (máx. 2 MB)',
-    toast_avatar_ok: 'Foto atualizada!', toast_avatar_err: 'Imagem muito grande.',
-    page_title: 'TAF — Configurações',
-    data_expenses: 'despesa', data_expenses_pl: 'despesas',
-    data_objectives: 'meta', data_objectives_pl: 'metas',
-  }
-};
-
-/* ════════════════════════════════════════════════════════════
+/* ════════════════════════════════════
    SETTINGS PAGE CONTROLLER
-════════════════════════════════════════════════════════════ */
+════════════════════════════════════ */
 (function() {
   'use strict';
 
   let settings = {};
 
-  /* ── i18n helper ── */
-  function getLang() {
-    return (settings && settings.language) || localStorage.getItem('taf_lang') || 'fr';
-  }
-
-  function t(key) {
-    const lang = getLang();
-    const dict = TAF_TRANSLATIONS[lang] || TAF_TRANSLATIONS['fr'];
-    return dict[key] || TAF_TRANSLATIONS['fr'][key] || key;
-  }
-
-  function applyAllTranslations() {
-    const lang = getLang();
-    const isRTL = lang === 'ar';
-    document.documentElement.lang = lang;
-    document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
-    document.title = t('page_title');
-
-    // Text content
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-      const key = el.getAttribute('data-i18n');
-      el.textContent = t(key);
-    });
-
-    // Placeholders
-    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-      const key = el.getAttribute('data-i18n-placeholder');
-      el.placeholder = t(key);
-    });
-
-    // Delete confirm input placeholder
-    const delInput = document.getElementById('input-delete-confirm');
-    if (delInput) delInput.placeholder = t('ph_delete_confirm');
-  }
-
   function init() {
     settings = Store.getSettings();
     setActiveNav('settings');
     applyCurrentSettings();
-    applyAllTranslations();
     loadDataStats();
     attachEvents();
   }
@@ -704,7 +388,7 @@ const TAF_TRANSLATIONS = {
     document.getElementById('input-username').value = uname;
     document.getElementById('avatar-name-display').textContent = uname || '—';
 
-    // Income & budget
+    // Income & budget — convert from EUR to display currency
     const inc = parseFloat(settings.income) || 0;
     const bud = parseFloat(settings.budget) || 0;
     document.getElementById('display-income').textContent = inc > 0 ? formatCurrency(inc) : '—';
@@ -713,10 +397,10 @@ const TAF_TRANSLATIONS = {
     document.getElementById('input-budget').value = bud > 0 ? fromEUR(bud).toFixed(2) : '';
 
     // Notifications toggle
-    const notif = settings.budgetAlert !== false;
+    const notif = settings.budgetAlert !== false; // default true
     document.getElementById('toggle-notif').checked = notif;
 
-    // Avatar
+    // Avatar from localStorage
     const savedAvatar = Store.get('avatar', null);
     if (savedAvatar) {
       const img = document.getElementById('avatar-img');
@@ -725,7 +409,24 @@ const TAF_TRANSLATIONS = {
       document.getElementById('avatar-emoji').style.display = 'none';
     }
 
+    // Conversion info
     updateConversionInfo();
+    applyTranslations();
+  }
+
+  /* ── Translations ── */
+  function applyTranslations() {
+    const pairs = [
+      ['lbl-profile',        'profile'],
+      ['lbl-username',       'username'],
+      ['lbl-currency',       'currency'],
+      ['lbl-language',       'language'],
+      ['lbl-dark-mode',      'theme'],
+      ['lbl-export',         'export'],
+      ['lbl-storage',        'Stockage local'],
+    ];
+    // Only translate known keys
+    document.title = 'TAF — ' + t('settings');
   }
 
   /* ── Currency conversion info ── */
@@ -734,21 +435,21 @@ const TAF_TRANSLATIONS = {
     const cfg = CURRENCIES[cur] || CURRENCIES['EUR'];
     const rate = (cfg.rate).toFixed(cur === 'XOF' || cur === 'NGN' ? 0 : 4);
     const txt = cur === 'EUR'
-      ? (getLang() === 'fr' ? 'Les montants sont stockés en EUR (devise de référence).' : 'Amounts are stored in EUR (reference currency).')
-      : `1 EUR = ${rate} ${cfg.symbol}.`;
+      ? 'Les montants sont stockés en EUR (devise de référence).'
+      : `1 EUR = ${rate} ${cfg.symbol}. Conversion automatique appliquée à l'affichage.`;
     document.getElementById('conversion-text').textContent = txt;
   }
 
   /* ── Data stats ── */
   function loadDataStats() {
-    const expenses   = Expenses.getAll();
-    const objectives = Objectives.getAll();
-    const eLen = expenses.length;
-    const oLen = objectives.length;
-    const eWord = eLen !== 1 ? t('data_expenses_pl') : t('data_expenses');
-    const oWord = oLen !== 1 ? t('data_objectives_pl') : t('data_objectives');
-    document.getElementById('data-summary').textContent = `${eLen} ${eWord} · ${oLen} ${oWord}`;
+    const expenses  = Expenses.getAll();
+    const objectives= Objectives.getAll();
+    const totalMonth= Expenses.totalMonth();
 
+    document.getElementById('data-summary').textContent =
+      `${expenses.length} dépense${expenses.length!==1?'s':''} · ${objectives.length} objectif${objectives.length!==1?'s':''}`;
+
+    // Approximate localStorage size
     let size = 0;
     try {
       for (const k in localStorage) {
@@ -757,55 +458,14 @@ const TAF_TRANSLATIONS = {
         }
       }
     } catch(e) { size = 0; }
-    document.getElementById('data-size').textContent = (size / 1024).toFixed(1) + ' KB';
-  }
-
-  /* ════════════════
-     ACCOUNT ACTIONS
-     ════════════════ */
-
-  /**
-   * LOGOUT — Ferme la session SANS supprimer les données.
-   * Redirige vers auth.html.
-   */
-  function doLogout() {
-    // Supprimer uniquement la session active
-    localStorage.removeItem('taf_session');
-    localStorage.removeItem('taf_logged_in');
-    sessionStorage.clear();
-
-    // Si TAFAuth.logout existe, l'utiliser (il gère la redirection)
-    if (typeof TAFAuth !== 'undefined' && typeof TAFAuth.logout === 'function') {
-      TAFAuth.logout();
-    } else {
-      Toast.success(t('logout_success'));
-      setTimeout(() => { window.location.href = 'auth.html'; }, 700);
-    }
-  }
-
-  /**
-   * DELETE ACCOUNT — Supprime TOUT : utilisateur, mdp, naissance, session, données.
-   * Remet le site à zéro. Redirige vers auth.html.
-   */
-  function doDeleteAccount() {
-    // Vider TOUT le localStorage lié à TAF
-    const keysToDelete = [];
-    for (const k in localStorage) {
-      if (localStorage.hasOwnProperty(k)) keysToDelete.push(k);
-    }
-    keysToDelete.forEach(k => localStorage.removeItem(k));
-
-    // Vider sessionStorage
-    sessionStorage.clear();
-
-    Toast.success(t('delete_success'));
-    setTimeout(() => { window.location.href = 'auth.html'; }, 900);
+    const kb = (size / 1024).toFixed(1);
+    document.getElementById('data-size').textContent = kb + ' KB';
   }
 
   /* ── EVENTS ── */
   function attachEvents() {
 
-    // Theme toggle (nav button)
+    // ── Theme toggle
     document.getElementById('btn-theme-toggle').addEventListener('click', () => {
       Theme.toggle();
       settings = Store.getSettings();
@@ -814,7 +474,6 @@ const TAF_TRANSLATIONS = {
       document.getElementById('btn-theme-toggle').textContent = dark ? '☀️' : '🌙';
     });
 
-    // Theme toggle (checkbox)
     document.getElementById('toggle-dark').addEventListener('change', function() {
       settings.theme = this.checked ? 'dark' : 'light';
       Store.saveSettings(settings);
@@ -822,18 +481,19 @@ const TAF_TRANSLATIONS = {
       document.getElementById('btn-theme-toggle').textContent = this.checked ? '☀️' : '🌙';
     });
 
-    // Notifications toggle
+    // ── Notifications toggle
     document.getElementById('toggle-notif').addEventListener('change', function() {
       settings.budgetAlert = this.checked;
       Store.saveSettings(settings);
       Toast.success(t('saved'));
     });
 
-    // Currency change
+    // ── Currency change
     document.getElementById('select-currency').addEventListener('change', function() {
       settings.currency = this.value;
       Store.saveSettings(settings);
       updateConversionInfo();
+      // Refresh displayed amounts
       const inc = parseFloat(settings.income) || 0;
       const bud = parseFloat(settings.budget) || 0;
       document.getElementById('display-income').textContent = inc > 0 ? formatCurrency(inc) : '—';
@@ -843,17 +503,17 @@ const TAF_TRANSLATIONS = {
       Toast.success(t('saved'));
     });
 
-    // Language change → recharge la page
+    // ── Language change
     document.getElementById('select-language').addEventListener('change', function() {
       settings.language = this.value;
       Store.saveSettings(settings);
-      localStorage.setItem('taf_lang', this.value);
       document.documentElement.lang = this.value;
       Toast.success(t('saved'));
+      // Reload to apply all translations
       setTimeout(() => window.location.reload(), 600);
     });
 
-    // Save profile
+    // ── Save profile
     document.getElementById('btn-save-profile').addEventListener('click', () => {
       const name = document.getElementById('input-username').value.trim();
       settings.username = name;
@@ -862,7 +522,7 @@ const TAF_TRANSLATIONS = {
       Toast.success(t('saved'));
     });
 
-    // Save finances
+    // ── Save finances
     document.getElementById('btn-save-finances').addEventListener('click', () => {
       const rawInc = parseFloat(document.getElementById('input-income').value) || 0;
       const rawBud = parseFloat(document.getElementById('input-budget').value) || 0;
@@ -874,81 +534,55 @@ const TAF_TRANSLATIONS = {
       Toast.success(t('saved'));
     });
 
-    // Avatar upload
+    // ── Avatar upload
     document.getElementById('avatar-input').addEventListener('change', function() {
       const file = this.files && this.files[0];
       if (!file) return;
-      if (file.size > 2 * 1024 * 1024) { Toast.error(t('toast_image_large')); return; }
+      if (file.size > 2 * 1024 * 1024) { Toast.error('Image trop lourde (max 2 Mo)'); return; }
       const reader = new FileReader();
       reader.onload = function(e) {
+        const dataUrl = e.target.result;
+        // Save to localStorage
         try {
-          Store.set('avatar', e.target.result);
+          Store.set('avatar', dataUrl);
           const img = document.getElementById('avatar-img');
-          img.src = e.target.result;
+          img.src = dataUrl;
           img.style.display = 'block';
           document.getElementById('avatar-emoji').style.display = 'none';
-          Toast.success(t('toast_avatar_ok'));
+          Toast.success('Photo mise à jour !');
         } catch(err) {
-          Toast.error(t('toast_avatar_err'));
+          Toast.error('Image trop volumineuse pour le stockage local.');
         }
       };
       reader.readAsDataURL(file);
     });
 
-    // Export
+    // ── Export
     document.getElementById('row-export').addEventListener('click', exportCSV);
 
-    // Privacy
-    document.getElementById('row-privacy').addEventListener('click', () => { PageTransition.go('privacy.html'); });
+    // ── Privacy
+    document.getElementById('row-privacy').addEventListener('click', () => {
+      PageTransition.go('privacy.html');
+    });
 
-    // Terms
-    document.getElementById('row-terms').addEventListener('click', () => { PageTransition.go('terms.html'); });
+    // ── Terms
+    document.getElementById('row-terms').addEventListener('click', () => {
+      PageTransition.go('terms.html');
+    });
 
-    // ── LOGOUT ROW → ouvre la modale de confirmation (NE supprime PAS les données)
+    // ── Logout
     document.getElementById('row-logout').addEventListener('click', () => {
-      Modal.open('modal-logout');
+      if (confirm('Se déconnecter de TAF ?')) TAFAuth.logout();
     });
 
-    // Confirmation déconnexion
-    document.getElementById('btn-confirm-logout').addEventListener('click', () => {
-      Modal.close('modal-logout');
-      doLogout();
-    });
-
-    // ── RESET DATA ROW
+    // ── Reset data
     document.getElementById('row-reset').addEventListener('click', () => Modal.open('modal-reset'));
 
     document.getElementById('btn-confirm-reset').addEventListener('click', () => {
       Store.clearAll();
       Modal.close('modal-reset');
-      Toast.success(t('saved'));
+      Toast.success('Données effacées.');
       setTimeout(() => PageTransition.go('index.html'), 800);
-    });
-
-    // ── DELETE ACCOUNT ROW → ouvre la modale (supprime TOUT)
-    document.getElementById('row-delete-account').addEventListener('click', () => {
-      document.getElementById('input-delete-confirm').value = '';
-      const btn = document.getElementById('btn-confirm-delete');
-      btn.disabled = true;
-      btn.style.opacity = '0.5';
-      btn.style.cursor = 'not-allowed';
-      Modal.open('modal-delete-account');
-    });
-
-    // Validation du champ de confirmation de suppression
-    document.getElementById('input-delete-confirm').addEventListener('input', function() {
-      const btn = document.getElementById('btn-confirm-delete');
-      const isValid = this.value.trim().toUpperCase() === t('confirm_word').toUpperCase();
-      btn.disabled = !isValid;
-      btn.style.opacity = isValid ? '1' : '0.5';
-      btn.style.cursor = isValid ? 'pointer' : 'not-allowed';
-    });
-
-    // Confirmation suppression de compte
-    document.getElementById('btn-confirm-delete').addEventListener('click', function() {
-      if (this.disabled) return;
-      Modal.close('modal-delete-account');
-      doDeleteAccount();
     });
   }
 
